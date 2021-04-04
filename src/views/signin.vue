@@ -1,0 +1,97 @@
+<template>
+  <div class="signin flex">
+    <div class="signin-inner flex">
+      <h2>ログイン</h2>
+      <input type="text" placeholder="Email" v-model="email" />
+      <input type="password" placeholder="Password" v-model="password" />
+      <button class="btn" @click.prevent="signIn">ログイン</button>
+      <p>
+        アカウントをお持ちでない方は
+        <router-link to="/signup">こちらへ</router-link>
+      </p>
+    </div>
+  </div>
+</template>
+
+<script>
+import firebase from "firebase";
+
+export default {
+  name: "Signin",
+  data: function() {
+    return {
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    //以下、「メールアドレス」と「パスワード」を使ったサインインの実装。
+    signIn: function() {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        //ユーザーがフォームに入力したら、signInWithEmailAndPassword メソッドを呼び出します。
+        .then(
+          () => {
+            // alert("ログインに成功しました。");
+            //上記、登録できたらアラート実行
+            this.$router.push("/mypage");
+            //ログイン後、上記ルート先へページ遷移
+          },
+          (err) => {
+            alert("ログイン情報が間違っています。", err.message);
+            //エラーメッセージ
+          }
+        );
+    },
+  },
+};
+</script>
+
+<style scoped lang="scss">
+.signin {
+  height: 90vh;
+  flex-flow: column nowrap;
+  background-color: rgba(211, 211, 211, 0.24);
+  .signin-inner {
+    width: 35%;
+    height: 53%;
+    flex-direction: column;
+    z-index: 1;
+    font-weight: bold;
+    color: gray;
+    background-color: white;
+    position: absolute;
+    top: 30%;
+    left: 35%;
+    padding: 2rem;
+    box-shadow: 0 0 10px lightgrey;
+  }
+  h2 {
+    font-weight: normal;
+    margin-bottom: 0.5rem;
+  }
+
+  a {
+    color: #008deb;
+  }
+  input {
+    margin: 10px 0;
+    padding: 10px;
+  }
+  .btn {
+    width: 5rem;
+    margin: 1rem;
+    color: #fff;
+    background-color: #008deb;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    cursor: hand;
+    border: none;
+    outline: none;
+    font-weight: bold;
+  }
+}
+</style>
