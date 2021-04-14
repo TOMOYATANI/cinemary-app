@@ -1,21 +1,25 @@
 <template>
-  <div class="signup flex">
-    <div class="signup-inner flex">
-      <h2>新規登録</h2>
-      <input type="text" placeholder="Username" v-model="username" />
-      <input type="text" placeholder="Email" v-model="email" />
-      <input type="password" placeholder="Password" v-model="password" />
-      <button class="btn-signup" @click.prevent="signUp">登録</button>
-      <p>
-        既に登録済みの方は
-        <router-link to="/signin">こちらへ</router-link>
-      </p>
+  <div id="app">
+    <Header />
+    <div class="signup flex">
+      <div class="signup-inner flex">
+        <h2>新規登録</h2>
+        <input type="text" placeholder="Username" v-model="username" />
+        <input type="text" placeholder="Email" v-model="email" />
+        <input type="password" placeholder="Password" v-model="password" />
+        <button class="btn-signup" @click.prevent="signUp">登録</button>
+        <p>
+          既に登録済みの方は
+          <router-link to="/signin">こちらへ</router-link>
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
+import Header from "@/components/header.vue";
 
 export default {
   name: "Signup",
@@ -26,9 +30,12 @@ export default {
       password: "",
     };
   },
+  components: {
+    Header,
+  },
   methods: {
     //以下、「メールアドレス」と「パスワード」を使った新規登録の実装。
-    signUp: function() {
+    signUp() {
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)

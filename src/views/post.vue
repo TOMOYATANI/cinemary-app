@@ -1,110 +1,109 @@
 <template>
-  <div class="post-inner flex">
-    <h2 class="post-tll flex">Chinemaryを投稿する</h2>
-    <hr class="separate" />
+  <div id="app">
+    <Header />
+    <div class="post-inner flex">
+      <h2 class="post-tll flex">Chinemaryを投稿する</h2>
+      <hr class="separate" />
 
-    <div class="post-items flex">
-      <div class="post-contens flex">
-        <img class="item-img" src="../assets/タイトル.jpg" alt="タイトル" />
-        <input
-          type="text"
-          class="post-item blank"
-          placeholder="タイトル"
-          v-model="title"
-        />
+      <div class="post-items flex">
+        <div class="post-contens flex">
+          <img class="item-img" src="../assets/タイトル.jpg" alt="タイトル" />
+          <input type="text" class="post-item blank" placeholder="タイトル" v-model="title" />
+        </div>
+        <div class="post-contens flex">
+          <img class="item-img" src="../assets/自己紹介.jpg" alt="内容" />
+          <input type="text" class="post-item" placeholder="内容" v-model="description" />
+        </div>
+        <div class="post-contens post-img flex">
+          <img class="item-img" src="../assets/画像.jpg" alt="画像" />
+          <input type="text" class="post-item blank" v-model="image" />
+          <button class="btn-img">画像選択</button>
+        </div>
+        <div class="post-contens flex">
+          <img class="item-img" src="../assets/好きなジャンル.jpg" alt="好きなジャンル" />
+          <select name="好きなジャンル">
+            <option class="post-item" value="好きなジャンル" hidden>ジャンル</option>
+            <option class="post-item" value="アクション">アクション</option>
+            <option class="post-item" value="ドラマ">ドラマ</option>
+            <option class="post-item" value="恋愛">恋愛</option>
+            <option class="post-item" value="ホラー">ホラー</option>
+            <option class="post-item" value="戦争">戦争</option>
+            <option class="post-item" value="音楽">音楽</option>
+            <option class="post-item" value="ミュージカル">ミュージカル</option>
+            <option class="post-item" value="スポーツ">スポーツ</option>
+            <option class="post-item" value="SE">SF</option>
+            <option class="post-item" value="青春">青春</option>
+            <option class="post-item" value="コメディ">コメディ</option>
+            <option class="post-item" value="アニメ">アニメ</option>
+            <option class="post-item" value="アドベンチャー・冒険">アドベンチャー・冒険</option>
+            <option class="post-item" value="アート・コンテンボラリー">アート・コンテンボラリー</option>
+            <option class="post-item" value="クライム">クライム</option>
+            <option class="post-item" value="ドキュメンタリー">ドキュメンタリー</option>
+            <option class="post-item" value="ショートフィルム・短編">ショートフィルム・短編</option>
+            <option class="post-item" value="サスペンス">サスペンス</option>
+            <option class="post-item" value="ファミリー">ファミリー</option>
+            <option class="post-item" value="スリラー">スリラー</option>
+            <option class="post-item" value="ヤクザ・任侠">ヤクザ・任侠</option>
+            <option class="post-item" value="ファンタジー">ファンタジー</option>
+            <option class="post-item" value="時代劇">時代劇</option>
+            <option class="post-item" value="ミステリー">ミステリー</option>
+            <option class="post-item" value="伝記">伝記</option>
+            <option class="post-item" value="西部劇">西部劇</option>
+            <option class="post-item" value="ヤクザ・任侠">ヤクザ・任侠</option>
+            <option class="post-item" value="パニック">パニック</option>
+            <option class="post-item" value="オムニバス">オムニバス</option>
+            <option class="post-item" value="バイオレンス">バイオレンス</option>
+            <option class="post-item" value="歴史">歴史</option>
+            <option class="post-item" value="ギャング・マフィア">ギャング・マフィア</option>
+          </select>
+        </div>
+        <button class="btn" @click.prevent="postItem">投稿</button>
       </div>
-      <div class="post-contens flex">
-        <img class="item-img" src="../assets/自己紹介.jpg" alt="内容" />
-        <input
-          type="text"
-          class="post-item"
-          placeholder="内容"
-          v-model="contens"
-        />
-      </div>
-      <div class="post-contens post-img flex">
-        <img class="item-img" src="../assets/画像.jpg" alt="画像" />
-        <input type="text" class="post-item blank" v-model="image" />
-        <button class="btn-img">画像選択</button>
-      </div>
-      <div class="post-contens flex">
-        <img
-          class="item-img"
-          src="../assets/好きなジャンル.jpg"
-          alt="好きなジャンル"
-        />
-        <select name="好きなジャンル">
-          <option class="profile-item" value="好きなジャンル" hidden
-            >好きなジャンル</option
-          >
-          <option class="profile-item" value="アクション">アクション</option>
-          <option class="profile-item" value="ドラマ">ドラマ</option>
-          <option class="profile-item" value="恋愛">恋愛</option>
-          <option class="profile-item" value="ホラー">ホラー</option>
-          <option class="profile-item" value="戦争">戦争</option>
-          <option class="profile-item" value="音楽">音楽</option>
-          <option class="profile-item" value="ミュージカル"
-            >ミュージカル</option
-          >
-          <option class="profile-item" value="スポーツ">スポーツ</option>
-          <option class="profile-item" value="SE">SF</option>
-          <option class="profile-item" value="青春">青春</option>
-          <option class="profile-item" value="コメディ">コメディ</option>
-          <option class="profile-item" value="アニメ">アニメ</option>
-          <option class="profile-item" value="アドベンチャー・冒険"
-            >アドベンチャー・冒険</option
-          >
-          <option class="profile-item" value="アート・コンテンボラリー"
-            >アート・コンテンボラリー</option
-          >
-          <option class="profile-item" value="クライム">クライム</option>
-          <option class="profile-item" value="ドキュメンタリー"
-            >ドキュメンタリー</option
-          >
-          <option class="profile-item" value="ショートフィルム・短編"
-            >ショートフィルム・短編</option
-          >
-          <option class="profile-item" value="サスペンス">サスペンス</option>
-          <option class="profile-item" value="ファミリー">ファミリー</option>
-          <option class="profile-item" value="スリラー">スリラー</option>
-          <option class="profile-item" value="ヤクザ・任侠"
-            >ヤクザ・任侠</option
-          >
-          <option class="profile-item" value="ファンタジー"
-            >ファンタジー</option
-          >
-          <option class="profile-item" value="時代劇">時代劇</option>
-          <option class="profile-item" value="ミステリー">ミステリー</option>
-          <option class="profile-item" value="伝記">伝記</option>
-          <option class="profile-item" value="西部劇">西部劇</option>
-          <option class="profile-item" value="ヤクザ・任侠"
-            >ヤクザ・任侠</option
-          >
-          <option class="profile-item" value="パニック">パニック</option>
-          <option class="profile-item" value="オムニバス">オムニバス</option>
-          <option class="profile-item" value="バイオレンス"
-            >バイオレンス</option
-          >
-          <option class="profile-item" value="歴史">歴史</option>
-          <option class="profile-item" value="ギャング・マフィア"
-            >ギャング・マフィア</option
-          >
-        </select>
-      </div>
-      <button class="btn">投稿</button>
     </div>
   </div>
 </template>
 
 <script>
+import firebase from "firebase";
+import Header from "@/components/header.vue";
+
 export default {
-  data: function() {
+  data() {
     return {
+      db: null,
+      time: "",
       title: "",
-      contents: "",
+      description: "",
       image: "",
+      genre: ""
     };
   },
+  components: {
+    Header
+  },
+  // mounted() {
+  //   this.db = firebase.firestore().collection("posts");
+  // },
+  //何度も使う場合は、リファクタリングで関数で定義しておく。
+  methods: {
+    // postItem()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
+    postItem() {
+      firebase
+        .firestore()
+        .collection("posts")
+        .add({
+          title: this.title,
+          description: this.description,
+          image: this.image,
+          genre: this.genre,
+          time: firebase.firestore.FieldValue.serverTimestamp()
+          //サーバ側で値設定
+        })
+        .then(() => {
+          confirm("投稿しますか？");
+        });
+    }
+  }
 };
 </script>
 
@@ -146,6 +145,7 @@ select {
 }
 .post-items {
   flex-direction: column;
+
   .post-contens {
     position: relative;
     margin: 0.8rem;

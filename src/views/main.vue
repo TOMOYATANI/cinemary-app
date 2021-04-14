@@ -1,129 +1,132 @@
 <template>
-  <div class="main">
-    <div class="main-tll flex">
-      <h1>映画を楽しむすべての映画好きへ</h1>
-      <p>Cinemary(シネマリー)は、映画を共有するアプリです。</p>
-      <p>あなたのお気に入りの作品を共有しませんか。</p>
-      <router-link to="/signup" class="btn btn-orange" v-if="!authenticatedUser"
-        >今すぐ登録</router-link
-      >
-      <router-link to="/post" class="btn btn-orange" v-if="authenticatedUser"
-        >投稿する</router-link
-      >
+  <div id="app">
+    <Header />
+    <div class="main">
+      <div class="main-tll flex">
+        <h1>映画を楽しむすべての映画好きへ</h1>
+        <p>Cinemary(シネマリー)は、映画を共有するアプリです。</p>
+        <p>あなたのお気に入りの作品を共有しませんか。</p>
+        <router-link to="/signup" class="btn btn-orange" v-if="!authenticatedUser">今すぐ登録</router-link>
+        <router-link to="/post" class="btn btn-orange" v-if="authenticatedUser">投稿する</router-link>
+      </div>
+      <ul class="main-roop">
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/アベンジャーズ.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/ヴェノム.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/きみに読む物語.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/ショーシャンク.jpg" alt />
+        </li>
+      </ul>
+      <ul class="main-roop">
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/インセプション.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/シャッターアイランド.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/テネット.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/ララランド.jpg" alt />
+        </li>
+      </ul>
+      <ul class="main-roop">
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/グレイテストショーマン.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/セッション.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/ピエロがお前を嘲笑う.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/ブラッドダイヤモンド.jpg" alt />
+        </li>
+      </ul>
+      <ul class="main-roop">
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/アベンジャーズ.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/ヴェノム.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/きみに読む物語.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/ショーシャンク.jpg" alt />
+        </li>
+      </ul>
+      <ul class="main-roop">
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/インセプション.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/シャッターアイランド.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/テネット.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/ララランド.jpg" alt />
+        </li>
+      </ul>
+      <ul class="main-roop">
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/グレイテストショーマン.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/セッション.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/ピエロがお前を嘲笑う.jpg" alt />
+        </li>
+        <li class="main-roop-items">
+          <img class="main-img" src="../assets/ブラッドダイヤモンド.jpg" alt />
+        </li>
+      </ul>
     </div>
-    <ul class="main-roop">
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/アベンジャーズ.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/ヴェノム.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/きみに読む物語.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/ショーシャンク.jpg" alt />
-      </li>
-    </ul>
-    <ul class="main-roop">
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/インセプション.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/シャッターアイランド.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/テネット.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/ララランド.jpg" alt />
-      </li>
-    </ul>
-    <ul class="main-roop">
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/グレイテストショーマン.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/セッション.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/ピエロがお前を嘲笑う.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/ブラッドダイヤモンド.jpg" alt />
-      </li>
-    </ul>
-    <ul class="main-roop">
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/アベンジャーズ.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/ヴェノム.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/きみに読む物語.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/ショーシャンク.jpg" alt />
-      </li>
-    </ul>
-    <ul class="main-roop">
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/インセプション.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/シャッターアイランド.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/テネット.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/ララランド.jpg" alt />
-      </li>
-    </ul>
-    <ul class="main-roop">
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/グレイテストショーマン.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/セッション.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/ピエロがお前を嘲笑う.jpg" alt />
-      </li>
-      <li class="main-roop-items">
-        <img class="main-img" src="../assets/ブラッドダイヤモンド.jpg" alt />
-      </li>
-    </ul>
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
+import Header from "@/components/header.vue";
 
 export default {
   name: "signOut",
   data() {
     return {
       authenticatedUser: "",
-      isOpen: false,
+      isOpen: false
     };
   },
+  components: {
+    Header
+  },
   methods: {
-    toggle: function() {
+    toggle() {
       this.isOpen = !this.isOpen;
       //「!」を先頭につける事で真偽が逆。
-    },
+    }
   },
   mounted() {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.authenticatedUser = true;
       } else {
         this.authenticatedUser = false;
       }
     });
-  },
+  }
 };
 </script>
 
@@ -158,6 +161,7 @@ export default {
     border-radius: 1rem;
     text-decoration: none;
     font-weight: bold;
+    text-align: center;
   }
   .btn-orange:hover,
   a.btn-orange:hover {

@@ -1,49 +1,58 @@
 <template>
-  <div class="mypage flex">
-    <div class="mypage-inner flex">
-      <div class="profile-inner flex">
-        <img
-          class="profile-inner-img"
-          src="../assets/デフォルト画像.jpg"
-          alt="デフォルト画像"
-        />
-        <div class="profile-inner-name">TOMOYA TANI</div>
-      </div>
-      <div class="profile-inner2 flex">
-        <div class="follow-inner">
-          <div class="follow">
-            <div>0</div>
-            <p>フォロー</p>
-          </div>
-          <div class="follower">
-            <div>0</div>
-            <p>フォロワー</p>
-          </div>
+  <div id="app">
+    <Header />
+    <div class="mypage flex">
+      <div class="mypage-inner flex">
+        <div class="profile-inner flex">
+          <img class="profile-inner-img" src="../assets/デフォルト画像.jpg" alt="デフォルト画像" />
+          <div class="profile-inner-name">TOMOYA TANI</div>
         </div>
-        <hr class="separate" />
-        <button @click="edit" class="profile-edit">プロフィール編集</button>
+        <div class="profile-inner2 flex">
+          <div class="follow-inner">
+            <div class="post">
+              <div>0</div>
+              <p>投稿</p>
+            </div>
+            <div class="follow">
+              <div>0</div>
+              <p>フォロー</p>
+            </div>
+            <div class="follower">
+              <div>0</div>
+              <p>フォロワー</p>
+            </div>
+          </div>
+          <hr class="separate" />
+          <button @click="edit" class="profile-edit">プロフィール編集</button>
+        </div>
       </div>
-    </div>
-    <div class="profile-list">
-      <ul>
-        <li>性別</li>
-        <li>年齢</li>
-        <li>職業</li>
-        <li>居住地</li>
-        <li>好きな映画</li>
-        <li>好きなジャンル</li>
-        <li>自己紹介</li>
-      </ul>
-    </div>
-    <hr class="separate" />
-    <div class="profile-post flex">
-      <h3>TOMOYA TANIさんの投稿一覧</h3>
+      <div class="profile-list">
+        <ul>
+          <li>性別</li>
+          <li>年齢</li>
+          <li>職業</li>
+          <li>居住地</li>
+          <li>好きな映画</li>
+          <li>好きなジャンル</li>
+          <li>自己紹介</li>
+        </ul>
+      </div>
+      <hr class="separate" />
+      <div class="profile-post flex">
+        <h3>TOMOYA TANIさんの投稿一覧</h3>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import Header from "@/components/header.vue";
+
+export default {
+  components: {
+    Header
+  }
+};
 </script>
 
 <style scoped lang="scss">
@@ -81,6 +90,7 @@ export default {};
       flex-direction: column;
       .follow-inner {
         display: flex;
+        text-align: center;
       }
       .profile-edit {
         width: 9rem;

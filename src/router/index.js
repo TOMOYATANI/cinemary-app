@@ -7,7 +7,7 @@ import First from "../views/first.vue";
 import Mypage from "../views/mypage.vue";
 import Profile from "../views/profile.vue";
 import Post from "../views/post.vue";
-import Search from "../views/search.vue";
+import Board from "../views/board.vue";
 import Chat from "../components/chat.vue";
 import firebase from "firebase";
 
@@ -54,9 +54,9 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/search",
-    name: "Search",
-    component: Search,
+    path: "/board",
+    name: "Board",
+    component: Board,
   },
   {
     path: "/chat",

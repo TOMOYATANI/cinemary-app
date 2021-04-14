@@ -1,32 +1,39 @@
 <template>
-  <div class="signin flex">
-    <div class="signin-inner flex">
-      <h2>ログイン</h2>
-      <input type="text" placeholder="Email" v-model="email" />
-      <input type="password" placeholder="Password" v-model="password" />
-      <button class="btn" @click.prevent="signIn">ログイン</button>
-      <p>
-        アカウントをお持ちでない方は
-        <router-link to="/signup">こちらへ</router-link>
-      </p>
+  <div id="app">
+    <Header />
+    <div class="signin flex">
+      <div class="signin-inner flex">
+        <h2>ログイン</h2>
+        <input type="text" placeholder="Email" v-model="email" />
+        <input type="password" placeholder="Password" v-model="password" />
+        <button class="btn" @click.prevent="signIn">ログイン</button>
+        <p>
+          アカウントをお持ちでない方は
+          <router-link to="/signup">こちらへ</router-link>
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import firebase from "firebase";
+import Header from "@/components/header.vue";
 
 export default {
   name: "Signin",
-  data: function() {
+  data() {
     return {
       email: "",
       password: "",
     };
   },
+  components: {
+    Header,
+  },
   methods: {
     //以下、「メールアドレス」と「パスワード」を使ったサインインの実装。
-    signIn: function() {
+    signIn() {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)

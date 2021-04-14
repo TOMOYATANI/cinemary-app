@@ -1,58 +1,39 @@
 <template>
   <header class="header">
     <router-link to="/" class="header-ttl">
-      <span class="header-ttl-color">C</span>inemary</router-link
-    >
+      <span class="header-ttl-color">C</span>inemary
+    </router-link>
     <ul class="header-menu">
       <li>
         <router-link to="/first" class="header-link">初めての方へ</router-link>
       </li>
       <li>
-        <router-link to="/post" class="header-link" v-if="authenticatedUser"
-          >投稿</router-link
-        >
+        <router-link to="/post" class="header-link" v-if="authenticatedUser">投稿</router-link>
       </li>
       <li>
-        <router-link to="/search" class="header-link">検索する</router-link>
+        <router-link to="/board" class="header-link">検索</router-link>
       </li>
       <li>
-        <router-link to="/signup" class="header-link" v-if="!authenticatedUser"
-          >新規登録</router-link
-        >
+        <router-link to="/signup" class="header-link" v-if="!authenticatedUser">新規登録</router-link>
       </li>
       <li>
-        <router-link to="/signin" class="header-link" v-if="!authenticatedUser"
-          >ログイン</router-link
-        >
+        <router-link to="/signin" class="header-link" v-if="!authenticatedUser">ログイン</router-link>
       </li>
       <li>
-        <span
-          class="dropdown-menu"
-          v-click-outside="clickoutside"
-          @click="toggle"
-        >
-          <a class="header-link"
-            >マイページ<span class="dropdown-arrow"></span
-          ></a>
+        <span class="dropdown-menu" v-click-outside="clickoutside" @click="toggle">
+          <a class="header-link">
+            マイページ
+            <span class="dropdown-arrow"></span>
+          </a>
           <ul class="dropdown" :class="{ isOpen }">
             <li class="dropdown-items">
-              <router-link to="/mypage" class="dropdown-link"
-                >マイページ</router-link
-              >
+              <router-link to="/mypage" class="dropdown-link">マイページ</router-link>
             </li>
             <li class="dropdown-items">
-              <router-link to="/profile" class="dropdown-link"
-                >プロフィール編集</router-link
-              >
+              <router-link to="/profile" class="dropdown-link">プロフィール編集</router-link>
             </li>
             <li class="dropdown-items" v-if="authenticatedUser">
-              <button
-                class="dropdown-link"
-                @click="signOut"
-                v-if="authenticatedUser"
-              >
-                ログアウト
-              </button>
+              <button class="dropdown-link" @click="signOut" v-if="authenticatedUser">ログアウト</button>
             </li>
           </ul>
         </span>
@@ -70,12 +51,12 @@ export default {
   data() {
     return {
       authenticatedUser: "",
-      isOpen: false,
+      isOpen: false
     };
   },
   methods: {
     //ログアウトを実装
-    signOut: function() {
+    signOut() {
       firebase
         .auth()
         .signOut()
@@ -87,21 +68,21 @@ export default {
           // alert("ログアウトができません。");
         });
     },
-    toggle: function() {
+    toggle() {
       this.isOpen = !this.isOpen;
       //「!」を先頭につける事で真偽が逆。
     },
-    clickoutside: function() {
+    clickoutside() {
       //this.isOpenがtrue場合、this.toggleは何も起きない。
       //要するにドロップダウンメニューが開かれている時は、クリックしても何も起きない。
       if (this.isOpen) {
         this.toggle();
       }
-    },
+    }
   },
   mounted() {
     //以下、ユーザーが認証済みであれば「ログアウト」を表示
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.authenticatedUser = true;
       } else {
@@ -112,8 +93,8 @@ export default {
   },
   //directivesオプションを使用することにより、ローカルディレクティブに登録されるため、機能を使える
   directives: {
-    ClickOutside,
-  },
+    ClickOutside
+  }
 };
 </script>
 
@@ -214,6 +195,7 @@ li {
   &-items {
     padding: 1rem;
     border-bottom: 1px solid #fff;
+    text-align: center;
   }
 }
 
