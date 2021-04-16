@@ -2,16 +2,18 @@
   <div id="app">
     <Header />
     <div class="profile-inner flex">
-      <!-- <h2 class="profile-tll flex">プロフィールを変更する</h2>
-      <hr class="separate" /> -->
       <div class="profile-contens flex">
         <div class="profile-img-inner flex">
           <img
+            :src="uploadedImage"
+            width="200"
+            height="200"
             class="profile-img"
-            src="../assets/デフォルト画像.jpg"
             alt="プロフィール画像"
           />
-          <a class="profile-txt" href="#">プロフィール画像を変更する</a>
+          <button class="profile-txt profile-update" @click="update">
+            プロフィール画像を編集する
+          </button>
         </div>
         <div class="line"></div>
         <div class="profile-items flex">
@@ -27,124 +29,40 @@
           <div class="profile-contens flex">
             <img class="item-img" src="../assets/性別.jpg" alt="性別" />
             <select name="性別">
-              <option class="profile-item" value="性別" hidden>性別</option>
-              <option class="profile-item" value="男性">男性</option>
-              <option class="profile-item" value="女性">女性</option>
-              <option class="profile-item" value="その他">その他</option>
+              <option
+                v-for="sex in sexs"
+                :value="sex.name"
+                :key="sex"
+                class="post-item"
+              >
+                {{ sex.name }}
+              </option>
             </select>
           </div>
           <div class="profile-contens flex">
             <img class="item-img" src="../assets/年齢.jpg" alt="年齢" />
             <select name="年齢">
-              <option value="年齢" hidden>年齢</option>
-              <option value="10歳未満">10歳未満</option>
-              <option value="11歳">11歳</option>
-              <option value="12歳">12歳</option>
-              <option value="13歳">13歳</option>
-              <option value="14歳">14歳</option>
-              <option value="15歳">15歳</option>
-              <option value="16歳">16歳</option>
-              <option value="17歳">17歳</option>
-              <option value="18歳">18歳</option>
-              <option value="19歳">19歳</option>
-              <option value="20歳">20歳</option>
-              <option value="21歳">21歳</option>
-              <option value="22歳">22歳</option>
-              <option value="23歳">23歳</option>
-              <option value="24歳">24歳</option>
-              <option value="25歳">25歳</option>
-              <option value="26歳">26歳</option>
-              <option value="27歳">27歳</option>
-              <option value="28歳">28歳</option>
-              <option value="29歳">29歳</option>
-              <option value="30歳">30歳</option>
-              <option value="31歳">31歳</option>
-              <option value="32歳">32歳</option>
-              <option value="33歳">33歳</option>
-              <option value="34歳">34歳</option>
-              <option value="35歳">35歳</option>
-              <option value="36歳">36歳</option>
-              <option value="37歳">37歳</option>
-              <option value="38歳">38歳</option>
-              <option value="39歳">39歳</option>
-              <option value="40歳">40歳</option>
-              <option value="41歳">41歳</option>
-              <option value="42歳">42歳</option>
-              <option value="43歳">43歳</option>
-              <option value="44歳">44歳</option>
-              <option value="45歳">45歳</option>
-              <option value="46歳">46歳</option>
-              <option value="47歳">47歳</option>
-              <option value="48歳">48歳</option>
-              <option value="49歳">49歳</option>
-              <option value="50歳">50歳</option>
-              <option value="51歳">51歳</option>
-              <option value="52歳">52歳</option>
-              <option value="53歳">53歳</option>
-              <option value="54歳">54歳</option>
-              <option value="55歳">55歳</option>
-              <option value="56歳">56歳</option>
-              <option value="57歳">57歳</option>
-              <option value="58歳">58歳</option>
-              <option value="59歳">59歳</option>
-              <option value="60歳">60歳</option>
-              <option value="61歳">61歳</option>
-              <option value="62歳">62歳</option>
-              <option value="63歳">63歳</option>
-              <option value="64歳">64歳</option>
-              <option value="65歳">65歳</option>
-              <option value="66歳">66歳</option>
-              <option value="67歳">67歳</option>
-              <option value="68歳">68歳</option>
-              <option value="69歳">69歳</option>
-              <option value="70歳">70歳</option>
-              <option value="71歳">71歳</option>
-              <option value="72歳">72歳</option>
-              <option value="73歳">73歳</option>
-              <option value="74歳">74歳</option>
-              <option value="75歳">75歳</option>
-              <option value="76歳">76歳</option>
-              <option value="77歳">77歳</option>
-              <option value="78歳">78歳</option>
-              <option value="79歳">79歳</option>
-              <option value="80歳">80歳</option>
-              <option value="81歳">81歳</option>
-              <option value="82歳">82歳</option>
-              <option value="83歳">83歳</option>
-              <option value="84歳">84歳</option>
-              <option value="85歳">85歳</option>
-              <option value="86歳">86歳</option>
-              <option value="87歳">87歳</option>
-              <option value="88歳">88歳</option>
-              <option value="89歳">89歳</option>
-              <option value="90歳">90歳</option>
-              <option value="91歳">91歳</option>
-              <option value="92歳">92歳</option>
-              <option value="93歳">93歳</option>
-              <option value="94歳">94歳</option>
-              <option value="95歳">95歳</option>
-              <option value="96歳">96歳</option>
-              <option value="97歳">97歳</option>
-              <option value="98歳">98歳</option>
-              <option value="99歳">99歳</option>
+              <option
+                v-for="age in ages"
+                :value="age"
+                :key="age"
+                class="post-item"
+              >
+                {{ age.name }}
+              </option>
             </select>
           </div>
           <div class="profile-contens flex">
             <img class="item-img" src="../assets/職業.jpg" alt="職業" />
             <select name="職業">
-              <option class="profile-item" value="職業" hidden>職業</option>
-              <option class="profile-item" value="公務員">公務員</option>
-              <option class="profile-item" value="会社員">会社員</option>
-              <option class="profile-item" value="自営業">自営業</option>
-              <option class="profile-item" value="フリーランス"
-                >フリーランス</option
+              <option
+                v-for="profession in professions"
+                :value="profession"
+                :key="profession"
+                class="post-item"
               >
-              <option class="profile-item" value="パート・アルバイト"
-                >パート・アルバイト</option
-              >
-              <option class="profile-item" value="専業主婦">専業主婦</option>
-              <option class="profile-item" value="学生">学生</option>
-              <option class="profile-item" value="その他">その他</option>
+                {{ profession.name }}
+              </option>
             </select>
           </div>
           <div class="profile-contens flex">
@@ -163,124 +81,25 @@
               alt="好きなジャンル"
             />
             <select name="好きなジャンル">
-              <option class="profile-item" value="好きなジャンル" hidden
-                >好きなジャンル</option
+              <option
+                v-for="genre in genres"
+                :value="genre.name"
+                :key="genre"
+                class="post-item"
               >
-              <option class="profile-item" value="アクション"
-                >アクション</option
-              >
-              <option class="profile-item" value="ドラマ">ドラマ</option>
-              <option class="profile-item" value="恋愛">恋愛</option>
-              <option class="profile-item" value="ホラー">ホラー</option>
-              <option class="profile-item" value="戦争">戦争</option>
-              <option class="profile-item" value="音楽">音楽</option>
-              <option class="profile-item" value="ミュージカル"
-                >ミュージカル</option
-              >
-              <option class="profile-item" value="スポーツ">スポーツ</option>
-              <option class="profile-item" value="SE">SF</option>
-              <option class="profile-item" value="青春">青春</option>
-              <option class="profile-item" value="コメディ">コメディ</option>
-              <option class="profile-item" value="アニメ">アニメ</option>
-              <option class="profile-item" value="アドベンチャー・冒険"
-                >アドベンチャー・冒険</option
-              >
-              <option class="profile-item" value="アート・コンテンボラリー"
-                >アート・コンテンボラリー</option
-              >
-              <option class="profile-item" value="クライム">クライム</option>
-              <option class="profile-item" value="ドキュメンタリー"
-                >ドキュメンタリー</option
-              >
-              <option class="profile-item" value="ショートフィルム・短編"
-                >ショートフィルム・短編</option
-              >
-              <option class="profile-item" value="サスペンス"
-                >サスペンス</option
-              >
-              <option class="profile-item" value="ファミリー"
-                >ファミリー</option
-              >
-              <option class="profile-item" value="スリラー">スリラー</option>
-              <option class="profile-item" value="ヤクザ・任侠"
-                >ヤクザ・任侠</option
-              >
-              <option class="profile-item" value="ファンタジー"
-                >ファンタジー</option
-              >
-              <option class="profile-item" value="時代劇">時代劇</option>
-              <option class="profile-item" value="ミステリー"
-                >ミステリー</option
-              >
-              <option class="profile-item" value="伝記">伝記</option>
-              <option class="profile-item" value="西部劇">西部劇</option>
-              <option class="profile-item" value="ヤクザ・任侠"
-                >ヤクザ・任侠</option
-              >
-              <option class="profile-item" value="パニック">パニック</option>
-              <option class="profile-item" value="オムニバス"
-                >オムニバス</option
-              >
-              <option class="profile-item" value="バイオレンス"
-                >バイオレンス</option
-              >
-              <option class="profile-item" value="歴史">歴史</option>
-              <option class="profile-item" value="ギャング・マフィア"
-                >ギャング・マフィア</option
-              >
+                {{ genre.name }}
+              </option>
             </select>
-          </div>
-          <div class="profile-contens flex">
-            <img
-              class="item-img"
-              src="../assets/メールアドレス.jpg"
-              alt="メールアドレス"
-            />
-            <input
-              type="text"
-              class="profile-item"
-              placeholder="メールアドレス"
-              v-model="mail"
-            />
-          </div>
-          <div id="app" class="profile-contens flex">
-            <img
-              class="item-img"
-              src="../assets/パスワード.jpg"
-              alt="パスワード"
-            />
-            <div class="password-container">
-              <input
-                :type="inputType"
-                id="password"
-                placeholder="パスワード"
-                class="profile-item password-input"
-              />
-            </div>
-          </div>
-          <div id="app" class="profile-contens flex">
-            <img
-              class="item-img"
-              src="../assets/パスワード.jpg"
-              alt="パスワード"
-            />
-            <div class="password-container">
-              <input
-                :type="inputType"
-                id="password"
-                placeholder="パスワード"
-                class="profile-item password-input"
-              />
-            </div>
           </div>
         </div>
       </div>
-      <button class="btn flex">更新</button>
+      <button @click="updateBtn" class="btn flex">更新</button>
     </div>
   </div>
 </template>
 
 <script>
+import firebase from "firebase";
 import Header from "@/components/header.vue";
 
 export default {
@@ -288,30 +107,111 @@ export default {
     return {
       name: "",
       sex: "",
+      sexs: [
+        { name: "性別" },
+        { name: "男性" },
+        { name: "女性" },
+        { name: "その他" },
+      ],
       age: "",
+      ages: [
+        { name: "年齢" },
+        { name: "10際未満" },
+        { name: "10 ~ 19歳" },
+        { name: "20 ~ 29歳" },
+        { name: "30 ~ 39歳" },
+        { name: "40 ~ 49歳" },
+        { name: "50 ~ 59歳" },
+        { name: "60 ~ 69歳" },
+        { name: "70 ~ 79歳" },
+        { name: "80際以上" },
+      ],
+      profession: "",
+      professions: [
+        { name: "職業" },
+        { name: "公務員" },
+        { name: "会社員" },
+        { name: "自営業" },
+        { name: "フリーランス" },
+        { name: "パート・アルバイト" },
+        { name: "専業主婦" },
+        { name: "学生" },
+        { name: "その他" },
+      ],
       selfpr: "",
       genre: "",
-      mail: "",
-      password: "",
-      passwordConfirm: "",
-      profileImage: "",
-      isChecked: false,
+      genres: [
+        { id: 0, name: "ジャンル" },
+        { id: 1, name: "アクション" },
+        { id: 2, name: "ドラマ" },
+        { id: 3, name: "恋愛" },
+        { id: 4, name: "ホラー" },
+        { id: 5, name: "戦争" },
+        { id: 6, name: "音楽" },
+        { id: 7, name: "ミュージカル" },
+        { id: 8, name: "スポーツ" },
+        { id: 9, name: "SF" },
+        { id: 10, name: "青春" },
+        { id: 11, name: "コメディ" },
+        { id: 12, name: "アニメ" },
+        { id: 13, name: "アドベンチャー・冒険" },
+        { id: 14, name: "アート・コンテンボラリー" },
+        { id: 15, name: "クライム" },
+        { id: 16, name: "ドキュメンタリー" },
+        { id: 17, name: "ショートフィルム・短編" },
+        { id: 18, name: "サスペンス" },
+        { id: 19, name: "ファミリー" },
+        { id: 20, name: "スリラー" },
+        { id: 21, name: "ヤクザ・任侠" },
+        { id: 22, name: "ファンタジー" },
+        { id: 23, name: "時代劇" },
+        { id: 24, name: "ミステリー" },
+        { id: 25, name: "伝記" },
+        { id: 26, name: "西部劇" },
+        { id: 27, name: "パニック" },
+        { id: 28, name: "オムニバス" },
+        { id: 29, name: "バイオレンス" },
+        { id: 30, name: "歴史" },
+        { id: 31, name: "ギャング・マフィア" },
+      ],
+      uploadedImage: "",
     };
   },
   components: {
     Header,
   },
-  computed: {
-    inputType() {
-      return this.isChecked ? "text" : "password";
-    },
-    iconType() {
-      return this.isChecked ? "eye-slash" : "eye";
-    },
-  },
   methods: {
-    onClick() {
-      this.isChecked = !this.isChecked;
+    // postItem()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
+    updateBtn() {
+      firebase
+        .firestore()
+        .collection("users")
+        .add({
+          name: this.name,
+          sex: this.sex,
+          age: this.age,
+          selfpr: this.selfpr,
+          professions: this.professions,
+          uploadedImage: this.uploadedImage,
+          genre: this.genre,
+          time: firebase.firestore.FieldValue.serverTimestamp(),
+          //サーバ側で値設定
+        });
+      this.$swal({
+        title: "内容確認",
+        text: "この内容で投稿しますか？",
+        icon: "info",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          this.$swal("投稿しました。", {
+            icon: "success",
+          });
+        } else {
+          this.$swal("キャンセルしました。");
+        }
+      });
     },
   },
 };
@@ -358,6 +258,15 @@ select {
     .profile-img-inner {
       width: 35%;
       flex-direction: column;
+      .profile-update {
+        cursor: pointer;
+        border: none;
+        outline: none;
+        color: rgb(68, 126, 233);
+        background-color: #fff;
+        font-weight: bold;
+        font-size: 1rem;
+      }
       .profile-img {
         width: 200px;
         height: 185px;
@@ -367,7 +276,6 @@ select {
       .profile-txt {
         margin: 1rem;
         margin-left: 2rem;
-        color: #000000
       }
     }
     .profile-items {
@@ -404,7 +312,6 @@ select {
   border-radius: 1rem;
   text-decoration: none;
   cursor: pointer;
-  cursor: hand;
   border: none;
   outline: none;
   font-weight: bold;

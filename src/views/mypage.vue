@@ -4,8 +4,12 @@
     <div class="mypage flex">
       <div class="mypage-inner flex">
         <div class="profile-inner flex">
-          <img class="profile-inner-img" src="../assets/デフォルト画像.jpg" alt="デフォルト画像" />
-          <div class="profile-inner-name">TOMOYA TANI</div>
+          <img
+            class="profile-inner-img"
+            src="../assets/デフォルト画像.jpg"
+            alt="デフォルト画像"
+          />
+          <div class="profile-inner-name">{{allData.name}}</div>
         </div>
         <div class="profile-inner2 flex">
           <div class="follow-inner">
@@ -23,35 +27,58 @@
             </div>
           </div>
           <hr class="separate" />
-          <button @click="edit" class="profile-edit">プロフィール編集</button>
+          <router-link to="/profile" @click="edit" class="profile-edit flex"
+            >プロフィール編集</router-link
+          >
         </div>
       </div>
       <div class="profile-list">
         <ul>
-          <li>性別</li>
-          <li>年齢</li>
-          <li>職業</li>
-          <li>居住地</li>
-          <li>好きな映画</li>
-          <li>好きなジャンル</li>
-          <li>自己紹介</li>
+          <li>性別：{{ allData.sex }}</li>
+          <li>年齢：{{ allData.age }}</li>
+          <li>職業：{{allData.professions}}</li>
+          <li>居住地：</li>
+          <li>好きな映画：</li>
+          <li>好きなジャンル：{{allData.genre}}</li>
+          <li>自己紹介{{allData.selfpr}}}}</li>
         </ul>
       </div>
       <hr class="separate" />
       <div class="profile-post flex">
-        <h3>TOMOYA TANIさんの投稿一覧</h3>
+        <h3>{{allData.name}}の投稿一覧</h3>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import firebase from "firebase";
 import Header from "@/components/header.vue";
 
 export default {
+  data() {
+    return {
+      allData: [],
+    };
+  },
+
   components: {
-    Header
-  }
+    Header,
+  },
+  created() {
+    firebase
+      .firestore()
+      .collection("users")
+      .get()
+      .then((snapshot) => {
+        //"users"(参照先)のスナップショットを得る
+        snapshot.forEach((doc) => {
+          //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
+          this.allData.push(doc.data());
+          //更にallDataの空箱に格納した"doc"データを格納
+        });
+      });
+  },
 };
 </script>
 
@@ -104,6 +131,7 @@ export default {
         border: none;
         outline: none;
         font-weight: bold;
+        font-size: 0.9rem;
       }
       p {
         font-weight: bold;

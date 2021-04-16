@@ -156,7 +156,7 @@ export default {
     width: 7rem;
     color: #fff;
     background-color: #eb6100;
-    padding: 10px;
+    padding: 7px;
     margin-top: 1rem;
     border-radius: 1rem;
     text-decoration: none;

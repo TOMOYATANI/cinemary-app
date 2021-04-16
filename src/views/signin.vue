@@ -19,6 +19,9 @@
 <script>
 import firebase from "firebase";
 import Header from "@/components/header.vue";
+import Vue from "vue";
+import VueSwal from "vue-swal";
+Vue.use(VueSwal);
 
 export default {
   name: "Signin",
@@ -36,20 +39,23 @@ export default {
     signIn() {
       firebase
         .auth()
+       //.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         .signInWithEmailAndPassword(this.email, this.password)
         //ユーザーがフォームに入力したら、signInWithEmailAndPassword メソッドを呼び出します。
-        .then(
-          () => {
-            // alert("ログインに成功しました。");
-            //上記、登録できたらアラート実行
+        .then((willDelete) => {
+          if (willDelete) {
+            this.$swal("ログインに成功しました。", {
+              icon: "success",
+            });
             this.$router.push("/mypage");
-            //ログイン後、上記ルート先へページ遷移
-          },
-          (err) => {
-            alert("ログイン情報が間違っています。", err.message);
-            //エラーメッセージ
           }
-        );
+          //return firebase.auth().signInWithEmailAndPassword(email, password);
+        })
+        .catch(() => {
+          this.$swal("ログイン情報が間違っています。", {
+            icon: "error",
+          });
+        });
     },
   },
 };

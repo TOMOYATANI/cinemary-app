@@ -4,7 +4,6 @@
     <div class="signup flex">
       <div class="signup-inner flex">
         <h2>新規登録</h2>
-        <input type="text" placeholder="Username" v-model="username" />
         <input type="text" placeholder="Email" v-model="email" />
         <input type="password" placeholder="Password" v-model="password" />
         <button class="btn-signup" @click.prevent="signUp">登録</button>
@@ -20,12 +19,14 @@
 <script>
 import firebase from "firebase";
 import Header from "@/components/header.vue";
+import Vue from 'vue'
+import VueSwal from 'vue-swal'
+Vue.use(VueSwal)
 
 export default {
   name: "Signup",
   data() {
     return {
-      username: "",
       email: "",
       password: "",
     };
@@ -40,22 +41,24 @@ export default {
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         //ユーザーから提供されたメールアドレスとパスワードを検証し、それらをcreateUserWithEmailAndPassword メソッドに渡す。
-        .then(() => {
-          firebase
-            .auth()
-            .currentUser.updateProfile({
-              displayName: this.username,
-            })
-            .then(() => {
-              // alert("登録に成功しました。");
-              //上記、登録できたらアラート実行
-              this.$router.push("/signin");
-              //登録後、上記ルート先へページ遷移
+        // .then(() => {
+        //   firebase
+        //     .auth()
+        //     .currentUser.updateProfile({
+        //       displayName: this.username,
+        //     })
+        .then((willDelete) => {
+          if (willDelete) {
+            this.$swal("登録に成功しました。", {
+              icon: "success",
             });
+            this.$router.push("/signin");
+          }
         })
-        .catch((error) => {
-          alert("登録情報が正しくありません。", error.message);
-          //エラーメッセージ
+        .catch(() => {
+          this.$swal("登録情報が正しくありません。", {
+            icon: "error",
+          });
         });
     },
   },

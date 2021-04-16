@@ -8,11 +8,21 @@
       <div class="post-items flex">
         <div class="post-contens flex">
           <img class="item-img" src="../assets/タイトル.jpg" alt="タイトル" />
-          <input type="text" class="post-item blank" placeholder="タイトル" v-model="title" />
+          <input
+            type="text"
+            class="post-item blank"
+            placeholder="タイトル"
+            v-model="title"
+          />
         </div>
         <div class="post-contens flex">
           <img class="item-img" src="../assets/自己紹介.jpg" alt="内容" />
-          <input type="text" class="post-item" placeholder="内容" v-model="description" />
+          <input
+            type="text"
+            class="post-item"
+            placeholder="内容"
+            v-model="description"
+          />
         </div>
         <div class="post-contens post-img flex">
           <img class="item-img" src="../assets/画像.jpg" alt="画像" />
@@ -20,41 +30,20 @@
           <button class="btn-img">画像選択</button>
         </div>
         <div class="post-contens flex">
-          <img class="item-img" src="../assets/好きなジャンル.jpg" alt="好きなジャンル" />
+          <img
+            class="item-img"
+            src="../assets/好きなジャンル.jpg"
+            alt="好きなジャンル"
+          />
           <select name="好きなジャンル">
-            <option class="post-item" value="好きなジャンル" hidden>ジャンル</option>
-            <option class="post-item" value="アクション">アクション</option>
-            <option class="post-item" value="ドラマ">ドラマ</option>
-            <option class="post-item" value="恋愛">恋愛</option>
-            <option class="post-item" value="ホラー">ホラー</option>
-            <option class="post-item" value="戦争">戦争</option>
-            <option class="post-item" value="音楽">音楽</option>
-            <option class="post-item" value="ミュージカル">ミュージカル</option>
-            <option class="post-item" value="スポーツ">スポーツ</option>
-            <option class="post-item" value="SE">SF</option>
-            <option class="post-item" value="青春">青春</option>
-            <option class="post-item" value="コメディ">コメディ</option>
-            <option class="post-item" value="アニメ">アニメ</option>
-            <option class="post-item" value="アドベンチャー・冒険">アドベンチャー・冒険</option>
-            <option class="post-item" value="アート・コンテンボラリー">アート・コンテンボラリー</option>
-            <option class="post-item" value="クライム">クライム</option>
-            <option class="post-item" value="ドキュメンタリー">ドキュメンタリー</option>
-            <option class="post-item" value="ショートフィルム・短編">ショートフィルム・短編</option>
-            <option class="post-item" value="サスペンス">サスペンス</option>
-            <option class="post-item" value="ファミリー">ファミリー</option>
-            <option class="post-item" value="スリラー">スリラー</option>
-            <option class="post-item" value="ヤクザ・任侠">ヤクザ・任侠</option>
-            <option class="post-item" value="ファンタジー">ファンタジー</option>
-            <option class="post-item" value="時代劇">時代劇</option>
-            <option class="post-item" value="ミステリー">ミステリー</option>
-            <option class="post-item" value="伝記">伝記</option>
-            <option class="post-item" value="西部劇">西部劇</option>
-            <option class="post-item" value="ヤクザ・任侠">ヤクザ・任侠</option>
-            <option class="post-item" value="パニック">パニック</option>
-            <option class="post-item" value="オムニバス">オムニバス</option>
-            <option class="post-item" value="バイオレンス">バイオレンス</option>
-            <option class="post-item" value="歴史">歴史</option>
-            <option class="post-item" value="ギャング・マフィア">ギャング・マフィア</option>
+            <option
+              v-for="genre in genres"
+              :value="genre.name"
+              :key="genre.id"
+              class="post-item"
+            >
+              {{ genre.name }}
+            </option>
           </select>
         </div>
         <button class="btn" @click.prevent="postItem">投稿</button>
@@ -66,6 +55,9 @@
 <script>
 import firebase from "firebase";
 import Header from "@/components/header.vue";
+import Vue from "vue";
+import VueSwal from "vue-swal";
+Vue.use(VueSwal);
 
 export default {
   data() {
@@ -75,16 +67,46 @@ export default {
       title: "",
       description: "",
       image: "",
-      genre: ""
+      genre: "",
+      genres: [
+        { id: 0, name: "ジャンル" },
+        { id: 1, name: "アクション" },
+        { id: 2, name: "ドラマ" },
+        { id: 3, name: "恋愛" },
+        { id: 4, name: "ホラー" },
+        { id: 5, name: "戦争" },
+        { id: 6, name: "音楽" },
+        { id: 7, name: "ミュージカル" },
+        { id: 8, name: "スポーツ" },
+        { id: 9, name: "SF" },
+        { id: 10, name: "青春" },
+        { id: 11, name: "コメディ" },
+        { id: 12, name: "アニメ" },
+        { id: 13, name: "アドベンチャー・冒険" },
+        { id: 14, name: "アート・コンテンボラリー" },
+        { id: 15, name: "クライム" },
+        { id: 16, name: "ドキュメンタリー" },
+        { id: 17, name: "ショートフィルム・短編" },
+        { id: 18, name: "サスペンス" },
+        { id: 19, name: "ファミリー" },
+        { id: 20, name: "スリラー" },
+        { id: 21, name: "ヤクザ・任侠" },
+        { id: 22, name: "ファンタジー" },
+        { id: 23, name: "時代劇" },
+        { id: 24, name: "ミステリー" },
+        { id: 25, name: "伝記" },
+        { id: 26, name: "西部劇" },
+        { id: 27, name: "パニック" },
+        { id: 28, name: "オムニバス" },
+        { id: 29, name: "バイオレンス" },
+        { id: 30, name: "歴史" },
+        { id: 31, name: "ギャング・マフィア" },
+      ],
     };
   },
   components: {
-    Header
+    Header,
   },
-  // mounted() {
-  //   this.db = firebase.firestore().collection("posts");
-  // },
-  //何度も使う場合は、リファクタリングで関数で定義しておく。
   methods: {
     // postItem()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
     postItem() {
@@ -96,14 +118,26 @@ export default {
           description: this.description,
           image: this.image,
           genre: this.genre,
-          time: firebase.firestore.FieldValue.serverTimestamp()
+          time: firebase.firestore.FieldValue.serverTimestamp(),
           //サーバ側で値設定
-        })
-        .then(() => {
-          confirm("投稿しますか？");
         });
-    }
-  }
+      this.$swal({
+        title: "内容確認",
+        text: "この内容で投稿しますか？",
+        icon: "info",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          this.$swal("投稿しました。", {
+            icon: "success",
+          });
+        } else {
+          this.$swal("キャンセルしました。");
+        }
+      });
+    },
+  },
 };
 </script>
 
