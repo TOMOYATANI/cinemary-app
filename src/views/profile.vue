@@ -28,7 +28,8 @@
           </div>
           <div class="profile-contens flex">
             <img class="item-img" src="../assets/性別.jpg" alt="性別" />
-            <select name="性別">
+            <select v-model="sex" name="性別">
+              <option class="post-item" value="性別" hidden>性別</option>
               <option
                 v-for="sex in sexs"
                 :value="sex.name"
@@ -41,10 +42,11 @@
           </div>
           <div class="profile-contens flex">
             <img class="item-img" src="../assets/年齢.jpg" alt="年齢" />
-            <select name="年齢">
+            <select v-model="age" name="年齢">
+              <option class="post-item" value="年齢" hidden>年齢</option>
               <option
                 v-for="age in ages"
-                :value="age"
+                :value="age.name"
                 :key="age"
                 class="post-item"
               >
@@ -54,10 +56,11 @@
           </div>
           <div class="profile-contens flex">
             <img class="item-img" src="../assets/職業.jpg" alt="職業" />
-            <select name="職業">
+            <select v-model="profession" name="職業">
+              <option class="post-item" value="職業" hidden>職業</option>
               <option
                 v-for="profession in professions"
-                :value="profession"
+                :value="profession.name"
                 :key="profession"
                 class="post-item"
               >
@@ -80,7 +83,10 @@
               src="../assets/好きなジャンル.jpg"
               alt="好きなジャンル"
             />
-            <select name="好きなジャンル">
+            <select v-model="genre" name="好きなジャンル">
+              <option class="post-item" value="ジャンル" hidden
+                >ジャンル</option
+              >
               <option
                 v-for="genre in genres"
                 :value="genre.name"
@@ -101,21 +107,20 @@
 <script>
 import firebase from "firebase";
 import Header from "@/components/header.vue";
+import Vue from "vue";
+import VueSwal from "vue-swal";
+Vue.use(VueSwal);
+import VModal from 'vue-js-modal'
+Vue.use(VModal);
 
 export default {
   data() {
     return {
       name: "",
       sex: "",
-      sexs: [
-        { name: "性別" },
-        { name: "男性" },
-        { name: "女性" },
-        { name: "その他" },
-      ],
+      sexs: [{ name: "男性" }, { name: "女性" }, { name: "その他" }],
       age: "",
       ages: [
-        { name: "年齢" },
         { name: "10際未満" },
         { name: "10 ~ 19歳" },
         { name: "20 ~ 29歳" },
@@ -128,7 +133,6 @@ export default {
       ],
       profession: "",
       professions: [
-        { name: "職業" },
         { name: "公務員" },
         { name: "会社員" },
         { name: "自営業" },
@@ -191,7 +195,7 @@ export default {
           sex: this.sex,
           age: this.age,
           selfpr: this.selfpr,
-          professions: this.professions,
+          profession: this.profession,
           uploadedImage: this.uploadedImage,
           genre: this.genre,
           time: firebase.firestore.FieldValue.serverTimestamp(),
@@ -212,6 +216,12 @@ export default {
           this.$swal("キャンセルしました。");
         }
       });
+    },
+     show : function() {
+      this.$modal.show('hello-world');
+    },
+    hide : function () {
+      this.$modal.hide('hello-world');
     },
   },
 };

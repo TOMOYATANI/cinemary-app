@@ -35,7 +35,10 @@
             src="../assets/好きなジャンル.jpg"
             alt="好きなジャンル"
           />
-          <select name="好きなジャンル">
+          <select v-model="genre" name="好きなジャンル">
+            <option class="post-item" value="好きなジャンル" hidden
+              >ジャンルを選択</option
+            >
             <option
               v-for="genre in genres"
               :value="genre.name"
@@ -69,7 +72,6 @@ export default {
       image: "",
       genre: "",
       genres: [
-        { id: 0, name: "ジャンル" },
         { id: 1, name: "アクション" },
         { id: 2, name: "ドラマ" },
         { id: 3, name: "恋愛" },

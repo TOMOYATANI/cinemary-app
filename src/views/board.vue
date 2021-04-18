@@ -1,13 +1,18 @@
 <template>
   <div id="app">
     <Header />
-    <Search />
+    <Post />
     <br />
     <div class="post">
       <h2 class="post-tll">投稿一覧</h2>
       <div class="post-inner">
         <div class="post-items">
-          <List v-for="(list,index) in allData" :index="index" :list="list" :key="list.id" />
+          <List
+            v-for="(list, index) in allData"
+            :index="index"
+            :list="list"
+            :key="list.id"
+          />
           <!--allDataのデータをlist関数とindex関数にそれぞれ格納-->
         </div>
       </div>
@@ -18,7 +23,7 @@
 <script>
 import firebase from "firebase";
 import Header from "@/components/header.vue";
-import Search from "@/components/search.vue";
+import Post from "@/components/post.vue";
 import List from "@/components/list.vue";
 
 export default {
@@ -27,13 +32,13 @@ export default {
       title: "",
       contents: "",
       image: "",
-      allData: []
+      allData: [],
     };
   },
   components: {
     Header,
-    Search,
-    List
+    Post,
+    List,
   },
   created() {
     // "posts"コレクションの全ドキュメントを取得。
@@ -41,15 +46,15 @@ export default {
       .firestore()
       .collection("posts")
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         //"posts"(参照先)のスナップショットを得る
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.allData.push(doc.data());
           //更にallDataの空箱に格納した"doc"データを格納
         });
       });
-  }
+  },
 };
 </script>
 

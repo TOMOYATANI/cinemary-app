@@ -5,8 +5,7 @@
 </template>
 
 <script>
-export default {
-};
+export default {};
 </script>
 
 <style scoped lang="scss">
@@ -67,5 +66,9 @@ input[type="button"] {
 
 ul {
   list-style: none;
+}
+
+a {
+  text-decoration: none;
 }
 </style>

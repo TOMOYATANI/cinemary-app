@@ -6,7 +6,7 @@ import Signup from "../views/signup.vue";
 import First from "../views/first.vue";
 import Mypage from "../views/mypage.vue";
 import Profile from "../views/profile.vue";
-import Post from "../views/post.vue";
+// import Post from "../views/post.vue";
 import Board from "../views/board.vue";
 import Chat from "../components/chat.vue";
 import firebase from "firebase";
@@ -47,12 +47,12 @@ const routes = [
     component: Profile,
     meta: { requiresAuth: true },
   },
-  {
-    path: "/post",
-    name: "Post",
-    component: Post,
-    meta: { requiresAuth: true },
-  },
+  // {
+  //   path: "/post",
+  //   name: "Post",
+  //   component: Post,
+  //   meta: { requiresAuth: true },
+  // },
   {
     path: "/board",
     name: "Board",
