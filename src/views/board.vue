@@ -55,6 +55,37 @@ export default {
         });
       });
   },
+  methods: {
+    //  // firebase databaseからコーヒーデータをダウンロード
+    //  loadCoffeeView() {
+    //    const imageRef = firebase
+    //      .database()
+    //      .ref('users') //firebase database の beans に保存したデータを参照
+    //      .orderByChild('createdAt'); //並び替え
+    //    // 過去に登録したイベントハンドラを削除
+    //    imageRef.off('child_added');
+    //    // ここで保存データを抜き取り
+    //    imageRef.on('child_added',(Snapshot) => {
+    //      const imageId = Snapshot.key;
+    //      const imageData = Snapshot.val();
+
+    //     //  this.lct = ; //ここでURLが抜き取られる
+    //    });
+    //  },
+     //firebase storageからコーヒーの画像データをダウンロード
+     downloadCoffeeImages(uploadUrl) {
+       firebase
+         .storage()
+         .ref(uploadUrl)
+         .getDownloadURL()
+         .then((data) => {
+           this.image = data;
+         })
+         .catch((error) => {
+           console.error('画像をダウンロードできませんでした。', error);
+         });
+     },
+   },
 };
 </script>
 

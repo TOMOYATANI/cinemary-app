@@ -27,10 +27,7 @@
             <div class="post-contens flex">
               <img class="item-img" src="../assets/自己紹介.jpg" alt="内容" />
               <textarea
-                class="post-item"
                 name="text"
-                id=""
-                cols="10"
                 rows="1"
                 v-model="description"
                 placeholder="内容"
@@ -38,8 +35,13 @@
             </div>
             <div class="post-contens post-img flex">
               <img class="item-img" src="../assets/画像.jpg" alt="画像" />
-              <input type="text" class="post-item" v-model="image" />
-              <button class="btn-img">画像選択</button>
+              <input
+
+                class="post-item"
+                @change="onFileChange"
+                accept="image/jpeg,image/png,image/gif"
+              />
+              <button @click="uploadImage" class="btn-img">画像選択</button>
             </div>
             <div class="post-contens flex">
               <img
@@ -129,7 +131,6 @@ export default {
       time: "",
       title: "",
       description: "",
-      image: "",
       genre: "",
       genres: [
         { id: 1, name: "アクション" },
@@ -198,6 +199,8 @@ export default {
         { id: 30, name: "歴史" },
         { id: 31, name: "ギャング・マフィア" },
       ],
+      file: null, // 選択した画像を持っておく変数
+      uploadUrl: null, //画像を保存する場所のURLを保存する変数
     };
   },
   components: {},
@@ -238,6 +241,42 @@ export default {
       this.$modal.hide("post");
     },
   },
+  onFileChange(e) {
+    const image = e.target.files; //選択された画像ファイルを選択
+    this.file = image[0]; //画像ファイルを1つだけ選択
+
+    // Firebase storageに保存するパスを決める
+    // this.uploadUrl = `upload-images/${this.}`;
+  },
+  uploadImage() {
+    //画像をfirebase storageに保存
+    firebase
+      .storage()
+      .ref(this.uploadUrl) //さっき決めたパスを参照して、
+      .put(this.file) //保存する
+      .then(() => {
+        //保存が成功したら、保存した画像ファイルの場所とともにfirebase databaseに保存する準備
+        const imageData = {
+          uploadUrl: this.uploadUrl,
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
+        };
+        // ここでfirebase databaseに保存する
+        firebase
+          .database()
+          .ref("users") //保存する場所を参照して、
+          .push(imageData) //追加で保存setメソッドを使うと上書きされる
+          .then(() => {
+            alert("画像が保存できました。");
+            // this.$emit("", false); //親コンポーネントに伝達
+          })
+          .catch((error) => {
+            console.error("画像が保存できませんでした。", error);
+          });
+      })
+      .catch((error) => {
+        console.error("エラー発生しました。", error);
+      });
+  },
 };
 </script>
 
@@ -245,7 +284,7 @@ export default {
 // -- 共通 -- //
 
 ::placeholder {
-  color: #444;
+  color: rgb(195, 195, 195);
   font-size: 1rem;
   padding-left: 0.25rem;
 }
@@ -262,13 +301,19 @@ hr.separate {
 
 textarea {
   resize: vertical;
+  width: 17rem;
+  outline: none;
+  border: none;
+  height: 2rem;
+  border-bottom: 1px solid #ddd;
+  color: #444;
+  font-size: 1rem;
 }
 
 textarea::placeholder {
-  color: #444;
+  color: rgb(195, 195, 195);
   font-size: 1rem;
   padding-left: 0.25rem;
-  padding-top: 1rem;
 }
 
 // -- search -- //

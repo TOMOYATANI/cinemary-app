@@ -132,9 +132,7 @@
                         alt="自己紹介"
                       />
                       <textarea
-                        class="profile-item selfpr"
                         name="text"
-                        id=""
                         cols="10"
                         rows="1"
                         v-model="selfpr"
@@ -338,12 +336,18 @@ export default {
 
 textarea {
   resize: vertical;
+  width: 15rem;
+  outline: none;
+  border: none;
+  height: 2rem;
+  border-bottom: 1px solid #ddd;
+  color: #444;
+  font-size: 1rem;
 }
 
 textarea::placeholder {
   color: #444;
   font-size: 1rem;
-  padding-top: 0.5rem;
   padding-left: 0.2rem;
 }
 

@@ -4,6 +4,7 @@
     <div class="signup flex">
       <div class="signup-inner flex">
         <h2>新規登録</h2>
+        <input type="text" placeholder="Username" v-model="userName" />
         <input type="text" placeholder="Email" v-model="email" />
         <input type="password" placeholder="Password" v-model="password" />
         <button class="btn-signup" @click.prevent="signUp">登録</button>
@@ -19,9 +20,9 @@
 <script>
 import firebase from "firebase";
 import Header from "@/components/header.vue";
-import Vue from 'vue'
-import VueSwal from 'vue-swal'
-Vue.use(VueSwal)
+import Vue from "vue";
+import VueSwal from "vue-swal";
+Vue.use(VueSwal);
 
 export default {
   name: "Signup",
@@ -29,6 +30,7 @@ export default {
     return {
       email: "",
       password: "",
+      userName:""
     };
   },
   components: {
