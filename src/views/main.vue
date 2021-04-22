@@ -5,9 +5,9 @@
       <div class="main-tll flex">
         <h1>映画を楽しむすべての映画好きへ</h1>
         <p>Cinemary(シネマリー)は、映画を共有するアプリです。</p>
-        <p>あなたのお気に入りの作品を共有しませんか。</p>
-        <router-link to="/signup" class="btn btn-orange" v-if="!authenticatedUser">今すぐ登録</router-link>
-        <router-link to="/post" class="btn btn-orange" v-if="authenticatedUser">投稿する</router-link>
+        <p>あなたのお気に入りの作品を共有してみませんか。</p>
+        <router-link to="/signup" class="post-btn" v-if="!authenticatedUser">今すぐ登録</router-link>
+        <router-link to="/board" class="post-btn flex" v-if="authenticatedUser">投稿</router-link>
       </div>
       <ul class="main-roop">
         <li class="main-roop-items">
@@ -131,6 +131,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+// -- 変数 -- //
+
+$gray-color: rgb(100, 100, 100);
+$white-color: rgb(255, 255, 255);
+$black-color: rgb(0, 0, 0);
+
 .main {
   width: 100%;
   height: 90vh;
@@ -146,27 +152,34 @@ export default {
     border-radius: 2rem;
     position: absolute;
     top: 30%;
-    left: 10%;
-    padding: 2rem;
+    left: 15%;
+    padding: 2.3rem;
     box-shadow: 0 0 10px lightgrey;
-    width: 80%;
+    width: 70%;
+    h1 {
+      color: rgb(80, 80, 80);
+    }
+    p {
+      color: rgb(80, 80, 80);
+    }
   }
-  .btn-orange,
-  a.btn-orange {
+  .post-btn {
     width: 7rem;
+    margin-top: 1.5rem;
+    padding: 0.5rem;
+    display: inline-block;
+    letter-spacing: 2px;
+    overflow: hidden;
     color: #fff;
-    background-color: #eb6100;
-    padding: 7px;
-    margin-top: 1rem;
-    border-radius: 1rem;
-    text-decoration: none;
+    background: #fc8f01;
+    box-shadow: 0 0 10px #fc8f01, 0 0 50px #fc8f01, 0 0 0px;
+    outline: none;
+    border: none;
+    border-radius: 0.5rem;
     font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
     text-align: center;
-  }
-  .btn-orange:hover,
-  a.btn-orange:hover {
-    color: #fff;
-    background: #f56500;
   }
   &-roop {
     width: 100%;

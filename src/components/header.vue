@@ -1,32 +1,29 @@
 <template>
   <header class="header">
-    <router-link to="/" class="header-ttl">
-      <span class="header-ttl-color">C</span>inemary
+    <router-link to="/" class="header-ttl neon">
+      <span class="header-ttl-color neon2">C</span>inemary
     </router-link>
     <ul class="header-menu">
       <li>
-        <router-link to="/first" class="header-link">初めての方へ</router-link>
+        <router-link to="/" class="header-link neon3 flash">HOME</router-link>
       </li>
       <li>
-        <router-link to="/board" class="header-link">投稿一覧</router-link>
+        <router-link to="/first" class="header-link neon3 flash">ABOUT</router-link>
       </li>
       <li>
-        <router-link to="/signup" class="header-link" v-if="!authenticatedUser"
-          >新規登録</router-link
-        >
+        <router-link to="/board" class="header-link neon3 flash">POST</router-link>
       </li>
       <li>
-        <router-link to="/signin" class="header-link" v-if="!authenticatedUser"
-          >ログイン</router-link
-        >
+        <router-link to="/signup" class="header-link neon3 flash" v-if="!authenticatedUser">SINGUP</router-link>
       </li>
       <li>
-        <router-link to="/mypage" class="header-link">マイページ</router-link>
+        <router-link to="/signin" class="header-link neon3 flash" v-if="!authenticatedUser">LOGIN</router-link>
+      </li>
+      <li>
+        <router-link to="/mypage" class="header-link neon3 flash">MYPAGE</router-link>
       </li>
       <li v-if="authenticatedUser">
-        <button class="header-link" @click="signOut" v-if="authenticatedUser">
-          ログアウト
-        </button>
+        <button class="header-link neon3 flash" @click="signOut" v-if="authenticatedUser">LOGOUT</button>
       </li>
     </ul>
   </header>
@@ -41,7 +38,7 @@ export default {
   data() {
     return {
       authenticatedUser: "",
-      isOpen: false,
+      isOpen: false
     };
   },
   methods: {
@@ -68,11 +65,11 @@ export default {
       if (this.isOpen) {
         this.toggle();
       }
-    },
+    }
   },
   mounted() {
     //以下、ユーザーが認証済みであれば「ログアウト」を表示
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.authenticatedUser = true;
       } else {
@@ -83,28 +80,31 @@ export default {
   },
   //directivesオプションを使用することにより、ローカルディレクティブに登録されるため、機能を使える
   directives: {
-    ClickOutside,
-  },
+    ClickOutside
+  }
 };
 </script>
 
 <style scoped lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
-li {
-  list-style: none;
-}
+// -- 変数 -- //
+
+$gray-color: rgb(100, 100, 100);
+$white-color: rgb(255, 255, 255);
+$black-color: rgb(0, 0, 0);
+
 
 .header {
   position: sticky;
   top: 0;
-  background-color: #000000;
+  background-color: $black-color;
   padding: 1rem 3rem;
   z-index: 999;
   display: flex;
   align-items: center;
   &-ttl {
     color: #fff;
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: bold;
     text-decoration: none;
     background-color: transparent;
@@ -112,32 +112,13 @@ li {
     outline: none;
     font-family: "Roboto", sans-serif;
     &-color {
-      color: grey;
-      font-size: 2.5rem;
+      color: rgb(0, 0, 0);
+      font-size: 3rem;
     }
   }
   &-menu {
     display: flex;
     margin-left: auto;
-    .dropdown-menu {
-      position: relative;
-      display: flex;
-      .dropdown-link {
-        color: #fff;
-        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-        text-decoration: none;
-        background-color: transparent;
-        border: none;
-        outline: none;
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-        cursor: hand;
-        &:hover {
-          color: grey;
-        }
-      }
-    }
   }
   &-link {
     color: #fff;
@@ -151,43 +132,16 @@ li {
     cursor: pointer;
     cursor: hand;
     margin-left: 3rem;
+    font-family: "Roboto", sans-serif;
     &:not(:first-child) {
       margin-left: 2rem;
     }
     &:hover {
-      color: #bbb;
+      color: rgba(0, 255, 0, 0.5);
     }
   }
 }
 
-.dropdown-arrow {
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  top: 9px;
-  right: -20px;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 7px solid white;
-  .header-link:hover & {
-    border-top-color: #bbb;
-  }
-}
-
-.dropdown {
-  width: 10rem;
-  height: auto;
-  position: absolute;
-  top: 50px;
-  right: -47px;
-  display: none;
-  background-color: #000000;
-  &-items {
-    padding: 1rem;
-    border-bottom: 1px solid #fff;
-    text-align: center;
-  }
-}
 
 .isOpen {
   display: block;
@@ -196,5 +150,60 @@ li {
 a.header-ttl:hover,
 a.header-ttl:hover span {
   color: #bbb;
+}
+
+// -- neon -- //
+.neon {
+  display: inline-block;
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(255, 255, 255);
+  text-shadow: 0 0 10px rgb(255, 255, 255), 0 0 15px rgb(150, 150, 150);
+}
+
+.neon2 {
+  display: inline-block;
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(180, 180, 180);
+  text-shadow: 0 0 10px rgb(50, 50, 50), 0 0 15px rgb(50, 50, 50);
+}
+
+.neon3 {
+  display: inline-block;
+  color: transparent;
+  -webkit-text-stroke: 0.5px #0f0;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.5);
+}
+
+.flash {
+  animation: flash-anime 5s linear infinite;
+}
+@keyframes flash-anime {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  51% {
+    opacity: 0.3;
+  }
+  52% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  76% {
+    opacity: 0.6;
+  }
+  77% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 0.3;
+  }
+  79% {
+    opacity: 1;
+  }
 }
 </style>

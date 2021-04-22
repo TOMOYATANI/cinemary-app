@@ -56,6 +56,7 @@ input[type="button"] {
 * {
   margin: 0;
   box-sizing: border-box;
+  color: rgb(255, 255, 255);
 }
 
 .flex {

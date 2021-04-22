@@ -47,19 +47,14 @@ const routes = [
     component: Profile,
     meta: { requiresAuth: true },
   },
-  // {
-  //   path: "/post",
-  //   name: "Post",
-  //   component: Post,
-  //   meta: { requiresAuth: true },
-  // },
   {
     path: "/board",
     name: "Board",
     component: Board,
   },
   {
-    path: "/chat",
+    path: "/chat/:id",
+    ///「:id」とすることで、Firestoreで取得した「id」先へページ遷移できる。
     name: "Chat",
     component: Chat,
   },

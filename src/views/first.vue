@@ -2,7 +2,7 @@
   <div id="app">
     <Header />
     <div class="first flex">
-      <h2 class="about-tll">Cinemary(シネマリー)とは？</h2>
+      <h2 class="about-tll neon">Cinemary(シネマリー)とは？</h2>
       <hr class="separate" />
       <ul class="flex">
         <li>
@@ -47,13 +47,13 @@
         <p>しかし、「何の映画を観よう」「どれを観たらいいだろう」と悩んだことはないでしょうか。</p>
         <p>その時の気分を投稿して、そのシーンにあった映画をチャットを通じて選んでみませんか。</p>
       </div>
-      <h2 class="flow-tll">Cinemaryを利用するまでの流れ</h2>
+      <h2 class="flow-tll neon">Cinemaryを利用するまでの流れ</h2>
       <hr class="separate" />
       <div class="flow flex">
         <div class="flow-item flex">
           <div class="step">
             <div>
-              <img src="../assets/パソコンicon.jpg" alt="パソコン" />
+              <img src="../assets/パソコン.jpg" alt="パソコン" />
             </div>
             <p>STEP1</p>
             <h3>無料会員登録</h3>
@@ -61,7 +61,7 @@
           </div>
           <div class="step">
             <div>
-              <img src="../assets/投稿icon.jpg" alt="投稿" />
+              <img src="../assets/投稿.jpg" alt="投稿" />
             </div>
             <p>STEP2</p>
             <h3>投稿</h3>
@@ -69,16 +69,14 @@
           </div>
           <div class="step">
             <div>
-              <img src="../assets/成立icon.jpg" alt="成立" />
+              <img src="../assets/成立.jpg" alt="成立" />
             </div>
             <p>STEP3</p>
             <h3>映画が決定！</h3>
             <p class="step-txt">チャットを通じて、あなたの気分にあった映画が決まります。</p>
           </div>
         </div>
-        <div class="first-btn">
-          <router-link to="/signup" class="btn btn-orange" v-if="!authenticatedUser">今すぐ登録</router-link>
-        </div>
+        <router-link to="/signup" class="first-btn" v-if="!authenticatedUser">今すぐ登録</router-link>
       </div>
     </div>
   </div>
@@ -141,15 +139,18 @@ export default {
 
 .first {
   flex-direction: column;
+  background-color: rgb(0, 0, 0);
   .about-tll {
     margin-top: 3rem;
+    color: rgb(255, 255, 255);
+    font-family: "Roboto", sans-serif;
   }
   .separate {
     width: 70%;
     display: block;
     height: 0;
     border: 0;
-    border-top: 1px solid rgb(58, 57, 57);
+    border-top: 1px solid rgb(100, 100, 100);
     margin: 1em 0;
     padding: 1rem;
   }
@@ -176,16 +177,25 @@ export default {
           position: absolute;
           top: 20px;
           left: 55px;
+          p {
+            color: rgb(0, 0, 0);
+          }
         }
         .say2 {
           position: absolute;
           top: 20px;
           left: 55px;
+          p {
+            color: rgb(0, 0, 0);
+          }
         }
         .say3 {
           position: absolute;
           top: 20px;
           left: 55px;
+          p {
+            color: rgb(0, 0, 0);
+          }
         }
       }
     }
@@ -198,11 +208,14 @@ export default {
     padding: 3rem;
     p {
       padding: 2px;
+      color: rgb(255, 255, 255);
     }
   }
 
   .flow-tll {
     margin-top: 2rem;
+    color: rgb(255, 255, 255);
+    font-family: "Roboto", sans-serif;
   }
 
   .flow {
@@ -215,42 +228,51 @@ export default {
         width: 32%;
         text-align: center;
       }
+      p {
+        color: rgb(255, 255, 255);
+      }
       img {
         width: 70px;
         height: 70px;
       }
       h4 {
         font-weight: 0px;
+        color: rgb(255, 255, 255);
       }
       h3 {
         padding: 0.5rem;
+        color: rgb(255, 255, 255);
       }
       .step-txt {
         padding: 1rem;
         font-size: 14px;
+        color: rgb(255, 255, 255);
       }
     }
     .first-btn {
-      height: 5rem;
-      .btn-orange,
-      a.btn-orange {
-        width: 8rem;
-        color: #fff;
-        background-color: #eb6100;
-        padding: 10px;
-        margin-top: 1rem;
-        border-radius: 1rem;
-        text-decoration: none;
-        font-weight: bold;
-        display: inline-block;
-        text-align: center;
-      }
-      .btn-orange:hover,
-      a.btn-orange:hover {
-        color: #fff;
-        background: #f56500;
-      }
+      width: 7rem;
+      margin-bottom: 3rem;
+      padding: 0.5rem;
+      display: inline-block;
+      letter-spacing: 2px;
+      overflow: hidden;
+      color: #fff;
+      background: #fc8f01;
+      box-shadow: 0 0 10px #fc8f01, 0 0 40px #fc8f01, 0 0 80px;
+      outline: none;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-align: center;
     }
   }
+}
+
+.neon {
+  color: transparent;
+  -webkit-text-stroke: 0.2px rgb(255, 0, 0);
+  text-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
 }
 </style>

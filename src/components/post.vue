@@ -4,7 +4,7 @@
       <button @click="show" class="post-comment flex">
         <img class="comment-icon" src="../assets/コメント.jpg" alt="コメント" />
       </button>
-      <modal class="modal-inner" name="post" :width="750" :height="550">
+      <modal class="modal-inner" name="post" :width="750" :height="485">
         <div class="modal-header flex">
           <h2 class="post-tll flex">Chinemaryを投稿する</h2>
           <hr class="separate" />
@@ -12,55 +12,25 @@
         <div class="modal-body">
           <div class="post-items flex">
             <div class="post-contens flex">
-              <img
-                class="item-img"
-                src="../assets/タイトル.jpg"
-                alt="タイトル"
-              />
-              <input
-                type="text"
-                class="post-item blank"
-                placeholder="タイトル"
-                v-model="title"
-              />
+              <input type="text" class="post-item blank" placeholder="タイトル" v-model="title" />
             </div>
             <div class="post-contens flex">
-              <img class="item-img" src="../assets/自己紹介.jpg" alt="内容" />
-              <textarea
-                name="text"
-                rows="1"
-                v-model="description"
-                placeholder="内容"
-              ></textarea>
-            </div>
-            <div class="post-contens post-img flex">
-              <img class="item-img" src="../assets/画像.jpg" alt="画像" />
-              <input
-
-                class="post-item"
-                @change="onFileChange"
-                accept="image/jpeg,image/png,image/gif"
-              />
-              <button @click="uploadImage" class="btn-img">画像選択</button>
+              <textarea name="text" rows="1" v-model="description" placeholder="内容"></textarea>
             </div>
             <div class="post-contens flex">
-              <img
-                class="item-img"
-                src="../assets/好きなジャンル.jpg"
-                alt="好きなジャンル"
-              />
-              <select v-model="genre" class="post-select" name="好きなジャンル">
-                <option class="post-item" :value="genre" hidden
-                  >ジャンルを選択</option
-                >
+              <select
+                v-model="genre"
+                class="post-select"
+                :style="{ color : genre == '' ? 'gray' : 'white' }"
+              >
+                <option class="post-item" value hidden>ジャンルを選択</option>
                 <option
                   v-for="genre in genres"
                   :value="genre.name"
                   :key="genre.id"
                   class="post-item"
-                >
-                  {{ genre.name }}
-                </option>
+                  style="color: white;"
+                >{{ genre.name }}</option>
               </select>
             </div>
             <button class="post-btn" @click.prevent="postItem">投稿</button>
@@ -69,46 +39,37 @@
         </div>
       </modal>
       <div class="search-inner flex">
-        <h2 class="search-tll flex">Chinemaryを検索する</h2>
+        <h2 class="search-tll neon flex">Chinemaryを検索する</h2>
         <hr class="separate" />
         <div class="search-main-contens flex">
           <input
             type="text"
             class="search-main-item"
             placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
-            v-model="title"
           />
         </div>
         <div class="search-items flex">
           <div class="search-contens flex">
-            <img class="item-img" src="../assets/タイトル.jpg" alt="タイトル" />
-            <input
-              type="text"
-              class="search-item"
-              placeholder="タイトル"
-              v-model="title"
-            />
+            <input type="text" class="search-item" placeholder="タイトル" />
           </div>
           <div class="search-contens flex">
-            <img
-              class="item-img"
-              src="../assets/好きなジャンル.jpg"
-              alt="好きなジャンル"
-            />
-            <select class="search-select">
-              <option class="search-item" hidden>ジャンルを選択</option>
+            <select
+              class="search-select"
+              v-model="genre"
+              :style="{ color : genre == '' ? 'gray' : 'white' }"
+            >
+              <option class="search-item" value hidden>ジャンルを選択</option>
               <option
                 v-for="searchGenre in searchGenres"
                 :value="searchGenre.name"
                 :key="searchGenre.id"
                 class="search-item"
-              >
-                {{ searchGenre.name }}
-              </option>
+                style="color: white;"
+              >{{ searchGenre.name }}</option>
             </select>
           </div>
           <button class="search-btn">
-            <img src="../assets/検索icon.jpg" alt="検索" class="search-icon" />
+            <img src="../assets/検索.jpg" alt="検索" class="search-icon" />
           </button>
         </div>
       </div>
@@ -163,7 +124,7 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" },
+        { id: 31, name: "ギャング・マフィア" }
       ],
       searchGenre: "",
       searchGenres: [
@@ -197,38 +158,47 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" },
+        { id: 31, name: "ギャング・マフィア" }
       ],
       file: null, // 選択した画像を持っておく変数
-      uploadUrl: null, //画像を保存する場所のURLを保存する変数
+      uploadUrl: null //画像を保存する場所のURLを保存する変数
     };
   },
   components: {},
   methods: {
     // postItem()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
     postItem() {
+      const id = firebase
+        .firestore()
+        .collection("posts")
+        .doc().id;
+      //変数「id」に入れて、コレクションの"posts"を参照して、「id」を取得
+
       firebase
         .firestore()
         .collection("posts")
         .add({
           title: this.title,
           description: this.description,
-          image: this.image,
           genre: this.genre,
           time: firebase.firestore.FieldValue.serverTimestamp(),
           //サーバ側で値設定
+          id: id
+          //dataにデータを作ってないので、thisは付けなくてOK!
         });
+        
       this.$swal({
         title: "内容確認",
         text: "この内容で投稿しますか？",
         icon: "info",
         buttons: true,
-        dangerMode: true,
-      }).then((willDelete) => {
+        dangerMode: true
+      }).then(willDelete => {
         if (willDelete) {
           this.$swal("投稿しました。", {
-            icon: "success",
+            icon: "success"
           });
+          this.$router.push("/board");
         } else {
           this.$swal("キャンセルしました。");
         }
@@ -239,52 +209,23 @@ export default {
     },
     hide() {
       this.$modal.hide("post");
-    },
-  },
-  onFileChange(e) {
-    const image = e.target.files; //選択された画像ファイルを選択
-    this.file = image[0]; //画像ファイルを1つだけ選択
-
-    // Firebase storageに保存するパスを決める
-    // this.uploadUrl = `upload-images/${this.}`;
-  },
-  uploadImage() {
-    //画像をfirebase storageに保存
-    firebase
-      .storage()
-      .ref(this.uploadUrl) //さっき決めたパスを参照して、
-      .put(this.file) //保存する
-      .then(() => {
-        //保存が成功したら、保存した画像ファイルの場所とともにfirebase databaseに保存する準備
-        const imageData = {
-          uploadUrl: this.uploadUrl,
-          createdAt: firebase.database.ServerValue.TIMESTAMP,
-        };
-        // ここでfirebase databaseに保存する
-        firebase
-          .database()
-          .ref("users") //保存する場所を参照して、
-          .push(imageData) //追加で保存setメソッドを使うと上書きされる
-          .then(() => {
-            alert("画像が保存できました。");
-            // this.$emit("", false); //親コンポーネントに伝達
-          })
-          .catch((error) => {
-            console.error("画像が保存できませんでした。", error);
-          });
-      })
-      .catch((error) => {
-        console.error("エラー発生しました。", error);
-      });
+    }
   },
 };
 </script>
 
 <style scoped lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
+// -- 変数 -- //
+
+$gray-color: rgb(100, 100, 100);
+$white-color: rgb(255, 255, 255);
+$black-color: rgb(0, 0, 0);
+
 // -- 共通 -- //
 
 ::placeholder {
-  color: rgb(195, 195, 195);
+  color: gray;
   font-size: 1rem;
   padding-left: 0.25rem;
 }
@@ -294,7 +235,7 @@ hr.separate {
   display: block;
   height: 0;
   border: 0;
-  border-top: 1px solid #3a3939;
+  border-top: 1px solid $gray-color;
   margin: 2rem 0;
   padding: 0;
 }
@@ -306,12 +247,13 @@ textarea {
   border: none;
   height: 2rem;
   border-bottom: 1px solid #ddd;
-  color: #444;
+  color: $white-color;
   font-size: 1rem;
+  background-color: $black-color;
 }
 
 textarea::placeholder {
-  color: rgb(195, 195, 195);
+  color: gray;
   font-size: 1rem;
   padding-left: 0.25rem;
 }
@@ -321,9 +263,12 @@ textarea::placeholder {
 .search-inner {
   width: 100%;
   flex-direction: column;
+  background-color: $black-color;
   .search-tll {
     width: 80%;
     padding-top: 3rem;
+    color: $white-color;
+    font-family: "Roboto", sans-serif;
   }
   .search-main-contens {
     position: relative;
@@ -334,8 +279,9 @@ textarea::placeholder {
       border: none;
       height: 2.5rem;
       border-bottom: 1px solid #ddd;
-      color: #444;
+      color: $white-color;
       font-size: 1rem;
+      background-color: $black-color;
     }
   }
   .search-items {
@@ -353,27 +299,31 @@ textarea::placeholder {
         border: none;
         height: 2.5rem;
         border-bottom: 1px solid #ddd;
-        color: #444;
+        color: $white-color;
         font-size: 1rem;
+        background-color: $black-color;
       }
       .search-select {
         width: 15rem;
         outline: none;
         border: none;
         font-size: 1rem;
-        color: #444;
+        color: $white-color;
         height: 3rem;
         border-bottom: 1px solid #ddd;
         margin-right: 2rem;
+        background-color: $black-color;
       }
     }
     .search-btn {
       width: 25px;
       height: 25px;
+      background-color: $black-color;
       cursor: pointer;
       border: none;
       outline: none;
       .search-icon {
+        margin-top: 0.4rem;
         width: 100%;
         height: 100%;
       }
@@ -389,13 +339,15 @@ textarea::placeholder {
   flex-direction: column;
   .post-comment {
     position: fixed;
-    top: 100px;
-    right: 20px;
+    top: 130px;
+    right: 45px;
     width: 60px;
     height: 60px;
     border-radius: 50% 50%;
-    box-shadow: 0px 0px 1px;
-    background-color: rgba(35, 146, 236, 0.925);
+    box-shadow: inset 0 0 50px whitesmoke, inset 20px 0 80px #015dc7,
+      inset -20px 0 80px rgb(0, 132, 255), inset 20px 0 300px #015dc7,
+      inset -20px 0 300px rgb(0, 132, 255), 0 0 40px #fff, -10px 0 80px #015dc7,
+      10px 0 80px rgb(0, 132, 255);
     border: none;
     cursor: pointer;
     outline: none;
@@ -414,13 +366,19 @@ textarea::placeholder {
   position: relative;
   .modal-header {
     flex-direction: column;
+    background-color: $black-color;
     .post-tll {
       padding-top: 3rem;
+      color: $white-color;
+      font-family: "Roboto", sans-serif;
     }
   }
   .modal-body {
     .post-items {
       flex-direction: column;
+      background-color: $black-color;
+      color: $white-color;
+      padding-bottom: 4rem;
       .post-img {
         position: relative;
       }
@@ -431,20 +389,21 @@ textarea::placeholder {
           width: 17rem;
           outline: none;
           border: none;
-          font-size: 0.9rem;
-          color: #444;
+          font-size: 1rem;
+          color: $white-color;
           height: 3rem;
           border-bottom: 1px solid #ddd;
+          background-color: $black-color;
         }
         .btn-img {
           position: absolute;
-          left: 50px;
+          left: 0;
           bottom: 8px;
           width: 4.5rem;
-          color: #fff;
-          background-color: #afafaf;
+          color: white;
+          background-color: rgb(80, 80, 80);
           padding: 0.3rem;
-          border-radius: 1rem;
+          border-radius: 0.5rem;
           text-decoration: none;
           cursor: pointer;
           border: none;
@@ -462,23 +421,27 @@ textarea::placeholder {
           border: none;
           height: 3rem;
           border-bottom: 1px solid #ddd;
-          color: #444;
+          color: $white-color;
           font-size: 1rem;
+          background-color: $black-color;
         }
       }
     }
     .post-btn {
-      width: 5rem;
-      margin: 2rem;
+      display: inline-block;
+      padding: 7px 30px;
+      letter-spacing: 4px;
+      overflow: hidden;
       color: #fff;
-      background-color: #06baf1;
-      padding: 0.5rem;
-      border-radius: 1rem;
-      text-decoration: none;
-      cursor: pointer;
-      border: none;
+      background: #015dc7;
+      box-shadow: 0 0 10px #015dc7, 0 0 40px #015dc7, 0 0 80px;
       outline: none;
+      border: none;
+      border-radius: 0.5rem;
       font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 2rem;
     }
     .hide-btn {
       position: absolute;
@@ -486,8 +449,8 @@ textarea::placeholder {
       right: 15px;
       font-size: 20px;
       font-weight: bold;
-      border: 2px solid #2db2ff;
-      color: #2db2ff;
+      border: 2px solid $black-color;
+      color: $black-color;
       border-radius: 100%;
       width: 25px;
       line-height: 22px;
@@ -502,5 +465,23 @@ textarea::placeholder {
     border-color: #333;
     color: #fff;
   }
+}
+
+.vm--modal {
+  box-shadow: 0 20px 100px 55px rgb(27 33 58 / 40%);
+}
+
+// -- swal --//
+
+.swal-modal {
+  background-color: $black-color;
+}
+
+// -- neon -- //
+
+.neon {
+  color: transparent;
+  -webkit-text-stroke: 0.2px rgb(255, 0, 0);
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 50px rgba(255, 0, 0, 0.5);
 }
 </style>

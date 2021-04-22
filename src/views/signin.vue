@@ -39,7 +39,7 @@ export default {
     signIn() {
       firebase
         .auth()
-       //.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        //.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         .signInWithEmailAndPassword(this.email, this.password)
         //ユーザーがフォームに入力したら、signInWithEmailAndPassword メソッドを呼び出します。
         .then((willDelete) => {
@@ -62,10 +62,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+// -- 変数 -- //
+
+$gray-color: rgb(100, 100, 100);
+$white-color: rgb(255, 255, 255);
+$black-color: rgb(0, 0, 0);
+
 .signin {
   height: 90vh;
   flex-flow: column nowrap;
-  background-color: rgba(211, 211, 211, 0.24);
+  background-color: rgba(20, 20, 20);
   .signin-inner {
     width: 35%;
     height: 53%;
@@ -73,38 +79,45 @@ export default {
     z-index: 1;
     font-weight: bold;
     color: gray;
-    background-color: white;
+    background-color: $black-color;
     position: absolute;
     top: 30%;
     left: 35%;
     padding: 2rem;
-    box-shadow: 0 0 10px lightgrey;
+    box-shadow: 0 0 10px rgb(45, 45, 45);
   }
   h2 {
     font-weight: normal;
     margin-bottom: 0.5rem;
+    color: $white-color;
   }
-
+  p {
+    color: $white-color;
+  }
   a {
     color: #008deb;
   }
   input {
     margin: 10px 0;
     padding: 10px;
+    color: $black-color;
   }
   .btn {
-    width: 5rem;
+    width: 6rem;
     margin: 1rem;
-    color: #fff;
-    background-color: #008deb;
     padding: 0.5rem;
-    border-radius: 1rem;
-    text-decoration: none;
-    cursor: pointer;
-    cursor: hand;
-    border: none;
+    display: inline-block;
+    overflow: hidden;
+    letter-spacing: 2px;
+    color: #fff;
+    background: #2f84e6;
+    box-shadow: 0 0 10px #2f84e6, 0 0 40px #2f84e6, 0 0 80px;
     outline: none;
+    border: none;
+    border-radius: 0.5rem;
     font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
   }
 }
 </style>

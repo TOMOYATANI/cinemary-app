@@ -30,7 +30,7 @@ export default {
     return {
       email: "",
       password: "",
-      userName:""
+      userName: "",
     };
   },
   components: {
@@ -68,10 +68,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+// -- 変数 -- //
+
+$gray-color: rgb(100, 100, 100);
+$white-color: rgb(255, 255, 255);
+$black-color: rgb(0, 0, 0);
+
 .signup {
   height: 90vh;
   flex-flow: column nowrap;
-  background-color: rgba(211, 211, 211, 0.24);
+  background-color: rgba(20, 20, 20);
   .signup-inner {
     width: 35%;
     height: 53%;
@@ -79,37 +85,45 @@ export default {
     z-index: 1;
     font-weight: bold;
     color: gray;
-    background-color: white;
+    background-color: $black-color;
     position: absolute;
     top: 30%;
     left: 35%;
     padding: 2rem;
-    box-shadow: 0 0 10px lightgrey;
+    box-shadow: 0 0 10px rgb(45, 45, 45);
     h2 {
       font-weight: normal;
       margin-bottom: 0.5rem;
+      color: $white-color;
+    }
+    p {
+      color: $white-color;
     }
 
     a {
-      color: #eb6100;
+      color: #fc8f01;
     }
     input {
       margin: 10px 0;
       padding: 10px;
+      color: $black-color;
     }
     .btn-signup {
-      width: 5rem;
+      width: 6rem;
       margin: 1rem;
-      color: #fff;
-      background-color: #eb6100;
       padding: 0.5rem;
-      border-radius: 1rem;
-      text-decoration: none;
-      cursor: pointer;
-      cursor: hand;
-      border: none;
+      display: inline-block;
+      overflow: hidden;
+      letter-spacing: 2px;
+      color: #fff;
+      background: #fc8f01;
+      box-shadow: 0 0 10px #fc8f01, 0 0 40px #fc8f01, 0 0 80px;
       outline: none;
+      border: none;
+      border-radius: 0.5rem;
       font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
     }
   }
 }

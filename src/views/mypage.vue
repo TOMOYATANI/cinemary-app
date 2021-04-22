@@ -4,32 +4,26 @@
     <div class="mypage flex">
       <div class="mypage-inner flex">
         <div class="profile-inner flex">
-          <img
-            class="profile-inner-img"
-            src="../assets/デフォルト画像.jpg"
-            alt="デフォルト画像"
-          />
+          <img class="profile-inner-img" src="../assets/アイコン.jpg" alt="デフォルト画像" />
           <div class="profile-inner-name">{{ allData.name }}</div>
         </div>
         <div class="profile-inner2 flex">
           <div class="follow-inner">
             <div class="post">
               <div>0</div>
-              <p>投稿</p>
+              <p>POSTS</p>
             </div>
             <div class="follow">
               <div>0</div>
-              <p>フォロー</p>
+              <p>FOLLOW</p>
             </div>
             <div class="follower">
               <div>0</div>
-              <p>フォロワー</p>
+              <p>FOLLOWER</p>
             </div>
           </div>
           <hr class="separate" />
-          <button @click="show" class="profile-edit flex">
-            プロフィール編集
-          </button>
+          <button @click="show" class="profile-edit flex">プロフィール編集</button>
           <modal class="modal-inner" name="edit" :width="1100" :height="680">
             <div class="modal-header flex">
               <h2 class="profile-tll flex">プロフィールを編集する</h2>
@@ -46,117 +40,78 @@
                       class="profile-img"
                       alt="プロフィール画像"
                     />
-                    <button class="profile-txt profile-update" @click="update">
-                      プロフィール画像を編集する
-                    </button>
+                    <button class="profile-txt profile-update" @click="update">プロフィール画像を編集する</button>
                   </div>
                   <div class="line"></div>
                   <div class="profile-items flex">
                     <div class="profile-contens flex">
-                      <img
-                        class="item-img"
-                        src="../assets/名前.jpg"
-                        alt="名前"
-                      />
-                      <input
-                        type="text"
-                        class="profile-item"
-                        placeholder="名前"
-                        v-model="name"
-                      />
+                      <input type="text" class="profile-item" placeholder="名前" v-model="name" />
                     </div>
                     <div class="profile-contens flex">
-                      <img
-                        class="item-img"
-                        src="../assets/性別.jpg"
-                        alt="性別"
-                      />
-                      <select v-model="sex" name="性別">
-                        <option class="profile-item" :value="sex" hidden
-                          >性別</option
-                        >
+                      <select
+                        class="profile-select"
+                        v-model="sex"
+                        :style="{ color:sex == '' ? 'gray' : 'white' }"
+                      >
+                        <option class="profile-item" value hidden>性別</option>
                         <option
                           v-for="sex in sexs"
                           :value="sex.name"
-                          :key="sex"
+                          :key="sex.id"
                           class="profile-item"
-                        >
-                          {{ sex.name }}
-                        </option>
+                          style="color: white;"
+                        >{{ sex.name }}</option>
                       </select>
                     </div>
                     <div class="profile-contens flex">
-                      <img
-                        class="item-img"
-                        src="../assets/年齢.jpg"
-                        alt="年齢"
-                      />
-                      <select v-model="age" name="年齢">
-                        <option class="profile-item" :value="age" hidden
-                          >年齢</option
-                        >
+                      <select
+                        class="profile-select"
+                        v-model="age"
+                        :style="{ color : age == '' ? 'gray' : 'white' }"
+                      >
+                        <option class="profile-item" value hidden>年齢</option>
                         <option
                           v-for="age in ages"
                           :value="age.name"
-                          :key="age"
+                          :key="age.id"
                           class="profile-item"
-                        >
-                          {{ age.name }}
-                        </option>
+                          style="color: white;"
+                        >{{ age.name }}</option>
                       </select>
                     </div>
                     <div class="profile-contens flex">
-                      <img
-                        class="item-img"
-                        src="../assets/職業.jpg"
-                        alt="職業"
-                      />
-                      <select v-model="profession" name="職業">
-                        <option class="profile-item" :value="profession" hidden
-                          >職業</option
-                        >
+                      <select
+                        class="profile-select"
+                        v-model="profession"
+                        :style="{ color : profession == '' ? 'gray' : 'white' }"
+                      >
+                        <option class="profile-item" value hidden>職業</option>
                         <option
                           v-for="profession in professions"
                           :value="profession.name"
-                          :key="profession"
+                          :key="profession.id"
                           class="profile-item"
-                        >
-                          {{ profession.name }}
-                        </option>
+                          style="color: white;"
+                        >{{ profession.name }}</option>
                       </select>
                     </div>
                     <div class="profile-contens flex">
-                      <img
-                        class="item-img"
-                        src="../assets/自己紹介.jpg"
-                        alt="自己紹介"
-                      />
-                      <textarea
-                        name="text"
-                        cols="10"
-                        rows="1"
-                        v-model="selfpr"
-                        placeholder="自己紹介"
-                      ></textarea>
+                      <textarea name="text" cols="10" rows="1" v-model="selfpr" placeholder="自己紹介"></textarea>
                     </div>
                     <div class="profile-contens flex">
-                      <img
-                        class="item-img"
-                        src="../assets/好きなジャンル.jpg"
-                        alt="好きなジャンル"
-                      />
-                      <select v-model="genre" name="好きなジャンル">
-                        <option class="profile-item" :value="genre" hidden
-                          >ジャンル</option
-                        >
+                      <select
+                        class="profile-select"
+                        v-model="genre"
+                        :style="{ color : genre == '' ? 'gray' : 'white' }"
+                      >
+                        <option class="profile-item" value hidden>好きなジャンル</option>
                         <option
                           v-for="genre in genres"
                           :value="genre.name"
-                          :key="genre"
+                          :key="genre.id"
                           class="profile-item"
-                        >
-                          {{ genre.name }}
-                        </option>
+                          style="color: white;"
+                        >{{ genre.name }}</option>
                       </select>
                     </div>
                   </div>
@@ -169,14 +124,14 @@
         </div>
       </div>
       <div class="profile-list">
-        <ul>
-          <li>性別：{{ allData.sex }}</li>
-          <li>年齢：{{ allData.age }}</li>
-          <li>職業：{{ allData.professions }}</li>
-          <li>居住地：</li>
-          <li>好きな映画：</li>
-          <li>好きなジャンル：{{ allData.genre }}</li>
-          <li>自己紹介：{{ allData.selfpr }}</li>
+        <ul class="list-item">
+          <li class="list-item">性別：{{ allData.sex }}</li>
+          <li class="list-item">年齢：{{ allData.age }}</li>
+          <li class="list-item">職業：{{ allData.professions }}</li>
+          <li class="list-item">居住地：</li>
+          <li class="list-item">好きな映画：</li>
+          <li class="list-item">好きなジャンル：{{ allData.genre }}</li>
+          <li class="list-item">自己紹介：{{ allData.selfpr }}</li>
         </ul>
       </div>
       <hr class="separate" />
@@ -212,7 +167,7 @@ export default {
         { name: "50 ~ 59歳" },
         { name: "60 ~ 69歳" },
         { name: "70 ~ 79歳" },
-        { name: "80際以上" },
+        { name: "80際以上" }
       ],
       profession: "",
       professions: [
@@ -223,7 +178,7 @@ export default {
         { name: "パート・アルバイト" },
         { name: "専業主婦" },
         { name: "学生" },
-        { name: "その他" },
+        { name: "その他" }
       ],
       selfpr: "",
       genre: "",
@@ -259,14 +214,14 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" },
+        { id: 31, name: "ギャング・マフィア" }
       ],
       uploadedImage: "",
-      allData: [],
+      allData: []
     };
   },
   components: {
-    Header,
+    Header
   },
   methods: {
     // postItem()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
@@ -282,7 +237,7 @@ export default {
           profession: this.profession,
           uploadedImage: this.uploadedImage,
           genre: this.genre,
-          time: firebase.firestore.FieldValue.serverTimestamp(),
+          time: firebase.firestore.FieldValue.serverTimestamp()
           //サーバ側で値設定
         });
       this.$swal({
@@ -290,11 +245,11 @@ export default {
         text: "この内容で投稿しますか？",
         icon: "info",
         buttons: true,
-        dangerMode: true,
-      }).then((willDelete) => {
+        dangerMode: true
+      }).then(willDelete => {
         if (willDelete) {
           this.$swal("投稿しました。", {
-            icon: "success",
+            icon: "success"
           });
         } else {
           this.$swal("キャンセルしました。");
@@ -306,30 +261,79 @@ export default {
     },
     hide: function() {
       this.$modal.hide("edit");
-    },
+    }
   },
   created() {
     firebase
       .firestore()
       .collection("users")
       .get()
-      .then((snapshot) => {
+      .then(snapshot => {
         //"users"(参照先)のスナップショットを得る
-        snapshot.forEach((doc) => {
+        snapshot.forEach(doc => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.allData.push(doc.data());
           //更にallDataの空箱に格納した"doc"データを格納
         });
       });
   },
+  onFileChange(e) {
+    const image = e.target.files; //選択された画像ファイルを選択
+    this.file = image[0]; //画像ファイルを1つだけ選択
+
+    // Firebase storageに保存するパスを決める
+    // this.uploadUrl = `upload-images/${this.}`;
+  },
+  uploadImage() {
+    //画像をfirebase storageに保存
+    firebase
+      .storage()
+      .ref(this.uploadUrl) //さっき決めたパスを参照して、
+      .put(this.file) //保存する
+      .then(() => {
+        //保存が成功したら、保存した画像ファイルの場所とともにfirebase databaseに保存する準備
+        const imageData = {
+          uploadUrl: this.uploadUrl,
+          createdAt: firebase.database.ServerValue.TIMESTAMP
+        };
+        // ここでfirebase databaseに保存する
+        firebase
+          .database()
+          .ref("users") //保存する場所を参照して、
+          .push(imageData) //追加で保存setメソッドを使うと上書きされる
+          .then(() => {
+            alert("画像が保存できました。");
+            // this.$emit("", false); //親コンポーネントに伝達
+          })
+          .catch(error => {
+            console.error("画像が保存できませんでした。", error);
+          });
+      })
+      .catch(error => {
+        console.error("エラー発生しました。", error);
+      });
+  }
 };
 </script>
 
 <style scoped lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
+
+// -- 変数 -- //
+
+$gray-color: rgb(100, 100, 100);
+$white-color: rgb(255, 255, 255);
+$black-color: rgb(0, 0, 0);
+
 // -- 共通 -- //
 
+#app {
+  background-color: $black-color;
+  color: $white-color;
+}
+
 ::placeholder {
-  color: #444;
+  color: gray;
   font-size: 1rem;
   padding-left: 0.2rem;
 }
@@ -341,12 +345,13 @@ textarea {
   border: none;
   height: 2rem;
   border-bottom: 1px solid #ddd;
-  color: #444;
+  color: $white-color;
   font-size: 1rem;
+  background-color: $black-color;
 }
 
 textarea::placeholder {
-  color: #444;
+  color: gray;
   font-size: 1rem;
   padding-left: 0.2rem;
 }
@@ -356,7 +361,7 @@ hr.separate {
   display: block;
   height: 0;
   border: 0;
-  border-top: 1px solid #3a3939;
+  border-top: 1px solid #646464;
   margin: 1rem 0;
   padding: 0;
 }
@@ -367,7 +372,7 @@ hr.separate {
   left: 50%;
   width: 1px;
   height: 25rem;
-  background-color: #d3d3d3;
+  background-color: #646464;
   z-index: 10;
 }
 
@@ -375,8 +380,9 @@ hr.separate {
 
 .mypage {
   width: 100%;
-  margin-top: 5rem;
+  padding-top: 5rem;
   flex-direction: column;
+  background-color: $black-color;
   &-inner {
     width: 70%;
     .profile-inner {
@@ -384,8 +390,8 @@ hr.separate {
       flex-direction: column;
       &-img {
         width: 200px;
-        height: 185px;
-        border-radius: 50% 50%;
+        height: 200px;
+        border-radius: 50%;
       }
       &-name {
         font-weight: bold;
@@ -401,18 +407,21 @@ hr.separate {
         text-align: center;
       }
       .profile-edit {
-        width: 9rem;
+        width: 10rem;
         margin: 1rem;
+        padding: 0.8rem;
+        display: inline-block;
+        overflow: hidden;
+        letter-spacing: 2px;
         color: #fff;
-        background-color: #008deb;
-        padding: 0.5rem;
-        border-radius: 1rem;
-        text-decoration: none;
-        cursor: pointer;
-        border: none;
+        background: #2f84e6;
+        box-shadow: 0 0 150px #2f84e6, 0 0 50px #2f84e6, 0 0 0px;
         outline: none;
+        border: none;
+        border-radius: 0.5rem;
         font-weight: bold;
         font-size: 0.9rem;
+        cursor: pointer;
       }
       p {
         font-weight: bold;
@@ -425,6 +434,7 @@ hr.separate {
     width: 50%;
     display: flex;
     margin: 3rem;
+    color: $white-color;
     li {
       display: flex;
       justify-content: start;
@@ -440,34 +450,41 @@ hr.separate {
 
 // -- profile-edit -- //
 
-select {
+.profile-select {
   width: 15rem;
   outline: none;
   border: none;
   font-size: 1rem;
-  color: #444;
+  color: $white-color;
   height: 2.5rem;
   border-bottom: 1px solid #ddd;
+  background-color: $black-color;
 }
 
 .modal-inner {
   .modal-header {
     flex-direction: column;
+    background-color: $black-color;
     .profile-tll {
       padding-top: 3rem;
+      color: white;
+      font-family: "Roboto", sans-serif;
     }
   }
   .modal-body {
     .profile-inner {
       width: 100%;
       flex-direction: column;
+      background-color: $black-color;
+      padding-bottom: 1rem;
       .profile-tll {
         width: 80%;
-        padding-top: 2rem;
+        padding-top: 1rem;
       }
       .profile-contens {
         width: 100%;
         margin-top: 1.5rem;
+        background-color: $black-color;
         .item-img {
           width: 35px;
           height: 35px;
@@ -479,8 +496,9 @@ select {
           border: none;
           height: 2.5rem;
           border-bottom: 1px solid #ddd;
-          color: #444;
+          color: $white-color;
           font-size: 1rem;
+          background-color: $black-color;
         }
         .profile-img-inner {
           width: 35%;
@@ -493,6 +511,7 @@ select {
             background-color: #fff;
             font-weight: bold;
             font-size: 1rem;
+            background-color: $black-color;
           }
           .profile-img {
             width: 200px;
@@ -514,15 +533,19 @@ select {
     .update-btn {
       width: 5rem;
       margin: 3rem;
-      color: #fff;
-      background-color: #f10606;
       padding: 0.5rem;
-      border-radius: 1rem;
-      text-decoration: none;
-      cursor: pointer;
-      border: none;
+      display: inline-block;
+      overflow: hidden;
+      letter-spacing: 2px;
+      color: #fff;
+      background: #e62f2f;
+      box-shadow: 0 0 10px #e62f2f, 0 0 50px #e62f2f, 0 0 80px -6px;
       outline: none;
+      border: none;
+      border-radius: 0.5rem;
       font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
     }
 
     .hide-btn {
@@ -531,8 +554,8 @@ select {
       right: 15px;
       font-size: 20px;
       font-weight: bold;
-      border: 2px solid #f10606;
-      color: #f10606;
+      border: 2px solid $black-color;
+      color: $black-color;
       border-radius: 100%;
       width: 25px;
       line-height: 22px;
@@ -548,5 +571,19 @@ select {
       color: #fff;
     }
   }
+}
+
+// -- swal --//
+
+.swal-modal {
+  background-color: $black-color;
+}
+
+// -- neon -- //
+
+.neon {
+  color: transparent;
+  -webkit-text-stroke: 0.5px rgb(255, 0, 0);
+  text-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
 }
 </style>

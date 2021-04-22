@@ -1,15 +1,12 @@
 <template>
-  <div class="chat flex">
-    <h1 class="chat-tll flex">Chat Room</h1>
-
+  <div class="chat">
+    <h1 class="chat-tll flex">
+      <div class="flash neon">Chat Room</div>
+    </h1>
     <!--Firebase から取得したリストを描画-->
     <transition-group name="chat" tag="div" class="list content">
       <!--chatの中の{ key, name, image, message }をそれぞれ取得-->
-      <section
-        v-for="{ key, name, image, message } in chat"
-        :key="key"
-        class="item"
-      >
+      <section v-for="{ key, name, image, message } in chat" :key="key" class="item">
         <!--「画像」の指定-->
         <div class="item-image">
           <img :src="image" width="40" height="40" />
@@ -25,18 +22,20 @@
     </transition-group>
 
     <!-- 入力フォームの設定 -->
-    <form action="" @submit.prevent="doSend" class="form flex">
-      <textarea
-        v-model="input"
-        placeholder="メッセージを入力"
-        :disabled="!user.uid"
-        @keydown.enter.exact.prevent="doSend"
-      ></textarea>
-      <!-- ユーザーでなければ無効化 -->
-      <button type="submit" :disabled="!user.uid" class="send-button">
-        <img src="../assets/矢印icon.jpg" class="send-img" alt="送信" />
-      </button>
-    </form>
+    <div class="message-inner flex">
+      <form action @submit.prevent="doSend" class="form flex">
+        <textarea
+          v-model="input"
+          placeholder="メッセージを入力"
+          :disabled="!user.uid"
+          @keydown.enter.exact.prevent="doSend"
+        ></textarea>
+        <!-- ユーザーでなければ無効化 -->
+        <button type="submit" :disabled="!user.uid" class="send-button">
+          <img src="../assets/電球.jpg" class="send-img" alt="送信" />
+        </button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -51,16 +50,17 @@ export default {
     return {
       user: {}, // ユーザー情報
       chat: [], // 取得したメッセージを入れる配列
-      input: "", // 入力したメッセージ
+      input: "" // 入力したメッセージ
     };
   },
   created() {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       // ログイン状態ならuserが取得できる
       this.user = user ? user : {};
       //firebase.database()で以下のデータベースの読み書きを行う。
-      const ref_message = firebase.database().ref("message");
-      //「ref_message」という関数にデータベージ上の「message」を格納。
+      const ref_message = firebase.database().ref(this.$route.params.id);
+      //[router.vue]にて「/ ~ /:id」と指定しルートがマッチした時、
+      //この動的セグメントの値は全てのコンポーネント内で this.$route.params として利用可能になる。
       if (user) {
         this.chat = [];
         // limitToLast(10)で並べ替えられた「message」の最後の10個を取得。
@@ -93,7 +93,7 @@ export default {
         key: snap.key,
         name: message.name,
         image: message.image,
-        message: message.message,
+        message: message.message
       });
       this.scrollBottom();
       //スクロールの一番下に追加。
@@ -103,25 +103,35 @@ export default {
         //  firebaseに書き込まれたメッセージを追加
         firebase
           .database()
-          .ref("message")
+          .ref(this.$route.params.id)
           .push(
             {
               message: this.input,
               name: this.user.displayName,
-              image: this.user.photoURL,
+              image: this.user.photoURL
             },
             () => {
               this.input = ""; // フォームを空にする
             }
           );
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style scoped lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
+
+// -- 変数 -- //
+
+$gray-color: rgb(100, 100, 100);
+$white-color: rgb(255, 255, 255);
+$black-color: rgb(0, 0, 0);
+
+* {
+  color: $black-color;
+}
 
 .header {
   display: none;
@@ -129,12 +139,14 @@ export default {
 
 .chat {
   width: 100%;
+  height: 100vh;
   flex-direction: column;
+  background-color: rgba(20, 20, 20);
   &-tll {
     width: 100%;
     color: #fff;
     font-family: "Roboto", sans-serif;
-    background-color: #000000;
+    background-color: $black-color;
     padding: 1rem 3rem;
     position: sticky;
     top: 0;
@@ -186,30 +198,38 @@ export default {
     width: 100%;
     margin-bottom: 100px;
   }
-  .form {
-    width: 98%;
+  .message-inner {
+    width: 100%;
     position: fixed;
     bottom: 0;
-    height: 3rem;
-    textarea {
-      width: 100%;
-      height: 3em;
-      border: 1px solid #ccc;
-      border-radius: 25px;
-      resize: none;
-      margin-right: 0.5rem;
-      padding: 0.65rem;
-      outline: none;
-    }
-    .send-button {
-      width: 2rem;
-      height: 2rem;
-      cursor: pointer;
-      border: none;
-      outline: none;
-      .send-img {
+    padding: 0.5rem;
+    background-color: $black-color;
+    .form {
+      width: 95%;
+      bottom: 0;
+      height: 3rem;
+      textarea {
         width: 100%;
-        height: 100%;
+        height: 3em;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        resize: none;
+        margin-right: 0.5rem;
+        padding: 0.65rem;
+        outline: none;
+        color: $black-color;
+      }
+      .send-button {
+        width: 2rem;
+        height: 2rem;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        .send-img {
+          width: 100%;
+          height: 100%;
+          background-color: $black-color;
+        }
       }
     }
   }
@@ -222,5 +242,45 @@ export default {
 .chat-enter {
   opacity: 0;
   transform: translateX(-1rem);
+}
+
+// -- neon -- //
+.neon {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(255, 255, 255);
+  text-shadow: 0 0 10px rgb(255, 255, 255), 0 0 15px rgb(150, 150, 150);
+}
+
+.flash {
+  animation: flash-anime 5s linear infinite;
+}
+@keyframes flash-anime {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  51% {
+    opacity: 0.3;
+  }
+  52% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  76% {
+    opacity: 0.6;
+  }
+  77% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 0.3;
+  }
+  79% {
+    opacity: 1;
+  }
 }
 </style>
