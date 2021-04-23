@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <Header />
     <div class="first flex">
       <h2 class="about-tll neon">Cinemary(シネマリー)とは？</h2>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <Header />
     <div class="post-inner flex">
       <h2 class="post-tll flex">Chinemaryを投稿する</h2>

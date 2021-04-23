@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <Header />
     <div class="signup flex">
       <div class="signup-inner flex">

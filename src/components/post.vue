@@ -1,77 +1,99 @@
 <template>
-  <div id="app">
-    <div class="post-inner">
-      <button @click="show" class="post-comment flex">
-        <img class="comment-icon" src="../assets/コメント.jpg" alt="コメント" />
-      </button>
-      <modal class="modal-inner" name="post" :width="750" :height="485">
-        <div class="modal-header flex">
-          <h2 class="post-tll flex">Chinemaryを投稿する</h2>
-          <hr class="separate" />
-        </div>
-        <div class="modal-body">
-          <div class="post-items flex">
-            <div class="post-contens flex">
-              <input type="text" class="post-item blank" placeholder="タイトル" v-model="title" />
-            </div>
-            <div class="post-contens flex">
-              <textarea name="text" rows="1" v-model="description" placeholder="内容"></textarea>
-            </div>
-            <div class="post-contens flex">
-              <select
-                v-model="genre"
-                class="post-select"
-                :style="{ color : genre == '' ? 'gray' : 'white' }"
-              >
-                <option class="post-item" value hidden>ジャンルを選択</option>
-                <option
-                  v-for="genre in genres"
-                  :value="genre.name"
-                  :key="genre.id"
-                  class="post-item"
-                  style="color: white;"
-                >{{ genre.name }}</option>
-              </select>
-            </div>
-            <button class="post-btn" @click.prevent="postItem">投稿</button>
-            <button class="hide-btn flex" @click="hide">×</button>
-          </div>
-        </div>
-      </modal>
-      <div class="search-inner flex">
-        <h2 class="search-tll neon flex">Chinemaryを検索する</h2>
+  <div class="post-inner">
+    <button
+      @click="
+        show();
+        openModal();
+      "
+      class="post-comment flex"
+    >
+      <img class="comment-icon" src="../assets/コメント.jpg" alt="コメント" />
+    </button>
+    <modal
+      class="modal-inner"
+      v-scroll-lock="open"
+      name="post"
+      :width="750"
+      :height="485"
+    >
+      <div class="modal-header flex">
+        <h2 class="post-tll flex">Cinemaryを投稿する</h2>
         <hr class="separate" />
-        <div class="search-main-contens flex">
-          <input
-            type="text"
-            class="search-main-item"
-            placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
-          />
-        </div>
-        <div class="search-items flex">
-          <div class="search-contens flex">
-            <input type="text" class="search-item" placeholder="タイトル" />
+      </div>
+      <div class="modal-body">
+        <div class="post-items flex">
+          <div class="post-contens flex">
+            <input
+              type="text"
+              class="post-item"
+              placeholder="タイトル"
+              v-model="title"
+            />
           </div>
-          <div class="search-contens flex">
+          <div class="post-contens flex">
+            <textarea
+              name="text"
+              rows="1"
+              v-model="description"
+              placeholder="内容"
+            ></textarea>
+          </div>
+          <div class="post-contens flex">
             <select
-              class="search-select"
               v-model="genre"
-              :style="{ color : genre == '' ? 'gray' : 'white' }"
+              class="post-select"
+              :style="{ color: genre == '' ? 'gray' : 'white' }"
             >
-              <option class="search-item" value hidden>ジャンルを選択</option>
+              <option class="post-item" value hidden>ジャンルを選択</option>
               <option
-                v-for="searchGenre in searchGenres"
-                :value="searchGenre.name"
-                :key="searchGenre.id"
-                class="search-item"
+                v-for="genre in genres"
+                :value="genre.name"
+                :key="genre.id"
+                class="post-item"
                 style="color: white;"
-              >{{ searchGenre.name }}</option>
+                >{{ genre.name }}</option
+              >
             </select>
           </div>
-          <button class="search-btn">
-            <img src="../assets/検索.jpg" alt="検索" class="search-icon" />
-          </button>
+          <button class="post-btn" @click.prevent="postItem">投稿</button>
+          <button class="hide-btn flex" @click="hide">×</button>
         </div>
+      </div>
+    </modal>
+    <div class="search-inner flex">
+      <h2 class="search-tll neon flex">Cinemaryを検索する</h2>
+      <hr class="separate" />
+      <div class="search-main-contens flex">
+        <input
+          type="text"
+          class="search-main-item"
+          placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
+        />
+      </div>
+      <div class="search-items flex">
+        <div class="search-contens flex">
+          <input type="text" class="search-item" placeholder="タイトル" />
+        </div>
+        <div class="search-contens flex">
+          <select
+            class="search-select"
+            v-model="searchGenre"
+            :style="{ color: genre == '' ? 'gray' : 'white' }"
+          >
+            <option class="search-item" value hidden>ジャンルを選択</option>
+            <option
+              v-for="searchGenre in searchGenres"
+              :value="searchGenre.name"
+              :key="searchGenre.id"
+              class="search-item"
+              style="color: white;"
+              >{{ searchGenre.name }}</option
+            >
+          </select>
+        </div>
+        <button class="search-btn">
+          <img src="../assets/検索.jpg" alt="検索" class="search-icon" />
+        </button>
       </div>
     </div>
   </div>
@@ -84,6 +106,8 @@ import VueSwal from "vue-swal";
 Vue.use(VueSwal);
 import VModal from "vue-js-modal";
 Vue.use(VModal);
+import VScrollLock from "v-scroll-lock";
+Vue.use(VScrollLock);
 
 export default {
   data() {
@@ -124,7 +148,7 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" }
+        { id: 31, name: "ギャング・マフィア" },
       ],
       searchGenre: "",
       searchGenres: [
@@ -158,10 +182,11 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" }
+        { id: 31, name: "ギャング・マフィア" },
       ],
       file: null, // 選択した画像を持っておく変数
-      uploadUrl: null //画像を保存する場所のURLを保存する変数
+      uploadUrl: null, //画像を保存する場所のURLを保存する変数
+      open: false,
     };
   },
   components: {},
@@ -183,22 +208,22 @@ export default {
           genre: this.genre,
           time: firebase.firestore.FieldValue.serverTimestamp(),
           //サーバ側で値設定
-          id: id
+          id: id,
           //dataにデータを作ってないので、thisは付けなくてOK!
         });
-        
+
       this.$swal({
         title: "内容確認",
         text: "この内容で投稿しますか？",
         icon: "info",
         buttons: true,
-        dangerMode: true
-      }).then(willDelete => {
+        dangerMode: true,
+      }).then((willDelete) => {
         if (willDelete) {
           this.$swal("投稿しました。", {
-            icon: "success"
+            icon: "success",
           });
-          this.$router.push("/board");
+          this.$router.go({ path: "/board", force: true });
         } else {
           this.$swal("キャンセルしました。");
         }
@@ -209,7 +234,13 @@ export default {
     },
     hide() {
       this.$modal.hide("post");
-    }
+    },
+    openModal() {
+      this.open = true;
+    },
+    closeModal() {
+      this.open = false;
+    },
   },
 };
 </script>
@@ -263,6 +294,7 @@ textarea::placeholder {
 .search-inner {
   width: 100%;
   flex-direction: column;
+  padding-top: 3rem;
   background-color: $black-color;
   .search-tll {
     width: 80%;
@@ -337,6 +369,7 @@ textarea::placeholder {
   width: 100%;
   position: relative;
   flex-direction: column;
+  background-color: $black-color;
   .post-comment {
     position: fixed;
     top: 130px;
@@ -344,9 +377,9 @@ textarea::placeholder {
     width: 60px;
     height: 60px;
     border-radius: 50% 50%;
-    box-shadow: inset 0 0 50px whitesmoke, inset 20px 0 80px #015dc7,
+    box-shadow: inset 0 0 50px rgb(2, 149, 247), inset 20px 0 80px #015dc7,
       inset -20px 0 80px rgb(0, 132, 255), inset 20px 0 300px #015dc7,
-      inset -20px 0 300px rgb(0, 132, 255), 0 0 40px #fff, -10px 0 80px #015dc7,
+      inset -20px 0 300px rgb(0, 132, 255), 0 0 40px rgb(0, 130, 252), -10px 0 80px #015dc7,
       10px 0 80px rgb(0, 132, 255);
     border: none;
     cursor: pointer;
@@ -379,11 +412,7 @@ textarea::placeholder {
       background-color: $black-color;
       color: $white-color;
       padding-bottom: 4rem;
-      .post-img {
-        position: relative;
-      }
       .post-contens {
-        position: relative;
         margin: 0.8rem;
         .post-select {
           width: 17rem;
@@ -394,26 +423,6 @@ textarea::placeholder {
           height: 3rem;
           border-bottom: 1px solid #ddd;
           background-color: $black-color;
-        }
-        .btn-img {
-          position: absolute;
-          left: 0;
-          bottom: 8px;
-          width: 4.5rem;
-          color: white;
-          background-color: rgb(80, 80, 80);
-          padding: 0.3rem;
-          border-radius: 0.5rem;
-          text-decoration: none;
-          cursor: pointer;
-          border: none;
-          outline: none;
-          font-weight: bold;
-        }
-        .item-img {
-          width: 35px;
-          height: 35px;
-          margin-right: 0.8rem;
         }
         .post-item {
           width: 17rem;
@@ -465,16 +474,6 @@ textarea::placeholder {
     border-color: #333;
     color: #fff;
   }
-}
-
-.vm--modal {
-  box-shadow: 0 20px 100px 55px rgb(27 33 58 / 40%);
-}
-
-// -- swal --//
-
-.swal-modal {
-  background-color: $black-color;
 }
 
 // -- neon -- //

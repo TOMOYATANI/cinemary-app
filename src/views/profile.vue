@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <Header />
     <div class="profile-inner flex">
       <div class="profile-contens flex">

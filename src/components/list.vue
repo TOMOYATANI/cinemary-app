@@ -1,24 +1,31 @@
 <template>
-  <div id="app">
     <div class="card">
       <div class="face face1 flex">
         <div class="content">
-          <img class="profile-icon" width="50" height="50" src="../assets/アイコン.jpg" />
+          <img
+            class="profile-icon"
+            width="50"
+            height="50"
+            src="../assets/アイコン.jpg"
+          />
           <h3>{{ list.title }}</h3>
         </div>
       </div>
       <div class="face face2 flex">
         <div class="content flex">
           <p>{{ list.description }}</p>
-          <router-link :to="`chat/${list.id}`" class="join-btn flex">ルームへ参加</router-link>
+          <router-link
+            :to="`chat/${list.id}`"
+            class="join-btn flex"
+            >ルームへ参加</router-link
+          >
           <!-- to="`chat/${list.id}`"でchat/(取得したid)でページ遷移する。 -->
           <!-- ${ ~ }で囲ってあげないと文字列のままになってしまうので注意。 -->
           <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
-          <p class="post-time">{{list.time.toDate().toLocaleString()}}</p>
+          <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -29,14 +36,14 @@ export default {
   props: {
     //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
     list: {
-      type: Object
+      type: Object,
       //list内にObject型で格納されてる
     },
     index: {
-      type: Number
+      type: Number,
       //index内にNumber型で格納されてる
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -56,9 +63,11 @@ a {
 
 .card {
   width: 300px;
-  height: 200px;
+  height: 420px;
   position: relative;
   margin: 1rem;
+  flex-direction: column;
+  display: flex;
   .face {
     width: 300px;
     height: 200px;

@@ -1,8 +1,7 @@
 <template>
-  <div id="app">
+  <div>
     <Header />
     <Post />
-    <br />
     <div class="post">
       <h2 class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
@@ -112,7 +111,6 @@ $black-color: rgb(0, 0, 0);
   }
   &-inner {
     width: 100%;
-    margin-top: 3rem;
     display: flex;
     justify-content: center;
     .post-items {

@@ -57,6 +57,7 @@ const routes = [
     ///「:id」とすることで、Firestoreで取得した「id」先へページ遷移できる。
     name: "Chat",
     component: Chat,
+    meta: { requiresAuth: true },
   },
 ];
 

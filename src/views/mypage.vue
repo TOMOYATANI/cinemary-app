@@ -1,10 +1,14 @@
 <template>
-  <div id="app">
+  <div>
     <Header />
     <div class="mypage flex">
       <div class="mypage-inner flex">
         <div class="profile-inner flex">
-          <img class="profile-inner-img" src="../assets/アイコン.jpg" alt="デフォルト画像" />
+          <img
+            class="profile-inner-img"
+            src="../assets/アイコン.jpg"
+            alt="デフォルト画像"
+          />
           <div class="profile-inner-name">{{ allData.name }}</div>
         </div>
         <div class="profile-inner2 flex">
@@ -23,8 +27,22 @@
             </div>
           </div>
           <hr class="separate" />
-          <button @click="show" class="profile-edit flex">プロフィール編集</button>
-          <modal class="modal-inner" name="edit" :width="1100" :height="680">
+          <button
+            @click="
+              show();
+              openModal();
+            "
+            class="profile-edit flex"
+          >
+            プロフィール編集
+          </button>
+          <modal
+            class="modal-inner"
+            v-scroll-lock="open"
+            name="edit"
+            :width="1100"
+            :height="680"
+          >
             <div class="modal-header flex">
               <h2 class="profile-tll flex">プロフィールを編集する</h2>
               <hr class="separate" />
@@ -40,18 +58,25 @@
                       class="profile-img"
                       alt="プロフィール画像"
                     />
-                    <button class="profile-txt profile-update" @click="update">プロフィール画像を編集する</button>
+                    <button class="profile-txt profile-update" @click="update">
+                      プロフィール画像を編集する
+                    </button>
                   </div>
                   <div class="line"></div>
                   <div class="profile-items flex">
                     <div class="profile-contens flex">
-                      <input type="text" class="profile-item" placeholder="名前" v-model="name" />
+                      <input
+                        type="text"
+                        class="profile-item"
+                        placeholder="名前"
+                        v-model="name"
+                      />
                     </div>
                     <div class="profile-contens flex">
                       <select
                         class="profile-select"
                         v-model="sex"
-                        :style="{ color:sex == '' ? 'gray' : 'white' }"
+                        :style="{ color: sex == '' ? 'gray' : 'white' }"
                       >
                         <option class="profile-item" value hidden>性別</option>
                         <option
@@ -60,14 +85,15 @@
                           :key="sex.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ sex.name }}</option>
+                          >{{ sex.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
                       <select
                         class="profile-select"
                         v-model="age"
-                        :style="{ color : age == '' ? 'gray' : 'white' }"
+                        :style="{ color: age == '' ? 'gray' : 'white' }"
                       >
                         <option class="profile-item" value hidden>年齢</option>
                         <option
@@ -76,14 +102,15 @@
                           :key="age.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ age.name }}</option>
+                          >{{ age.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
                       <select
                         class="profile-select"
                         v-model="profession"
-                        :style="{ color : profession == '' ? 'gray' : 'white' }"
+                        :style="{ color: profession == '' ? 'gray' : 'white' }"
                       >
                         <option class="profile-item" value hidden>職業</option>
                         <option
@@ -92,26 +119,36 @@
                           :key="profession.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ profession.name }}</option>
+                          >{{ profession.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
-                      <textarea name="text" cols="10" rows="1" v-model="selfpr" placeholder="自己紹介"></textarea>
+                      <textarea
+                        name="text"
+                        cols="10"
+                        rows="1"
+                        v-model="selfpr"
+                        placeholder="自己紹介"
+                      ></textarea>
                     </div>
                     <div class="profile-contens flex">
                       <select
                         class="profile-select"
                         v-model="genre"
-                        :style="{ color : genre == '' ? 'gray' : 'white' }"
+                        :style="{ color: genre == '' ? 'gray' : 'white' }"
                       >
-                        <option class="profile-item" value hidden>好きなジャンル</option>
+                        <option class="profile-item" value hidden
+                          >好きなジャンル</option
+                        >
                         <option
                           v-for="genre in genres"
                           :value="genre.name"
                           :key="genre.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ genre.name }}</option>
+                          >{{ genre.name }}</option
+                        >
                       </select>
                     </div>
                   </div>
@@ -150,6 +187,8 @@ import VueSwal from "vue-swal";
 Vue.use(VueSwal);
 import VModal from "vue-js-modal";
 Vue.use(VModal);
+import VScrollLock from "v-scroll-lock";
+Vue.use(VScrollLock);
 
 export default {
   data() {
@@ -167,7 +206,7 @@ export default {
         { name: "50 ~ 59歳" },
         { name: "60 ~ 69歳" },
         { name: "70 ~ 79歳" },
-        { name: "80際以上" }
+        { name: "80際以上" },
       ],
       profession: "",
       professions: [
@@ -178,7 +217,7 @@ export default {
         { name: "パート・アルバイト" },
         { name: "専業主婦" },
         { name: "学生" },
-        { name: "その他" }
+        { name: "その他" },
       ],
       selfpr: "",
       genre: "",
@@ -214,14 +253,15 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" }
+        { id: 31, name: "ギャング・マフィア" },
       ],
       uploadedImage: "",
-      allData: []
+      allData: [],
+      open: false,
     };
   },
   components: {
-    Header
+    Header,
   },
   methods: {
     // postItem()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
@@ -237,7 +277,7 @@ export default {
           profession: this.profession,
           uploadedImage: this.uploadedImage,
           genre: this.genre,
-          time: firebase.firestore.FieldValue.serverTimestamp()
+          time: firebase.firestore.FieldValue.serverTimestamp(),
           //サーバ側で値設定
         });
       this.$swal({
@@ -245,11 +285,11 @@ export default {
         text: "この内容で投稿しますか？",
         icon: "info",
         buttons: true,
-        dangerMode: true
-      }).then(willDelete => {
+        dangerMode: true,
+      }).then((willDelete) => {
         if (willDelete) {
           this.$swal("投稿しました。", {
-            icon: "success"
+            icon: "success",
           });
         } else {
           this.$swal("キャンセルしました。");
@@ -261,16 +301,22 @@ export default {
     },
     hide: function() {
       this.$modal.hide("edit");
-    }
+    },
+    openModal() {
+      this.open = true;
+    },
+    closeModal() {
+      this.open = false;
+    },
   },
   created() {
     firebase
       .firestore()
       .collection("users")
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         //"users"(参照先)のスナップショットを得る
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.allData.push(doc.data());
           //更にallDataの空箱に格納した"doc"データを格納
@@ -294,7 +340,7 @@ export default {
         //保存が成功したら、保存した画像ファイルの場所とともにfirebase databaseに保存する準備
         const imageData = {
           uploadUrl: this.uploadUrl,
-          createdAt: firebase.database.ServerValue.TIMESTAMP
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
         };
         // ここでfirebase databaseに保存する
         firebase
@@ -305,14 +351,14 @@ export default {
             alert("画像が保存できました。");
             // this.$emit("", false); //親コンポーネントに伝達
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("画像が保存できませんでした。", error);
           });
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("エラー発生しました。", error);
       });
-  }
+  },
 };
 </script>
 
@@ -326,11 +372,6 @@ $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
 // -- 共通 -- //
-
-#app {
-  background-color: $black-color;
-  color: $white-color;
-}
 
 ::placeholder {
   color: gray;
@@ -573,11 +614,6 @@ hr.separate {
   }
 }
 
-// -- swal --//
-
-.swal-modal {
-  background-color: $black-color;
-}
 
 // -- neon -- //
 

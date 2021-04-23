@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
     <Header />
     <div class="main">
       <div class="main-tll flex">
@@ -100,6 +100,9 @@
 <script>
 import firebase from "firebase";
 import Header from "@/components/header.vue";
+import Vue from 'vue'
+import VueSwal from 'vue-swal'
+Vue.use(VueSwal)
 
 export default {
   name: "signOut",
