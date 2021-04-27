@@ -1,41 +1,41 @@
 <template>
   <div>
     <Header />
-    <div class="first flex">
+    <div class="about flex">
       <h2 class="about-tll neon">Cinemary(シネマリー)とは？</h2>
       <hr class="separate" />
       <ul class="flex">
         <li>
-          <div class="remark flex">
+          <div class="remark">
             <div class="faceicon">
               <img src="../assets/faceicon1.jpg" />
             </div>
             <div class="chatting">
-              <div class="say say1">
+              <div class="say">
                 <p>恋人とキュンとする恋愛映画が観たいな♡</p>
               </div>
             </div>
           </div>
         </li>
         <li>
-          <div class="remark flex">
+          <div class="remark">
             <div class="faceicon">
               <img src="../assets/faceicon3.jpg" />
             </div>
             <div class="chatting">
-              <div class="say say2">
+              <div class="say">
                 <p>スカッとするアクション映画が観たい！</p>
               </div>
             </div>
           </div>
         </li>
         <li>
-          <div class="remark flex">
+          <div class="remark">
             <div class="faceicon">
               <img src="../assets/faceicon2.jpg" />
             </div>
             <div class="chatting">
-              <div class="say say3">
+              <div class="say">
                 <p>お友達と大人数でホラー映画鑑賞会をしたい♩</p>
               </div>
             </div>
@@ -44,8 +44,12 @@
       </ul>
       <div class="description">
         <p>そんな映画を観たい気分の時があるかと思います。</p>
-        <p>しかし、「何の映画を観よう」「どれを観たらいいだろう」と悩んだことはないでしょうか。</p>
-        <p>その時の気分を投稿して、そのシーンにあった映画をチャットを通じて選んでみませんか。</p>
+        <p>
+          しかし、「何の映画を観よう」「どれを観たらいいだろう」と悩んだことはないでしょうか。
+        </p>
+        <p>
+          その時の気分を投稿して、そのシーンにあった映画をチャットを通じて選んでみませんか。
+        </p>
       </div>
       <h2 class="flow-tll neon">Cinemaryを利用するまでの流れ</h2>
       <hr class="separate" />
@@ -57,7 +61,9 @@
             </div>
             <p>STEP1</p>
             <h3>無料会員登録</h3>
-            <p class="step-txt">会員登録をすると全てのサービスが使用でき、全ての投稿を閲覧できます。</p>
+            <p class="step-txt">
+              会員登録をすると全てのサービスが使用でき、全ての投稿を閲覧できます。
+            </p>
           </div>
           <div class="step">
             <div>
@@ -65,7 +71,9 @@
             </div>
             <p>STEP2</p>
             <h3>投稿</h3>
-            <p class="step-txt">自分の気分を投稿したり、自分の気になる投稿に書き込みができます。</p>
+            <p class="step-txt">
+              自分の気分を投稿したり、自分の気になる投稿に書き込みができます。
+            </p>
           </div>
           <div class="step">
             <div>
@@ -73,10 +81,14 @@
             </div>
             <p>STEP3</p>
             <h3>映画が決定！</h3>
-            <p class="step-txt">チャットを通じて、あなたの気分にあった映画が決まります。</p>
+            <p class="step-txt">
+              チャットを通じて、あなたの気分にあった映画が決まります。
+            </p>
           </div>
         </div>
-        <router-link to="/signup" class="first-btn" v-if="!authenticatedUser">今すぐ登録</router-link>
+        <router-link to="/signup" class="first-btn" v-if="!authenticatedUser"
+          >今すぐ登録</router-link
+        >
       </div>
     </div>
   </div>
@@ -91,35 +103,60 @@ export default {
   data() {
     return {
       authenticatedUser: "",
-      isOpen: false
+      isOpen: false,
     };
   },
   components: {
-    Header
+    Header,
   },
   methods: {
     toggle() {
       this.isOpen = !this.isOpen;
       //「!」を先頭につける事で真偽が逆。
-    }
+    },
   },
   mounted() {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.authenticatedUser = true;
       } else {
         this.authenticatedUser = false;
       }
     });
-  }
+  },
 };
 </script>
 
 <style scoped lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
+
+// -- 変数 -- //
+
+$white-color: rgb(255, 255, 255);
+$black-color: rgb(0, 0, 0);
+
+// -- 全体共通 -- //
+
+.separate {
+  width: 70%;
+  display: block;
+  height: 0;
+  border: 0;
+  border-top: 1px solid rgb(100, 100, 100);
+  margin: 1em 0;
+  padding: 1rem;
+}
+
+p {
+  color: #000;
+}
+
+// -- Cinemary(シネマリー)とは？ -- //
+
 .say {
   display: inline-block;
   position: relative;
-  margin: 0 0 0 50px;
+  margin: 0 0 0 30px;
   padding: 10px;
   max-width: 460px;
   border-radius: 12px;
@@ -137,65 +174,31 @@ export default {
   border-right: 12px solid #00ec0ccb;
 }
 
-.first {
+.about {
   flex-direction: column;
-  background-color: rgb(0, 0, 0);
-  .about-tll {
+  background-color: $black-color;
+  &-tll {
     margin-top: 3rem;
-    color: rgb(255, 255, 255);
+    color: $white-color;
     font-family: "Roboto", sans-serif;
   }
-  .separate {
-    width: 70%;
-    display: block;
-    height: 0;
-    border: 0;
-    border-top: 1px solid rgb(100, 100, 100);
-    margin: 1em 0;
-    padding: 1rem;
-  }
+
   ul {
     width: 50%;
     flex-direction: column;
     margin-left: 5rem;
     li {
       width: 80%;
-      position: relative;
     }
     .remark {
-      width: 100%;
-      justify-content: space-between;
+      width: 465px;
+      display: flex;
+      align-items: center;
       .faceicon {
         img {
           width: 60px;
           height: 60px;
           margin: 0.5rem;
-        }
-      }
-      .chatting {
-        .say1 {
-          position: absolute;
-          top: 20px;
-          left: 55px;
-          p {
-            color: rgb(0, 0, 0);
-          }
-        }
-        .say2 {
-          position: absolute;
-          top: 20px;
-          left: 55px;
-          p {
-            color: rgb(0, 0, 0);
-          }
-        }
-        .say3 {
-          position: absolute;
-          top: 20px;
-          left: 55px;
-          p {
-            color: rgb(0, 0, 0);
-          }
         }
       }
     }
@@ -208,13 +211,15 @@ export default {
     padding: 3rem;
     p {
       padding: 2px;
-      color: rgb(255, 255, 255);
+      color: $white-color;
     }
   }
 
+  // -- Cinemaryを利用するまでの流れ -- //
+
   .flow-tll {
     margin-top: 2rem;
-    color: rgb(255, 255, 255);
+    color: $white-color;
     font-family: "Roboto", sans-serif;
   }
 
@@ -229,7 +234,7 @@ export default {
         text-align: center;
       }
       p {
-        color: rgb(255, 255, 255);
+        color: $white-color;
       }
       img {
         width: 70px;
@@ -237,16 +242,16 @@ export default {
       }
       h4 {
         font-weight: 0px;
-        color: rgb(255, 255, 255);
+        color: $white-color;
       }
       h3 {
         padding: 0.5rem;
-        color: rgb(255, 255, 255);
+        color: $white-color;
       }
       .step-txt {
         padding: 1rem;
         font-size: 14px;
-        color: rgb(255, 255, 255);
+        color: $white-color;
       }
     }
     .first-btn {
@@ -256,7 +261,7 @@ export default {
       display: inline-block;
       letter-spacing: 2px;
       overflow: hidden;
-      color: #fff;
+      color: $white-color;
       background: #fc8f01;
       box-shadow: 0 0 10px #fc8f01, 0 0 40px #fc8f01, 0 0 80px;
       outline: none;
@@ -270,8 +275,9 @@ export default {
   }
 }
 
+// -- タイトル -- //
+
 .neon {
-  color: transparent;
   -webkit-text-stroke: 0.2px rgb(255, 0, 0);
   text-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
 }

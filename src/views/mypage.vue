@@ -1,17 +1,22 @@
-<template>
+<template
+  v-for="data in profileData"
+  :index="index"
+  :profile="profile"
+  :key="data.id"
+>
   <div>
     <Header />
     <div class="mypage flex">
       <div class="mypage-inner flex">
-        <div class="profile-inner flex">
+        <div class="profile-inner-l flex">
           <img
-            class="profile-inner-img"
+            class="profile-inner-l-img"
             src="../assets/アイコン.jpg"
             alt="デフォルト画像"
           />
-          <div class="profile-inner-name">{{ allData.name }}</div>
+          <div class="profile-inner-l-name">{{ profileData.name }}</div>
         </div>
-        <div class="profile-inner2 flex">
+        <div class="profile-inner-r flex">
           <div class="follow-inner">
             <div class="post">
               <div>0</div>
@@ -27,21 +32,26 @@
             </div>
           </div>
           <hr class="separate" />
-          <button
-            @click="
-              show();
-              openModal();
-            "
-            class="profile-edit flex"
-          >
-            プロフィール編集
-          </button>
+          <div class="btn-inner">
+            <button
+              @click="
+                show();
+                openModal();
+              "
+              class="profile-edit flex"
+            >
+              プロフィール編集
+            </button>
+            <!-- <button class="profile-txt follow-btn" @click="follow">
+            フォロー
+          </button> -->
+          </div>
           <modal
             class="modal-inner"
             v-scroll-lock="open"
             name="edit"
             :width="1100"
-            :height="680"
+            :height="720"
           >
             <div class="modal-header flex">
               <h2 class="profile-tll flex">プロフィールを編集する</h2>
@@ -109,6 +119,25 @@
                     <div class="profile-contens flex">
                       <select
                         class="profile-select"
+                        v-model="access"
+                        :style="{ color: access == '' ? 'gray' : 'white' }"
+                      >
+                        <option class="profile-item" value hidden
+                          >居住地</option
+                        >
+                        <option
+                          v-for="access in accesses"
+                          :value="access.name"
+                          :key="access.id"
+                          class="profile-item"
+                          style="color: white;"
+                          >{{ access.name }}</option
+                        >
+                      </select>
+                    </div>
+                    <div class="profile-contens flex">
+                      <select
+                        class="profile-select"
                         v-model="profession"
                         :style="{ color: profession == '' ? 'gray' : 'white' }"
                       >
@@ -151,10 +180,20 @@
                         >
                       </select>
                     </div>
+                      <div class="profile-contens flex">
+                        <input
+                          type="text"
+                          class="profile-item"
+                          placeholder="好きな映画"
+                          v-model="favMovie"
+                        />
+                      </div>
                   </div>
+                  <button class="hide-btn flex" @click="hide">×</button>
                 </div>
-                <button @click="updateBtn" class="update-btn flex">更新</button>
-                <button class="hide-btn flex" @click="hide">×</button>
+                    <button @click="updateBtn" class="update-btn flex">
+                    更新
+                </button>
               </div>
             </div>
           </modal>
@@ -162,18 +201,39 @@
       </div>
       <div class="profile-list">
         <ul class="list-item">
-          <li class="list-item">性別：{{ allData.sex }}</li>
-          <li class="list-item">年齢：{{ allData.age }}</li>
-          <li class="list-item">職業：{{ allData.professions }}</li>
-          <li class="list-item">居住地：</li>
-          <li class="list-item">好きな映画：</li>
-          <li class="list-item">好きなジャンル：{{ allData.genre }}</li>
-          <li class="list-item">自己紹介：{{ allData.selfpr }}</li>
+          <li class="list-items">
+            性別：
+            <div class="list-color">{{ profileData.sex }}</div>
+          </li>
+          <li class="list-items">
+            年齢：
+            <div class="list-color">{{ profileData.age }}</div>
+          </li>
+          <li class="list-items">
+            職業：
+            <div class="list-color">{{ profileData.profession }}</div>
+          </li>
+          <li class="list-items">
+            居住地：
+            <div class="list-color">{{ profileData.access }}</div>
+          </li>
+          <li class="list-items">
+            好きな映画：
+            <div class="list-color">{{ profileData.favMovie }}</div>
+          </li>
+          <li class="list-items">
+            好きなジャンル：
+            <div class="list-color">{{ profileData.genre }}</div>
+          </li>
+          <li class="list-items">
+            自己紹介：
+            <div class="list-color">{{ profileData.selfpr }}</div>
+          </li>
         </ul>
       </div>
       <hr class="separate" />
       <div class="profile-post flex">
-        <h3>{{ allData.name }}の投稿一覧</h3>
+        <h3>{{ profileData.name }} さんの投稿一覧</h3>
       </div>
     </div>
   </div>
@@ -207,6 +267,56 @@ export default {
         { name: "60 ~ 69歳" },
         { name: "70 ~ 79歳" },
         { name: "80際以上" },
+      ],
+      access: "",
+      accesses: [
+        { name: "北海道" },
+        { name: "青森県" },
+        { name: "岩手県" },
+        { name: "宮城県" },
+        { name: "秋田県" },
+        { name: "山形県" },
+        { name: "福島県" },
+        { name: "茨城県" },
+        { name: "栃木県" },
+        { name: "群馬県" },
+        { name: "埼玉県" },
+        { name: "千葉県" },
+        { name: "東京都" },
+        { name: "神奈川県" },
+        { name: "新潟県" },
+        { name: "富山県" },
+        { name: "石川県" },
+        { name: "福井県" },
+        { name: "山梨県" },
+        { name: "長野県" },
+        { name: "岐阜県" },
+        { name: "静岡県" },
+        { name: "愛知県" },
+        { name: "三重県" },
+        { name: "滋賀県" },
+        { name: "京都府" },
+        { name: "大阪府" },
+        { name: "兵庫県" },
+        { name: "奈良県" },
+        { name: "和歌山県" },
+        { name: "鳥取県" },
+        { name: "島根県" },
+        { name: "岡山県" },
+        { name: "広島県" },
+        { name: "山口県" },
+        { name: "徳島県" },
+        { name: "香川県" },
+        { name: "愛媛県" },
+        { name: "高知県" },
+        { name: "福岡県" },
+        { name: "佐賀県" },
+        { name: "長崎県" },
+        { name: "熊本県" },
+        { name: "大分県" },
+        { name: "宮崎県" },
+        { name: "鹿児島県" },
+        { name: "沖縄県" },
       ],
       profession: "",
       professions: [
@@ -255,8 +365,10 @@ export default {
         { id: 30, name: "歴史" },
         { id: 31, name: "ギャング・マフィア" },
       ],
+      favMovie: "",
       uploadedImage: "",
-      allData: [],
+      profileData: {},
+      //配列にしないようにする。
       open: false,
     };
   },
@@ -264,22 +376,31 @@ export default {
     Header,
   },
   methods: {
-    // postItem()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
+    // updateBtn()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
     updateBtn() {
       firebase
         .firestore()
         .collection("users")
-        .add({
-          name: this.name,
-          sex: this.sex,
-          age: this.age,
-          selfpr: this.selfpr,
-          profession: this.profession,
-          uploadedImage: this.uploadedImage,
-          genre: this.genre,
-          time: firebase.firestore.FieldValue.serverTimestamp(),
-          //サーバ側で値設定
-        });
+        .doc(this.$route.params.uid)
+        //uidとは、routerの/mypage/:uidの[uid]のこと。
+        //コレクションのusersを参照して、ドキュメントのuidを参照。
+        .set(
+          {
+            name: this.name,
+            sex: this.sex,
+            age: this.age,
+            access: this.access,
+            selfpr: this.selfpr,
+            profession: this.profession,
+            uploadedImage: this.uploadedImage,
+            genre: this.genre,
+            favMovie: this.favMovie,
+            time: firebase.firestore.FieldValue.serverTimestamp(),
+            //サーバ側で値設定
+          },
+          { merge: true }
+          //set()でmergeをtrueにすると、上書き。updetaと同様。
+        );
       this.$swal({
         title: "内容確認",
         text: "この内容で投稿しますか？",
@@ -291,6 +412,8 @@ export default {
           this.$swal("投稿しました。", {
             icon: "success",
           });
+          this.$router.go({ path: `/mypage/${this.$route.params.uid}`, force: true });
+          //プロフィール編集されたらページをリロード
         } else {
           this.$swal("キャンセルしました。");
         }
@@ -310,18 +433,20 @@ export default {
     },
   },
   created() {
-    firebase
-      .firestore()
-      .collection("users")
-      .get()
-      .then((snapshot) => {
-        //"users"(参照先)のスナップショットを得る
-        snapshot.forEach((doc) => {
-          //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
-          this.allData.push(doc.data());
-          //更にallDataの空箱に格納した"doc"データを格納
+    const currentUser = firebase.auth().currentUser;
+
+    if (currentUser) {
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(this.$route.params.uid)
+        .get()
+        .then((snapshot) => {
+          this.profileData = snapshot.data();
+          //全てのデータを取得して、profileDataへ代入。
+          // console.log(snapshot.data());
         });
-      });
+    }
   },
   onFileChange(e) {
     const image = e.target.files; //選択された画像ファイルを選択
@@ -368,6 +493,7 @@ export default {
 // -- 変数 -- //
 
 $gray-color: rgb(100, 100, 100);
+$modal-color: rgb(5, 5, 5);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
@@ -388,7 +514,7 @@ textarea {
   border-bottom: 1px solid #ddd;
   color: $white-color;
   font-size: 1rem;
-  background-color: $black-color;
+  background-color: $modal-color;
 }
 
 textarea::placeholder {
@@ -412,12 +538,12 @@ hr.separate {
   top: 0;
   left: 50%;
   width: 1px;
-  height: 25rem;
+  height: 28rem;
   background-color: #646464;
   z-index: 10;
 }
 
-// -- mypage -- //
+// -- マイページ -- //
 
 .mypage {
   width: 100%;
@@ -426,7 +552,7 @@ hr.separate {
   background-color: $black-color;
   &-inner {
     width: 70%;
-    .profile-inner {
+    .profile-inner-l {
       width: 100%;
       flex-direction: column;
       &-img {
@@ -440,7 +566,7 @@ hr.separate {
         padding: 1rem;
       }
     }
-    .profile-inner2 {
+    .profile-inner-r {
       width: 100%;
       flex-direction: column;
       .follow-inner {
@@ -476,10 +602,15 @@ hr.separate {
     display: flex;
     margin: 3rem;
     color: $white-color;
-    li {
+    .list-items {
       display: flex;
       justify-content: start;
-      opacity: 0.5;
+      color: rgb(130, 130, 130);
+      .list-color {
+        color: $white-color;
+        font-weight: bold;
+        margin: 0 1rem;
+      }
     }
   }
   .profile-post {
@@ -489,7 +620,7 @@ hr.separate {
   }
 }
 
-// -- profile-edit -- //
+// -- プロフィール編集 -- //
 
 .profile-select {
   width: 15rem;
@@ -499,13 +630,13 @@ hr.separate {
   color: $white-color;
   height: 2.5rem;
   border-bottom: 1px solid #ddd;
-  background-color: $black-color;
+  background-color: $modal-color;
 }
 
 .modal-inner {
   .modal-header {
     flex-direction: column;
-    background-color: $black-color;
+    background-color: $modal-color;
     .profile-tll {
       padding-top: 3rem;
       color: white;
@@ -516,7 +647,7 @@ hr.separate {
     .profile-inner {
       width: 100%;
       flex-direction: column;
-      background-color: $black-color;
+      background-color: $modal-color;
       padding-bottom: 1rem;
       .profile-tll {
         width: 80%;
@@ -524,8 +655,8 @@ hr.separate {
       }
       .profile-contens {
         width: 100%;
-        margin-top: 1.5rem;
-        background-color: $black-color;
+        margin-top: 1rem;
+        background-color: $modal-color;
         .item-img {
           width: 35px;
           height: 35px;
@@ -539,7 +670,7 @@ hr.separate {
           border-bottom: 1px solid #ddd;
           color: $white-color;
           font-size: 1rem;
-          background-color: $black-color;
+          background-color: $modal-color;
         }
         .profile-img-inner {
           width: 35%;
@@ -552,7 +683,7 @@ hr.separate {
             background-color: #fff;
             font-weight: bold;
             font-size: 1rem;
-            background-color: $black-color;
+            background-color: $modal-color;
           }
           .profile-img {
             width: 200px;
@@ -568,12 +699,13 @@ hr.separate {
         .profile-items {
           width: 35%;
           flex-direction: column;
+          padding-bottom: 2rem;
         }
       }
     }
     .update-btn {
       width: 5rem;
-      margin: 3rem;
+      margin: 2rem;
       padding: 0.5rem;
       display: inline-block;
       overflow: hidden;
@@ -614,8 +746,31 @@ hr.separate {
   }
 }
 
+// -- フォローボタン -- //
 
-// -- neon -- //
+.btn-inner {
+  display: inline-block;
+}
+
+.follow-btn {
+  width: 6rem;
+  margin: 1rem;
+  padding: 0.8rem;
+  display: inline-block;
+  overflow: hidden;
+  letter-spacing: 2px;
+  color: #fff;
+  background: #e62f2f;
+  box-shadow: 0 0 10px #e62f2f, 0 0 50px #e62f2f, 0 0 80px -6px;
+  outline: none;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+// -- ネオンカラー -- //
 
 .neon {
   color: transparent;

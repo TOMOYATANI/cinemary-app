@@ -4,7 +4,7 @@
     <div class="signup flex">
       <div class="signup-inner flex">
         <h2>新規登録</h2>
-        <input type="text" placeholder="Username" v-model="userName" />
+        <input type="text" placeholder="Username" v-model="name" />
         <input type="text" placeholder="Email" v-model="email" />
         <input type="password" placeholder="Password" v-model="password" />
         <button class="btn-signup" @click.prevent="signUp">登録</button>
@@ -30,7 +30,8 @@ export default {
     return {
       email: "",
       password: "",
-      userName: "",
+      name: "",
+      uid: "",
     };
   },
   components: {
@@ -43,19 +44,26 @@ export default {
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         //ユーザーから提供されたメールアドレスとパスワードを検証し、それらをcreateUserWithEmailAndPassword メソッドに渡す。
-        // .then(() => {
-        //   firebase
-        //     .auth()
-        //     .currentUser.updateProfile({
-        //       displayName: this.username,
-        //     })
-        .then((willDelete) => {
-          if (willDelete) {
-            this.$swal("登録に成功しました。", {
-              icon: "success",
+        .then((userCredential) => {
+          this.$swal("登録に成功しました。", {
+            icon: "success",
+          });
+          this.uid = userCredential.user.uid;
+
+          return firebase
+            .firestore()
+            .collection("users")
+            .doc(userCredential.user.uid)
+            .set({
+              name: this.name,
+              time: firebase.firestore.FieldValue.serverTimestamp(),
+              uid: userCredential.user.uid,
+              //各マイページにページ遷移する為にuidをfirestoreに格納
             });
-            this.$router.push("/signin");
-          }
+        })
+        .then(() => {
+          this.$router.push(`/mypage/${this.uid}`);
+          //新規登録後、該当ページに遷移
         })
         .catch(() => {
           this.$swal("登録情報が正しくありません。", {

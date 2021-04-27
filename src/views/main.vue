@@ -140,6 +140,8 @@ $gray-color: rgb(100, 100, 100);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
+// -- メイン -- //
+
 .main {
   width: 100%;
   height: 90vh;

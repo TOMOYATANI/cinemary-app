@@ -24,6 +24,7 @@ export default {};
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  color: rgb(255, 255, 255);
 }
 input[type="submit"],
 input[type="button"] {
@@ -39,11 +40,6 @@ input[type="button"] {
   &::focus {
     outline-offset: -2px;
   }
-}
-* {
-  margin: 0;
-  box-sizing: border-box;
-  color: rgb(255, 255, 255);
 }
 
 .flex {

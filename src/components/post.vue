@@ -184,8 +184,6 @@ export default {
         { id: 30, name: "歴史" },
         { id: 31, name: "ギャング・マフィア" },
       ],
-      file: null, // 選択した画像を持っておく変数
-      uploadUrl: null, //画像を保存する場所のURLを保存する変数
       open: false,
     };
   },
@@ -224,6 +222,7 @@ export default {
             icon: "success",
           });
           this.$router.go({ path: "/board", force: true });
+          //router.go(path:"/ ~ ")まで戻す。
         } else {
           this.$swal("キャンセルしました。");
         }
@@ -250,6 +249,7 @@ export default {
 // -- 変数 -- //
 
 $gray-color: rgb(100, 100, 100);
+$modal-color:rgb(5, 5, 5);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
@@ -280,7 +280,7 @@ textarea {
   border-bottom: 1px solid #ddd;
   color: $white-color;
   font-size: 1rem;
-  background-color: $black-color;
+  background-color: $modal-color;
 }
 
 textarea::placeholder {
@@ -289,7 +289,7 @@ textarea::placeholder {
   padding-left: 0.25rem;
 }
 
-// -- search -- //
+// -- 検索フォーム -- //
 
 .search-inner {
   width: 100%;
@@ -363,7 +363,7 @@ textarea::placeholder {
   }
 }
 
-// -- post -- //
+// -- 投稿フォーム -- //
 
 .post-inner {
   width: 100%;
@@ -379,8 +379,8 @@ textarea::placeholder {
     border-radius: 50% 50%;
     box-shadow: inset 0 0 50px rgb(2, 149, 247), inset 20px 0 80px #015dc7,
       inset -20px 0 80px rgb(0, 132, 255), inset 20px 0 300px #015dc7,
-      inset -20px 0 300px rgb(0, 132, 255), 0 0 40px rgb(0, 130, 252), -10px 0 80px #015dc7,
-      10px 0 80px rgb(0, 132, 255);
+      inset -20px 0 300px rgb(0, 132, 255), 0 0 40px rgb(0, 130, 252),
+      -10px 0 80px #015dc7, 10px 0 80px rgb(0, 132, 255);
     border: none;
     cursor: pointer;
     outline: none;
@@ -399,7 +399,7 @@ textarea::placeholder {
   position: relative;
   .modal-header {
     flex-direction: column;
-    background-color: $black-color;
+    background-color: $modal-color;
     .post-tll {
       padding-top: 3rem;
       color: $white-color;
@@ -409,7 +409,7 @@ textarea::placeholder {
   .modal-body {
     .post-items {
       flex-direction: column;
-      background-color: $black-color;
+      background-color: $modal-color;
       color: $white-color;
       padding-bottom: 4rem;
       .post-contens {
@@ -422,7 +422,7 @@ textarea::placeholder {
           color: $white-color;
           height: 3rem;
           border-bottom: 1px solid #ddd;
-          background-color: $black-color;
+          background-color: $modal-color;
         }
         .post-item {
           width: 17rem;
@@ -432,7 +432,7 @@ textarea::placeholder {
           border-bottom: 1px solid #ddd;
           color: $white-color;
           font-size: 1rem;
-          background-color: $black-color;
+          background-color: $modal-color;
         }
       }
     }
@@ -476,7 +476,7 @@ textarea::placeholder {
   }
 }
 
-// -- neon -- //
+// -- ネオンカラー -- //
 
 .neon {
   color: transparent;

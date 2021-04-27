@@ -8,7 +8,7 @@
         <router-link to="/" class="header-link neon3 flash">HOME</router-link>
       </li>
       <li>
-        <router-link to="/first" class="header-link neon3 flash">ABOUT</router-link>
+        <router-link to="/about" class="header-link neon3 flash">ABOUT</router-link>
       </li>
       <li>
         <router-link to="/board" class="header-link neon3 flash">POST</router-link>
@@ -17,13 +17,13 @@
         <router-link to="/signup" class="header-link neon3 flash" v-if="!authenticatedUser">SINGUP</router-link>
       </li>
       <li>
-        <router-link to="/signin" class="header-link neon3 flash" v-if="!authenticatedUser">LOGIN</router-link>
+        <router-link to="/signin" class="header-link neon3 flash" v-if="!authenticatedUser">SINGIN</router-link>
       </li>
       <li>
-        <router-link to="/mypage" class="header-link neon3 flash">MYPAGE</router-link>
+        <router-link :to="`/mypage/${this.$route.params.uid}`" class="header-link neon3 flash">MYPAGE</router-link>
       </li>
       <li v-if="authenticatedUser">
-        <button class="header-link neon3 flash" @click="signOut" v-if="authenticatedUser">LOGOUT</button>
+        <button class="header-link neon3 flash" @click="signOut" v-if="authenticatedUser">SINGOUT</button>
       </li>
     </ul>
   </header>
@@ -40,6 +40,17 @@ export default {
       authenticatedUser: "",
       isOpen: false
     };
+  },
+  props: {
+    //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
+    profile: {
+      type: Object,
+      //list内にObject型で格納されてる
+    },
+    index: {
+      type: Number,
+      //index内にNumber型で格納されてる
+    },
   },
   methods: {
     //ログアウトを実装
@@ -93,6 +104,7 @@ $gray-color: rgb(100, 100, 100);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
+// -- ヘッダー -- //
 
 .header {
   position: sticky;
@@ -149,10 +161,11 @@ $black-color: rgb(0, 0, 0);
 
 a.header-ttl:hover,
 a.header-ttl:hover span {
-  color: #bbb;
+  color: rgba(200, 200, 200, 0.600);
 }
 
-// -- neon -- //
+// -- ネオンカラー -- //
+
 .neon {
   display: inline-block;
   color: transparent;

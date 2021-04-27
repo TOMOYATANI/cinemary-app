@@ -42,13 +42,20 @@ export default {
         //.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         .signInWithEmailAndPassword(this.email, this.password)
         //ユーザーがフォームに入力したら、signInWithEmailAndPassword メソッドを呼び出します。
-        .then((willDelete) => {
-          if (willDelete) {
-            this.$swal("ログインに成功しました。", {
-              icon: "success",
-            });
-            this.$router.push("/mypage");
-          }
+        .then((userCredential) => {
+          this.$swal("ログインに成功しました。", {
+            icon: "success",
+          });
+          this.uid = userCredential.user.uid;
+
+          return firebase
+            .firestore()
+            .collection("users")
+            .doc(userCredential.user.uid);
+        })
+        .then(() => {
+          this.$router.push(`/mypage/${this.uid}`);
+
           //return firebase.auth().signInWithEmailAndPassword(email, password);
         })
         .catch(() => {

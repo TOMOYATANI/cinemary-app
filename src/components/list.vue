@@ -48,9 +48,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+// -- 変数 -- //
+
+$white-color: rgb(255, 255, 255);
+$black-color: rgb(0, 0, 0);
+
+// -- ヘッダー -- //
+
 a {
   text-decoration: none;
-  color: rgb(0, 0, 0);
+  color: $black-color;
 }
 
 .join-btn {
@@ -82,7 +89,7 @@ a {
     }
     h3 {
       font-size: 1em;
-      color: white;
+      color: $white-color;
       text-align: center;
     }
   }

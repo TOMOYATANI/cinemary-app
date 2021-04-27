@@ -90,9 +90,13 @@ export default {
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
+// -- 全体共通 -- //
+
 #app {
   background-color: $black-color;
 }
+
+// -- 投稿一覧 -- //
 
 .post {
   background-color: $black-color;
