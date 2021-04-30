@@ -70,9 +70,9 @@ a {
 
 .card {
   width: 300px;
-  height: 420px;
+  height: 400px;
   position: relative;
-  margin: 1rem;
+  margin: 0 1rem;
   flex-direction: column;
   display: flex;
   .face {

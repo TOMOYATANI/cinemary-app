@@ -8,22 +8,44 @@
         <router-link to="/" class="header-link neon3 flash">HOME</router-link>
       </li>
       <li>
-        <router-link to="/about" class="header-link neon3 flash">ABOUT</router-link>
+        <router-link to="/about" class="header-link neon3 flash"
+          >ABOUT</router-link
+        >
       </li>
       <li>
-        <router-link to="/board" class="header-link neon3 flash">POST</router-link>
+        <router-link to="/board" class="header-link neon3 flash"
+          >POST</router-link
+        >
       </li>
       <li>
-        <router-link to="/signup" class="header-link neon3 flash" v-if="!authenticatedUser">SINGUP</router-link>
+        <router-link
+          to="/signup"
+          class="header-link neon3 flash"
+          v-if="!authenticatedUser"
+          >SINGUP</router-link
+        >
       </li>
       <li>
-        <router-link to="/signin" class="header-link neon3 flash" v-if="!authenticatedUser">SINGIN</router-link>
+        <router-link
+          to="/signin"
+          class="header-link neon3 flash"
+          v-if="!authenticatedUser"
+          >SINGIN</router-link
+        >
       </li>
       <li>
-        <router-link :to="`/mypage/${this.$route.params.uid}`" class="header-link neon3 flash">MYPAGE</router-link>
+        <router-link :to="`/mypage/${this.uid}`" class="header-link neon3 flash"
+          >MYPAGE</router-link
+        >
       </li>
       <li v-if="authenticatedUser">
-        <button class="header-link neon3 flash" @click="signOut" v-if="authenticatedUser">SINGOUT</button>
+        <button
+          class="header-link neon3 flash"
+          @click="signOut"
+          v-if="authenticatedUser"
+        >
+          SINGOUT
+        </button>
       </li>
     </ul>
   </header>
@@ -31,26 +53,14 @@
 
 <script>
 import firebase from "firebase";
-import ClickOutside from "vue-click-outside";
 
 export default {
   name: "signOut",
   data() {
     return {
       authenticatedUser: "",
-      isOpen: false
+      pages: "",
     };
-  },
-  props: {
-    //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
-    profile: {
-      type: Object,
-      //list内にObject型で格納されてる
-    },
-    index: {
-      type: Number,
-      //index内にNumber型で格納されてる
-    },
   },
   methods: {
     //ログアウトを実装
@@ -59,40 +69,32 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          // alert("ログアウトしました。");
           this.$router.push("/signin");
         })
-        .catch(() => {
-          // alert("ログアウトができません。");
-        });
+        .catch(() => {});
     },
-    toggle() {
-      this.isOpen = !this.isOpen;
-      //「!」を先頭につける事で真偽が逆。
-    },
-    clickoutside() {
-      //this.isOpenがtrue場合、this.toggleは何も起きない。
-      //要するにドロップダウンメニューが開かれている時は、クリックしても何も起きない。
-      if (this.isOpen) {
-        this.toggle();
-      }
-    }
+  },
+  created() {
+    const currentUser = firebase.auth().currentUser;
+    //現在ログインしているユーザーを取得
+    this.uid = currentUser.uid;
+
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(currentUser.uid)
+      .get();
   },
   mounted() {
     //以下、ユーザーが認証済みであれば「ログアウト」を表示
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.authenticatedUser = true;
       } else {
         this.authenticatedUser = false;
       }
     });
-    this.popupItem = this.$el;
   },
-  //directivesオプションを使用することにより、ローカルディレクティブに登録されるため、機能を使える
-  directives: {
-    ClickOutside
-  }
 };
 </script>
 
@@ -154,14 +156,13 @@ $black-color: rgb(0, 0, 0);
   }
 }
 
-
 .isOpen {
   display: block;
 }
 
 a.header-ttl:hover,
 a.header-ttl:hover span {
-  color: rgba(200, 200, 200, 0.600);
+  color: rgba(200, 200, 200, 0.6);
 }
 
 // -- ネオンカラー -- //

@@ -39,24 +39,28 @@ export default {
     signIn() {
       firebase
         .auth()
-        //.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         .signInWithEmailAndPassword(this.email, this.password)
         //ユーザーがフォームに入力したら、signInWithEmailAndPassword メソッドを呼び出します。
-        .then((userCredential) => {
-          this.$swal("ログインに成功しました。", {
+        .then((res) => {
+          //ログイン時に取得したemailとpasswordを引数であるresに渡す。
+
+          this.$swal("ログインに成功しました。 ", {
             icon: "success",
           });
-          this.uid = userCredential.user.uid;
+          this.uid = res.user.uid;
+          //this.uidに 「res.user.uid;」を格納
 
-          return firebase
-            .firestore()
-            .collection("users")
-            .doc(userCredential.user.uid);
+          return (
+            firebase
+              .firestore()
+              .collection("users")
+              .doc(res.user.uid)
+              //usersのドキュメントを参照して、上記で引数として受けたresのuid取得
+              .get()
+          );
         })
         .then(() => {
           this.$router.push(`/mypage/${this.uid}`);
-
-          //return firebase.auth().signInWithEmailAndPassword(email, password);
         })
         .catch(() => {
           this.$swal("ログイン情報が間違っています。", {

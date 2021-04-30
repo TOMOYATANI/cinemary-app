@@ -1,9 +1,4 @@
-<template
-  v-for="data in profileData"
-  :index="index"
-  :profile="profile"
-  :key="data.id"
->
+<template>
   <div>
     <Header />
     <div class="mypage flex">
@@ -44,15 +39,18 @@
             </button>
             <!-- <button class="profile-txt follow-btn" @click="follow">
             フォロー
-          </button> -->
+            </button>-->
           </div>
           <modal
             class="modal-inner"
             v-scroll-lock="open"
             name="edit"
             :width="1100"
-            :height="720"
+            :height="740"
           >
+            <div data-modal="edit" aria-expanded="true" class="vm--overlay">
+              <div class="vm--top-right-slot"></div>
+            </div>
             <div class="modal-header flex">
               <h2 class="profile-tll flex">プロフィールを編集する</h2>
               <hr class="separate" />
@@ -62,7 +60,7 @@
                 <div class="profile-contens flex">
                   <div class="profile-img-inner flex">
                     <img
-                      :src="uploadedImage"
+                      src="../assets/アイコン.jpg"
                       width="200"
                       height="200"
                       class="profile-img"
@@ -153,18 +151,20 @@
                       </select>
                     </div>
                     <div class="profile-contens flex">
-                      <textarea
+                      <textarea-autosize
                         name="text"
                         cols="10"
                         rows="1"
                         v-model="selfpr"
                         placeholder="自己紹介"
-                      ></textarea>
+                        :min-height="70"
+                        :max-height="70"
+                      ></textarea-autosize>
                     </div>
                     <div class="profile-contens flex">
                       <select
-                        class="profile-select"
                         v-model="genre"
+                        class="profile-select"
                         :style="{ color: genre == '' ? 'gray' : 'white' }"
                       >
                         <option class="profile-item" value hidden
@@ -180,20 +180,26 @@
                         >
                       </select>
                     </div>
-                      <div class="profile-contens flex">
-                        <input
-                          type="text"
-                          class="profile-item"
-                          placeholder="好きな映画"
-                          v-model="favMovie"
-                        />
-                      </div>
+                    <div class="profile-contens flex">
+                      <input
+                        type="text"
+                        class="profile-item"
+                        placeholder="好きな映画"
+                        v-model="favMovie"
+                      />
+                    </div>
                   </div>
-                  <button class="hide-btn flex" @click="hide">×</button>
+                  <button
+                    class="hide-btn flex"
+                    @click="
+                      hide();
+                      closeModal();
+                    "
+                  >
+                    ×
+                  </button>
                 </div>
-                    <button @click="updateBtn" class="update-btn flex">
-                    更新
-                </button>
+                <button @click="updateBtn" class="update-btn flex">更新</button>
               </div>
             </div>
           </modal>
@@ -249,6 +255,8 @@ import VModal from "vue-js-modal";
 Vue.use(VModal);
 import VScrollLock from "v-scroll-lock";
 Vue.use(VScrollLock);
+import VueTextareaAutosize from "vue-textarea-autosize";
+Vue.use(VueTextareaAutosize);
 
 export default {
   data() {
@@ -412,7 +420,10 @@ export default {
           this.$swal("投稿しました。", {
             icon: "success",
           });
-          this.$router.go({ path: `/mypage/${this.$route.params.uid}`, force: true });
+          this.$router.go({
+            path: `/mypage/${this.$route.params.uid}`,
+            force: true,
+          });
           //プロフィール編集されたらページをリロード
         } else {
           this.$swal("キャンセルしました。");
@@ -493,7 +504,6 @@ export default {
 // -- 変数 -- //
 
 $gray-color: rgb(100, 100, 100);
-$modal-color: rgb(5, 5, 5);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
@@ -506,15 +516,13 @@ $black-color: rgb(0, 0, 0);
 }
 
 textarea {
-  resize: vertical;
-  width: 15rem;
+  width: 20rem;
   outline: none;
   border: none;
-  height: 2rem;
   border-bottom: 1px solid #ddd;
   color: $white-color;
   font-size: 1rem;
-  background-color: $modal-color;
+  background-color: $black-color;
 }
 
 textarea::placeholder {
@@ -541,6 +549,7 @@ hr.separate {
   height: 28rem;
   background-color: #646464;
   z-index: 10;
+  margin: 0 2rem;
 }
 
 // -- マイページ -- //
@@ -623,22 +632,27 @@ hr.separate {
 // -- プロフィール編集 -- //
 
 .profile-select {
-  width: 15rem;
+  width: 20rem;
   outline: none;
   border: none;
   font-size: 1rem;
   color: $white-color;
   height: 2.5rem;
   border-bottom: 1px solid #ddd;
-  background-color: $modal-color;
+  background-color: $black-color;
 }
 
 .modal-inner {
+  position: fixed;
+  .vm--overlay {
+    background: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+  }
   .modal-header {
     flex-direction: column;
-    background-color: $modal-color;
+    background-color: $black-color;
     .profile-tll {
-      padding-top: 3rem;
+      padding-top: 2rem;
       color: white;
       font-family: "Roboto", sans-serif;
     }
@@ -647,7 +661,7 @@ hr.separate {
     .profile-inner {
       width: 100%;
       flex-direction: column;
-      background-color: $modal-color;
+      background-color: $black-color;
       padding-bottom: 1rem;
       .profile-tll {
         width: 80%;
@@ -656,21 +670,21 @@ hr.separate {
       .profile-contens {
         width: 100%;
         margin-top: 1rem;
-        background-color: $modal-color;
+        background-color: $black-color;
         .item-img {
           width: 35px;
           height: 35px;
           margin-right: 0.8rem;
         }
         .profile-item {
-          width: 15rem;
+          width: 20rem;
           outline: none;
           border: none;
           height: 2.5rem;
           border-bottom: 1px solid #ddd;
           color: $white-color;
           font-size: 1rem;
-          background-color: $modal-color;
+          background-color: $black-color;
         }
         .profile-img-inner {
           width: 35%;
@@ -683,17 +697,17 @@ hr.separate {
             background-color: #fff;
             font-weight: bold;
             font-size: 1rem;
-            background-color: $modal-color;
+            background-color: $black-color;
           }
           .profile-img {
-            width: 200px;
-            height: 185px;
+            width: 250px;
+            height: 250px;
             border-radius: 50% 50%;
             margin-left: 2rem;
           }
           .profile-txt {
-            margin: 1rem;
-            margin-left: 2rem;
+            margin: 2rem;
+            margin-left: 4rem;
           }
         }
         .profile-items {

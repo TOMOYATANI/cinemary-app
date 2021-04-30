@@ -14,8 +14,16 @@
       v-scroll-lock="open"
       name="post"
       :width="750"
-      :height="485"
+      :height="550"
     >
+      <div
+        data-modal="post"
+        aria-expanded="true"
+        class="vm--overlay"
+        styles="background: rgba(255, 255, 255, 0.1);"
+      >
+        <div class="vm--top-right-slot"></div>
+      </div>
       <div class="modal-header flex">
         <h2 class="post-tll flex">Cinemaryを投稿する</h2>
         <hr class="separate" />
@@ -31,12 +39,14 @@
             />
           </div>
           <div class="post-contens flex">
-            <textarea
+            <textarea-autosize
               name="text"
               rows="1"
               v-model="description"
               placeholder="内容"
-            ></textarea>
+              :min-height="70"
+              :max-height="70"
+            ></textarea-autosize>
           </div>
           <div class="post-contens flex">
             <select
@@ -56,7 +66,15 @@
             </select>
           </div>
           <button class="post-btn" @click.prevent="postItem">投稿</button>
-          <button class="hide-btn flex" @click="hide">×</button>
+          <button
+            class="hide-btn flex"
+            @click="
+              hide();
+              closeModal();
+            "
+          >
+            ×
+          </button>
         </div>
       </div>
     </modal>
@@ -108,6 +126,9 @@ import VModal from "vue-js-modal";
 Vue.use(VModal);
 import VScrollLock from "v-scroll-lock";
 Vue.use(VScrollLock);
+import VueTextareaAutosize from "vue-textarea-autosize";
+Vue.use(VueTextareaAutosize);
+
 
 export default {
   data() {
@@ -249,7 +270,6 @@ export default {
 // -- 変数 -- //
 
 $gray-color: rgb(100, 100, 100);
-$modal-color:rgb(5, 5, 5);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
@@ -272,15 +292,13 @@ hr.separate {
 }
 
 textarea {
-  resize: vertical;
-  width: 17rem;
+  width: 25rem;
   outline: none;
   border: none;
-  height: 2rem;
   border-bottom: 1px solid #ddd;
   color: $white-color;
   font-size: 1rem;
-  background-color: $modal-color;
+  background-color: $black-color;
 }
 
 textarea::placeholder {
@@ -396,10 +414,14 @@ textarea::placeholder {
 }
 
 .modal-inner {
-  position: relative;
+  position: fixed;
+  .vm--overlay {
+    background: rgba(0, 0, 0, 0.7);
+    z-index: -1;
+  }
   .modal-header {
     flex-direction: column;
-    background-color: $modal-color;
+    background-color: $black-color;
     .post-tll {
       padding-top: 3rem;
       color: $white-color;
@@ -409,30 +431,30 @@ textarea::placeholder {
   .modal-body {
     .post-items {
       flex-direction: column;
-      background-color: $modal-color;
+      background-color: $black-color;
       color: $white-color;
       padding-bottom: 4rem;
       .post-contens {
         margin: 0.8rem;
         .post-select {
-          width: 17rem;
+          width: 25rem;
           outline: none;
           border: none;
           font-size: 1rem;
           color: $white-color;
           height: 3rem;
           border-bottom: 1px solid #ddd;
-          background-color: $modal-color;
+          background-color: $black-color;
         }
         .post-item {
-          width: 17rem;
+          width: 25rem;
           outline: none;
           border: none;
           height: 3rem;
           border-bottom: 1px solid #ddd;
           color: $white-color;
           font-size: 1rem;
-          background-color: $modal-color;
+          background-color: $black-color;
         }
       }
     }
@@ -450,7 +472,7 @@ textarea::placeholder {
       font-weight: bold;
       font-size: 0.9rem;
       cursor: pointer;
-      margin-top: 2rem;
+      margin-top: 4rem;
     }
     .hide-btn {
       position: absolute;

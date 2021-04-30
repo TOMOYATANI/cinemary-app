@@ -102,7 +102,7 @@ $black-color: rgb(0, 0, 0);
   background-color: $black-color;
   &-tll {
     width: 220px;
-    margin-top: 3rem;
+    margin: 3rem;
     margin-left: 10rem;
     z-index: 1;
     font-family: "Roboto", sans-serif;
