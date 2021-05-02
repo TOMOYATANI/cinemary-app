@@ -13,7 +13,7 @@
         >
       </li>
       <li>
-        <router-link to="/board" class="header-link neon3 flash"
+        <router-link :to="`/board/${this.uid}`" class="header-link neon3 flash"
           >POST</router-link
         >
       </li>

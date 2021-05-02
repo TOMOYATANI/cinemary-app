@@ -79,6 +79,13 @@
       </div>
     </modal>
     <div class="search-inner flex">
+      <ais-instant-search
+        :search-client="searchClient"
+        index-name="cinemary-app"
+      >
+        <ais-search-box placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.." class="search-main-item" />
+      </ais-instant-search>
+
       <h2 class="search-tll neon flex">Cinemaryを検索する</h2>
       <hr class="separate" />
       <div class="search-main-contens flex">
@@ -128,11 +135,15 @@ import VScrollLock from "v-scroll-lock";
 Vue.use(VScrollLock);
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
-
+import algoliasearch from "algoliasearch/lite";
 
 export default {
   data() {
     return {
+      searchClient: algoliasearch(
+        "VRXF7X7FPR",
+        "3b859896d42aa2c4576114dd3cd5735e"
+      ),
       db: null,
       time: "",
       title: "",
@@ -221,7 +232,8 @@ export default {
       firebase
         .firestore()
         .collection("posts")
-        .add({
+        .doc(this.$route.params.uid)
+        .set({
           title: this.title,
           description: this.description,
           genre: this.genre,
@@ -229,6 +241,7 @@ export default {
           //サーバ側で値設定
           id: id,
           //dataにデータを作ってないので、thisは付けなくてOK!
+          uid: this.$route.params.uid,
         });
 
       this.$swal({
@@ -380,6 +393,9 @@ textarea::placeholder {
     }
   }
 }
+
+// -- algolia --//
+
 
 // -- 投稿フォーム -- //
 

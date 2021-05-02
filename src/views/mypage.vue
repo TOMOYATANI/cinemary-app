@@ -4,17 +4,13 @@
     <div class="mypage flex">
       <div class="mypage-inner flex">
         <div class="profile-inner-l flex">
-          <img
-            class="profile-inner-l-img"
-            src="../assets/アイコン.jpg"
-            alt="デフォルト画像"
-          />
+          <img class="profile-inner-l-img" src="../assets/アイコン.jpg" alt="デフォルト画像" />
           <div class="profile-inner-l-name">{{ profileData.name }}</div>
         </div>
         <div class="profile-inner-r flex">
           <div class="follow-inner">
             <div class="post">
-              <div>0</div>
+              <div>{{listData.length}}</div>
               <p>POSTS</p>
             </div>
             <div class="follow">
@@ -34,20 +30,12 @@
                 openModal();
               "
               class="profile-edit flex"
-            >
-              プロフィール編集
-            </button>
+            >プロフィール編集</button>
             <!-- <button class="profile-txt follow-btn" @click="follow">
             フォロー
             </button>-->
           </div>
-          <modal
-            class="modal-inner"
-            v-scroll-lock="open"
-            name="edit"
-            :width="1100"
-            :height="740"
-          >
+          <modal class="modal-inner" v-scroll-lock="open" name="edit" :width="1100" :height="740">
             <div data-modal="edit" aria-expanded="true" class="vm--overlay">
               <div class="vm--top-right-slot"></div>
             </div>
@@ -66,19 +54,12 @@
                       class="profile-img"
                       alt="プロフィール画像"
                     />
-                    <button class="profile-txt profile-update" @click="update">
-                      プロフィール画像を編集する
-                    </button>
+                    <button class="profile-txt profile-update">プロフィール画像を編集する</button>
                   </div>
                   <div class="line"></div>
                   <div class="profile-items flex">
                     <div class="profile-contens flex">
-                      <input
-                        type="text"
-                        class="profile-item"
-                        placeholder="名前"
-                        v-model="name"
-                      />
+                      <input type="text" class="profile-item" placeholder="名前" v-model="name" />
                     </div>
                     <div class="profile-contens flex">
                       <select
@@ -93,8 +74,7 @@
                           :key="sex.id"
                           class="profile-item"
                           style="color: white;"
-                          >{{ sex.name }}</option
-                        >
+                        >{{ sex.name }}</option>
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -110,8 +90,7 @@
                           :key="age.id"
                           class="profile-item"
                           style="color: white;"
-                          >{{ age.name }}</option
-                        >
+                        >{{ age.name }}</option>
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -120,17 +99,14 @@
                         v-model="access"
                         :style="{ color: access == '' ? 'gray' : 'white' }"
                       >
-                        <option class="profile-item" value hidden
-                          >居住地</option
-                        >
+                        <option class="profile-item" value hidden>居住地</option>
                         <option
                           v-for="access in accesses"
                           :value="access.name"
                           :key="access.id"
                           class="profile-item"
                           style="color: white;"
-                          >{{ access.name }}</option
-                        >
+                        >{{ access.name }}</option>
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -146,8 +122,7 @@
                           :key="profession.id"
                           class="profile-item"
                           style="color: white;"
-                          >{{ profession.name }}</option
-                        >
+                        >{{ profession.name }}</option>
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -167,17 +142,14 @@
                         class="profile-select"
                         :style="{ color: genre == '' ? 'gray' : 'white' }"
                       >
-                        <option class="profile-item" value hidden
-                          >好きなジャンル</option
-                        >
+                        <option class="profile-item" value hidden>好きなジャンル</option>
                         <option
                           v-for="genre in genres"
                           :value="genre.name"
                           :key="genre.id"
                           class="profile-item"
                           style="color: white;"
-                          >{{ genre.name }}</option
-                        >
+                        >{{ genre.name }}</option>
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -195,9 +167,7 @@
                       hide();
                       closeModal();
                     "
-                  >
-                    ×
-                  </button>
+                  >×</button>
                 </div>
                 <button @click="updateBtn" class="update-btn flex">更新</button>
               </div>
@@ -238,8 +208,9 @@
         </ul>
       </div>
       <hr class="separate" />
-      <div class="profile-post flex">
-        <h3>{{ profileData.name }} さんの投稿一覧</h3>
+      <h3 class="post-list flex">{{ profileData.name }} さんの投稿一覧</h3>
+      <div class="profile-posts">
+        <List v-for="(list, index) in listData" :index="index" :list="list" :key="list.id" />
       </div>
     </div>
   </div>
@@ -248,6 +219,7 @@
 <script>
 import firebase from "firebase";
 import Header from "@/components/header.vue";
+import List from "@/components/list.vue";
 import Vue from "vue";
 import VueSwal from "vue-swal";
 Vue.use(VueSwal);
@@ -274,7 +246,7 @@ export default {
         { name: "50 ~ 59歳" },
         { name: "60 ~ 69歳" },
         { name: "70 ~ 79歳" },
-        { name: "80際以上" },
+        { name: "80際以上" }
       ],
       access: "",
       accesses: [
@@ -324,7 +296,7 @@ export default {
         { name: "大分県" },
         { name: "宮崎県" },
         { name: "鹿児島県" },
-        { name: "沖縄県" },
+        { name: "沖縄県" }
       ],
       profession: "",
       professions: [
@@ -335,7 +307,7 @@ export default {
         { name: "パート・アルバイト" },
         { name: "専業主婦" },
         { name: "学生" },
-        { name: "その他" },
+        { name: "その他" }
       ],
       selfpr: "",
       genre: "",
@@ -371,17 +343,19 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" },
+        { id: 31, name: "ギャング・マフィア" }
       ],
       favMovie: "",
       uploadedImage: "",
       profileData: {},
       //配列にしないようにする。
-      open: false,
+      listData: [],
+      open: false
     };
   },
   components: {
     Header,
+    List
   },
   methods: {
     // updateBtn()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
@@ -390,8 +364,7 @@ export default {
         .firestore()
         .collection("users")
         .doc(this.$route.params.uid)
-        //uidとは、routerの/mypage/:uidの[uid]のこと。
-        //コレクションのusersを参照して、ドキュメントのuidを参照。
+        //現在のURLのパラメーターを取得。
         .set(
           {
             name: this.name,
@@ -403,7 +376,7 @@ export default {
             uploadedImage: this.uploadedImage,
             genre: this.genre,
             favMovie: this.favMovie,
-            time: firebase.firestore.FieldValue.serverTimestamp(),
+            time: firebase.firestore.FieldValue.serverTimestamp()
             //サーバ側で値設定
           },
           { merge: true }
@@ -414,15 +387,15 @@ export default {
         text: "この内容で投稿しますか？",
         icon: "info",
         buttons: true,
-        dangerMode: true,
-      }).then((willDelete) => {
+        dangerMode: true
+      }).then(willDelete => {
         if (willDelete) {
           this.$swal("投稿しました。", {
-            icon: "success",
+            icon: "success"
           });
           this.$router.go({
             path: `/mypage/${this.$route.params.uid}`,
-            force: true,
+            force: true
           });
           //プロフィール編集されたらページをリロード
         } else {
@@ -430,10 +403,10 @@ export default {
         }
       });
     },
-    show: function() {
+    show() {
       this.$modal.show("edit");
     },
-    hide: function() {
+    hide() {
       this.$modal.hide("edit");
     },
     openModal() {
@@ -441,7 +414,7 @@ export default {
     },
     closeModal() {
       this.open = false;
-    },
+    }
   },
   created() {
     const currentUser = firebase.auth().currentUser;
@@ -452,12 +425,35 @@ export default {
         .collection("users")
         .doc(this.$route.params.uid)
         .get()
-        .then((snapshot) => {
+        .then(snapshot => {
           this.profileData = snapshot.data();
+          this.name = this.profileData.name;
+          this.sex = this.profileData.sex;
+          this.age = this.profileData.age;
+          this.access = this.profileData.access;
+          this.selfpr = this.profileData.selfpr;
+          this.profession = this.profileData.profession;
+          this.uploadedImage = this.profileData.uploadedImage;
+          this.genre = this.profileData.genre;
+          this.favMovie = this.profileData.favMovie;
           //全てのデータを取得して、profileDataへ代入。
           // console.log(snapshot.data());
         });
     }
+    firebase
+      .firestore()
+      .collection("posts")
+      .where("uid", "==", this.$route.params.uid)
+      .get()
+      .then(snapshot => {
+        //"posts"(参照先)のスナップショットを得る
+        snapshot.forEach(doc => {
+          //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
+          this.listData.push(doc.data());
+          console.log(doc.data());
+          //更にlistDataの空箱に格納した"doc"データを格納
+        });
+      });
   },
   onFileChange(e) {
     const image = e.target.files; //選択された画像ファイルを選択
@@ -476,7 +472,7 @@ export default {
         //保存が成功したら、保存した画像ファイルの場所とともにfirebase databaseに保存する準備
         const imageData = {
           uploadUrl: this.uploadUrl,
-          createdAt: firebase.database.ServerValue.TIMESTAMP,
+          createdAt: firebase.database.ServerValue.TIMESTAMP
         };
         // ここでfirebase databaseに保存する
         firebase
@@ -487,14 +483,14 @@ export default {
             alert("画像が保存できました。");
             // this.$emit("", false); //親コンポーネントに伝達
           })
-          .catch((error) => {
+          .catch(error => {
             console.error("画像が保存できませんでした。", error);
           });
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("エラー発生しました。", error);
       });
-  },
+  }
 };
 </script>
 
@@ -556,7 +552,7 @@ hr.separate {
 
 .mypage {
   width: 100%;
-  padding-top: 5rem;
+  padding: 5rem 0;
   flex-direction: column;
   background-color: $black-color;
   &-inner {
@@ -622,10 +618,17 @@ hr.separate {
       }
     }
   }
-  .profile-post {
-    display: inline-block;
-    width: 50%;
-    height: 20rem;
+  .post-list {
+    width: 60%;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    justify-content: flex-start;
+  }
+  .profile-posts {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 }
 
