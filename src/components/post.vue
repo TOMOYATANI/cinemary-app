@@ -79,23 +79,25 @@
       </div>
     </modal>
     <div class="search-inner flex">
-      <ais-instant-search
-        :search-client="searchClient"
-        index-name="cinemary-app"
-      >
-        <ais-search-box placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.." class="search-main-item" />
-      </ais-instant-search>
-
       <h2 class="search-tll neon flex">Cinemaryを検索する</h2>
       <hr class="separate" />
       <div class="search-main-contens flex">
-        <input
+        <ais-instant-search
+          :search-client="searchClient"
+          index-name="cinemary-app"
+        >
+          <ais-search-box
+            placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
+            class="search-main-item"
+          />
+        </ais-instant-search>
+        <!-- <input
           type="text"
           class="search-main-item"
           placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
-        />
-      </div>
-      <div class="search-items flex">
+        /> -->
+      <!-- </div> -->
+      <!-- <div class="search-items flex">
         <div class="search-contens flex">
           <input type="text" class="search-item" placeholder="タイトル" />
         </div>
@@ -118,7 +120,7 @@
         </div>
         <button class="search-btn">
           <img src="../assets/検索.jpg" alt="検索" class="search-icon" />
-        </button>
+        </button> -->
       </div>
     </div>
   </div>
@@ -136,6 +138,7 @@ Vue.use(VScrollLock);
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
 import algoliasearch from "algoliasearch/lite";
+import "instantsearch.css/themes/satellite.css";
 
 export default {
   data() {
@@ -396,6 +399,16 @@ textarea::placeholder {
 
 // -- algolia --//
 
+.ais-SearchBox-input {
+       width: 30rem;
+      outline: none;
+      border: none;
+      height: 2.5rem;
+      border-bottom: 1px solid #ddd;
+      color: $white-color;
+      font-size: 1rem;
+      background-color: $black-color;
+}
 
 // -- 投稿フォーム -- //
 

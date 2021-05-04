@@ -186,10 +186,6 @@ p {
   ul {
     width: 50%;
     flex-direction: column;
-    margin-left: 5rem;
-    li {
-      width: 80%;
-    }
     .remark {
       width: 465px;
       display: flex;

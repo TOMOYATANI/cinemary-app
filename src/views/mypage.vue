@@ -4,38 +4,41 @@
     <div class="mypage flex">
       <div class="mypage-inner flex">
         <div class="profile-inner-l flex">
-          <img class="profile-inner-l-img" src="../assets/アイコン.jpg" alt="デフォルト画像" />
+          <img
+            class="profile-inner-l-img"
+            src="../assets/アイコン.jpg"
+            alt="デフォルト画像"
+          />
           <div class="profile-inner-l-name">{{ profileData.name }}</div>
         </div>
         <div class="profile-inner-r flex">
-          <div class="follow-inner">
+          <div class="item-inner">
             <div class="post">
-              <div>{{listData.length}}</div>
+              <div>{{ listData.length }}</div>
               <p>POSTS</p>
             </div>
-            <div class="follow">
-              <div>0</div>
-              <p>FOLLOW</p>
-            </div>
-            <div class="follower">
-              <div>0</div>
-              <p>FOLLOWER</p>
+            <div class="bookmark">
+              <div>{{ bookmarkList.length }}</div>
+              <p>BOOKMARK</p>
             </div>
           </div>
           <hr class="separate" />
-          <div class="btn-inner">
-            <button
-              @click="
-                show();
-                openModal();
-              "
-              class="profile-edit flex"
-            >プロフィール編集</button>
-            <!-- <button class="profile-txt follow-btn" @click="follow">
-            フォロー
-            </button>-->
-          </div>
-          <modal class="modal-inner" v-scroll-lock="open" name="edit" :width="1100" :height="740">
+          <button
+            @click="
+              show();
+              openModal();
+            "
+            class="profile-edit flex"
+          >
+            プロフィール編集
+          </button>
+          <modal
+            class="modal-inner"
+            v-scroll-lock="open"
+            name="edit"
+            :width="1100"
+            :height="740"
+          >
             <div data-modal="edit" aria-expanded="true" class="vm--overlay">
               <div class="vm--top-right-slot"></div>
             </div>
@@ -54,12 +57,19 @@
                       class="profile-img"
                       alt="プロフィール画像"
                     />
-                    <button class="profile-txt profile-update">プロフィール画像を編集する</button>
+                    <button class="profile-txt profile-update">
+                      プロフィール画像を編集する
+                    </button>
                   </div>
                   <div class="line"></div>
                   <div class="profile-items flex">
                     <div class="profile-contens flex">
-                      <input type="text" class="profile-item" placeholder="名前" v-model="name" />
+                      <input
+                        type="text"
+                        class="profile-item"
+                        placeholder="名前"
+                        v-model="name"
+                      />
                     </div>
                     <div class="profile-contens flex">
                       <select
@@ -74,7 +84,8 @@
                           :key="sex.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ sex.name }}</option>
+                          >{{ sex.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -90,7 +101,8 @@
                           :key="age.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ age.name }}</option>
+                          >{{ age.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -99,14 +111,17 @@
                         v-model="access"
                         :style="{ color: access == '' ? 'gray' : 'white' }"
                       >
-                        <option class="profile-item" value hidden>居住地</option>
+                        <option class="profile-item" value hidden
+                          >居住地</option
+                        >
                         <option
                           v-for="access in accesses"
                           :value="access.name"
                           :key="access.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ access.name }}</option>
+                          >{{ access.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -122,7 +137,8 @@
                           :key="profession.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ profession.name }}</option>
+                          >{{ profession.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -142,14 +158,17 @@
                         class="profile-select"
                         :style="{ color: genre == '' ? 'gray' : 'white' }"
                       >
-                        <option class="profile-item" value hidden>好きなジャンル</option>
+                        <option class="profile-item" value hidden
+                          >好きなジャンル</option
+                        >
                         <option
                           v-for="genre in genres"
                           :value="genre.name"
                           :key="genre.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ genre.name }}</option>
+                          >{{ genre.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -167,7 +186,9 @@
                       hide();
                       closeModal();
                     "
-                  >×</button>
+                  >
+                    ×
+                  </button>
                 </div>
                 <button @click="updateBtn" class="update-btn flex">更新</button>
               </div>
@@ -210,7 +231,24 @@
       <hr class="separate" />
       <h3 class="post-list flex">{{ profileData.name }} さんの投稿一覧</h3>
       <div class="profile-posts">
-        <List v-for="(list, index) in listData" :index="index" :list="list" :key="list.id" />
+        <List
+          v-for="(list, index) in listData"
+          :index="index"
+          :list="list"
+          :key="list.id"
+        />
+      </div>
+      <hr class="separate" />
+      <h3 class="bookmark-list flex">
+        {{ profileData.name }} さんのブックマーク一覧
+      </h3>
+      <div class="profile-posts">
+        <List
+          v-for="(list, index) in bookmarkList"
+          :index="index"
+          :list="list"
+          :key="list.id"
+        />
       </div>
     </div>
   </div>
@@ -246,7 +284,7 @@ export default {
         { name: "50 ~ 59歳" },
         { name: "60 ~ 69歳" },
         { name: "70 ~ 79歳" },
-        { name: "80際以上" }
+        { name: "80際以上" },
       ],
       access: "",
       accesses: [
@@ -296,7 +334,7 @@ export default {
         { name: "大分県" },
         { name: "宮崎県" },
         { name: "鹿児島県" },
-        { name: "沖縄県" }
+        { name: "沖縄県" },
       ],
       profession: "",
       professions: [
@@ -307,7 +345,7 @@ export default {
         { name: "パート・アルバイト" },
         { name: "専業主婦" },
         { name: "学生" },
-        { name: "その他" }
+        { name: "その他" },
       ],
       selfpr: "",
       genre: "",
@@ -343,19 +381,20 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" }
+        { id: 31, name: "ギャング・マフィア" },
       ],
       favMovie: "",
       uploadedImage: "",
       profileData: {},
       //配列にしないようにする。
       listData: [],
-      open: false
+      bookmarkList:[],
+      open: false,
     };
   },
   components: {
     Header,
-    List
+    List,
   },
   methods: {
     // updateBtn()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
@@ -376,7 +415,7 @@ export default {
             uploadedImage: this.uploadedImage,
             genre: this.genre,
             favMovie: this.favMovie,
-            time: firebase.firestore.FieldValue.serverTimestamp()
+            time: firebase.firestore.FieldValue.serverTimestamp(),
             //サーバ側で値設定
           },
           { merge: true }
@@ -387,15 +426,15 @@ export default {
         text: "この内容で投稿しますか？",
         icon: "info",
         buttons: true,
-        dangerMode: true
-      }).then(willDelete => {
+        dangerMode: true,
+      }).then((willDelete) => {
         if (willDelete) {
           this.$swal("投稿しました。", {
-            icon: "success"
+            icon: "success",
           });
           this.$router.go({
             path: `/mypage/${this.$route.params.uid}`,
-            force: true
+            force: true,
           });
           //プロフィール編集されたらページをリロード
         } else {
@@ -414,7 +453,7 @@ export default {
     },
     closeModal() {
       this.open = false;
-    }
+    },
   },
   created() {
     const currentUser = firebase.auth().currentUser;
@@ -425,7 +464,7 @@ export default {
         .collection("users")
         .doc(this.$route.params.uid)
         .get()
-        .then(snapshot => {
+        .then((snapshot) => {
           this.profileData = snapshot.data();
           this.name = this.profileData.name;
           this.sex = this.profileData.sex;
@@ -444,14 +483,30 @@ export default {
       .firestore()
       .collection("posts")
       .where("uid", "==", this.$route.params.uid)
+      //uidをフィルタリングして現在のURLと合致するもののみを参照
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         //"posts"(参照先)のスナップショットを得る
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.listData.push(doc.data());
-          console.log(doc.data());
+          // console.log(this.listData);
           //更にlistDataの空箱に格納した"doc"データを格納
+        });
+      });
+      firebase
+      .firestore()
+      .collection("users")
+      .doc(this.$route.params.uid)
+      .collection("bookmarks")
+      .where("uid", "==", this.$route.params.uid)
+      .get()
+      .then((snapshot) => {
+        //"posts"(参照先)のスナップショットを得る
+        snapshot.forEach((doc) => {
+          //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
+          this.bookmarkList.push(doc.data());
+          console.log(this.bookmarkList);
         });
       });
   },
@@ -472,7 +527,7 @@ export default {
         //保存が成功したら、保存した画像ファイルの場所とともにfirebase databaseに保存する準備
         const imageData = {
           uploadUrl: this.uploadUrl,
-          createdAt: firebase.database.ServerValue.TIMESTAMP
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
         };
         // ここでfirebase databaseに保存する
         firebase
@@ -483,14 +538,14 @@ export default {
             alert("画像が保存できました。");
             // this.$emit("", false); //親コンポーネントに伝達
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("画像が保存できませんでした。", error);
           });
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("エラー発生しました。", error);
       });
-  }
+  },
 };
 </script>
 
@@ -574,7 +629,7 @@ hr.separate {
     .profile-inner-r {
       width: 100%;
       flex-direction: column;
-      .follow-inner {
+      .item-inner {
         display: flex;
         text-align: center;
       }
@@ -624,6 +679,14 @@ hr.separate {
     margin-bottom: 1rem;
     justify-content: flex-start;
   }
+
+  .bookmark-list {
+    width: 60%;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    justify-content: flex-start;
+  }
+
   .profile-posts {
     width: 90%;
     display: flex;
@@ -764,28 +827,6 @@ hr.separate {
 }
 
 // -- フォローボタン -- //
-
-.btn-inner {
-  display: inline-block;
-}
-
-.follow-btn {
-  width: 6rem;
-  margin: 1rem;
-  padding: 0.8rem;
-  display: inline-block;
-  overflow: hidden;
-  letter-spacing: 2px;
-  color: #fff;
-  background: #e62f2f;
-  box-shadow: 0 0 10px #e62f2f, 0 0 50px #e62f2f, 0 0 80px -6px;
-  outline: none;
-  border: none;
-  border-radius: 0.5rem;
-  font-weight: bold;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
 
 // -- ネオンカラー -- //
 

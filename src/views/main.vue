@@ -3,9 +3,9 @@
     <Header />
     <div class="main">
       <div class="main-tll flex">
-        <h1>映画を楽しむすべての映画好きへ</h1>
-        <p>Cinemary(シネマリー)は、映画を共有するアプリです。</p>
-        <p>あなたのお気に入りの作品を共有してみませんか。</p>
+        <h1>あなたに合わせて映画をマッチ</h1>
+        <p>Cinemary(シネマリー)は、気分にあった映画を提供するアプリです。</p>
+        <p>その時のシーンに合う映画を選び、より良いひと時を過ごしませんか。</p>
         <router-link to="/signup" class="post-btn" v-if="!authenticatedUser">今すぐ登録</router-link>
         <router-link to="/board" class="post-btn flex" v-if="authenticatedUser">投稿</router-link>
       </div>

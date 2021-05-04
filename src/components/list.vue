@@ -1,34 +1,40 @@
 <template>
-    <div class="card">
-      <div class="face face1 flex">
-        <div class="content">
-          <img
-            class="profile-icon"
-            width="50"
-            height="50"
-            src="../assets/アイコン.jpg"
-          />
-          <h3>{{ list.title }}</h3>
-        </div>
-      </div>
-      <div class="face face2 flex">
-        <div class="content flex">
-          <p>{{ list.description }}</p>
-          <router-link
-            :to="`chat/${list.id}`"
-            class="join-btn flex"
-            >ルームへ参加</router-link
-          >
-          <!-- to="`chat/${list.id}`"でchat/(取得したid)でページ遷移する。 -->
-          <!-- ${ ~ }で囲ってあげないと文字列のままになってしまうので注意。 -->
-          <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
-          <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
-        </div>
+  <div class="card">
+    <div class="face face1 flex">
+      <div class="content">
+        <img
+          class="profile-icon"
+          width="50"
+          height="50"
+          src="../assets/アイコン.jpg"
+        />
+        <h3>{{ list.title }}</h3>
       </div>
     </div>
+    <div class="face face2 flex">
+      <div class="content flex">
+        <p>{{ list.description }}</p>
+        <router-link :to="`chat/${list.id}`" class="join-btn flex"
+          >ルームへ参加</router-link
+        >
+        <!-- to="`chat/${list.id}`"でchat/(取得したid)でページ遷移する。 -->
+        <!-- ${ ~ }で囲ってあげないと文字列のままになってしまうので注意。 -->
+        <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
+        <img
+          src="../assets/ブックマーク.jpg"
+          alt="ブックマーク"
+          class="bookmark-icon"
+          @click="savePost"
+        />
+        <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import firebase from "firebase";
+
 export default {
   data() {
     return {};
@@ -42,6 +48,20 @@ export default {
     index: {
       type: Number,
       //index内にNumber型で格納されてる
+    },
+  },
+  methods: {
+    savePost() {
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(this.$route.params.uid)
+        .collection("bookmarks")
+        .doc(this.$route.params.uid)
+        .set({
+          uid: this.$route.params.uid,
+          list: this.list,
+        });
     },
   },
 };
@@ -134,7 +154,19 @@ a {
       bottom: 0;
       right: 0;
     }
+    .content .bookmark-icon {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
   }
+}
+
+.bookmark-icon {
+  width: 15px;
+  height: 15px;
+  margin: 0.2rem;
+  cursor: pointer;
 }
 
 // -- hover-animation -- //

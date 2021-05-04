@@ -6,7 +6,12 @@
       <h2 class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
         <div class="post-items">
-          <List v-for="(list, index) in allData" :index="index" :list="list" :key="list.id" />
+          <List
+            v-for="(list, index) in allData"
+            :index="index"
+            :list="list"
+            :key="list.id"
+          />
           <!--allDataのデータをlist関数とindex関数にそれぞれ格納-->
         </div>
       </div>
@@ -26,13 +31,13 @@ export default {
       title: "",
       contents: "",
       image: "",
-      allData: []
+      allData: [],
     };
   },
   components: {
     Header,
     Post,
-    List
+    List,
   },
   created() {
     // "posts"コレクションの全ドキュメントを取得。
@@ -40,16 +45,16 @@ export default {
       .firestore()
       .collection("posts")
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         //"posts"(参照先)のスナップショットを得る
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.allData.push(doc.data());
           //更にallDataの空箱に格納した"doc"データを格納
         });
       });
   },
-  methods: {
+  // methods: {
     //  // firebase databaseからコーヒーデータをダウンロード
     //  loadCoffeeView() {
     //    const imageRef = firebase
@@ -67,19 +72,19 @@ export default {
     //    });
     //  },
     //firebase storageからコーヒーの画像データをダウンロード
-    downloadCoffeeImages(uploadUrl) {
-      firebase
-        .storage()
-        .ref(uploadUrl)
-        .getDownloadURL()
-        .then(data => {
-          this.image = data;
-        })
-        .catch(error => {
-          console.error("画像をダウンロードできませんでした。", error);
-        });
-    }
-  }
+    // downloadCoffeeImages(uploadUrl) {
+    //   firebase
+    //     .storage()
+    //     .ref(uploadUrl)
+    //     .getDownloadURL()
+    //     .then((data) => {
+    //       this.image = data;
+    //     })
+    //     .catch((error) => {
+    //       console.error("画像をダウンロードできませんでした。", error);
+    //     });
+    // },
+  // },
 };
 </script>
 
