@@ -2,30 +2,19 @@
   <div class="card">
     <div class="face face1 flex">
       <div class="content">
-        <img
-          class="profile-icon"
-          width="50"
-          height="50"
-          src="../assets/アイコン.jpg"
-        />
+        <img class="profile-icon" width="50" height="50" src="../assets/アイコン.jpg" />
         <h3>{{ list.title }}</h3>
       </div>
     </div>
     <div class="face face2 flex">
       <div class="content flex">
+        <button class="hide-btn" @click="deletePost">×</button>
         <p>{{ list.description }}</p>
-        <router-link :to="`chat/${list.id}`" class="join-btn flex"
-          >ルームへ参加</router-link
-        >
+        <router-link :to="`/chat/${list.id}`" class="join-btn flex">ルームへ参加</router-link>
         <!-- to="`chat/${list.id}`"でchat/(取得したid)でページ遷移する。 -->
         <!-- ${ ~ }で囲ってあげないと文字列のままになってしまうので注意。 -->
         <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
-        <img
-          src="../assets/ブックマーク.jpg"
-          alt="ブックマーク"
-          class="bookmark-icon"
-          @click="savePost"
-        />
+        <img src="../assets/ブックマーク.jpg" alt="ブックマーク" class="bookmark-icon" @click="savePost" />
         <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
       </div>
     </div>
@@ -34,6 +23,9 @@
 
 <script>
 import firebase from "firebase";
+import Vue from "vue";
+import VueSwal from "vue-swal";
+Vue.use(VueSwal);
 
 export default {
   data() {
@@ -42,13 +34,14 @@ export default {
   props: {
     //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
     list: {
-      type: Object,
+      type: Object
       //list内にObject型で格納されてる
     },
     index: {
-      type: Number,
+      type: Number
       //index内にNumber型で格納されてる
-    },
+    }
+  
   },
   methods: {
     savePost() {
@@ -60,10 +53,37 @@ export default {
         .doc(this.$route.params.uid)
         .set({
           uid: this.$route.params.uid,
-          list: this.list,
+          list: this.list
         });
     },
-  },
+    deletePost() {
+      firebase
+        .firestore()
+        .collection("posts")
+        .doc(this.$route.params.uid)
+        .delete();
+      console.log(this.$route.params.uid);
+      this.$swal({
+        title: "内容確認",
+        text: "投稿を削除しますか？",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+      }).then(willDelete => {
+        if (willDelete) {
+          this.$swal("投稿を削除しました", {
+            icon: "success"
+          });
+          this.$router.go({
+            path: `/board/${this.$route.params.uid}`,
+            force: true
+          });
+        } else {
+          this.$swal("キャンセルしました。");
+        }
+      });
+    }
+  }
 };
 </script>
 
@@ -167,6 +187,22 @@ a {
   height: 15px;
   margin: 0.2rem;
   cursor: pointer;
+}
+
+// -- 削除ボタン -- //@at-root
+
+.hide-btn {
+  position: absolute;
+  top: 7px;
+  right: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: $black-color;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  transition: 0.2s;
+  background-color: white;
 }
 
 // -- hover-animation -- //

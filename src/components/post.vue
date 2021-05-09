@@ -313,7 +313,7 @@ textarea {
   border: none;
   border-bottom: 1px solid #ddd;
   color: $white-color;
-  font-size: 1rem;
+  font-size: 1.2rem;
   background-color: $black-color;
 }
 

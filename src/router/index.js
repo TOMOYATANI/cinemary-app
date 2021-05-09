@@ -45,7 +45,7 @@ const routes = [
     component: Board,
   },
   {
-    path: "/board/chat/:id",
+    path: "/chat/:id",
     ///「:id」とすることで、Firestoreで取得した「id」先へページ遷移できる。
     name: "Chat",
     component: Chat,

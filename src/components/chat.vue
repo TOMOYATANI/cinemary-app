@@ -2,20 +2,43 @@
   <div class="chat">
     <h1 class="chat-tll flex">
       <div class="flash neon">Chat Room</div>
+      <router-link :to="`/board/${this.uid}`" class="back-btn">
+        <img src="../assets/戻る.jpg" alt="チャット終了" class="back-btn-icon" />
+      </router-link>
     </h1>
     <!--Firebase から取得したリストを描画-->
     <transition-group name="chat" tag="div" class="list content">
-      <!--chatの中の{ key, name, image, message }をそれぞれ取得-->
-      <section v-for="{ key, name, image, message } in chat" :key="key" class="item">
-        <!--「画像」の指定-->
-        <div class="item-image">
-          <img :src="image" width="40" height="40" />
+      <!--chatの中の{ key, name, image, message ,userid }をそれぞれ取得-->
+      <section v-for="{ key, name, image, message, userid } in chat" :key="key">
+        <div v-if="userid === user.uid" class="myitem flex">
+          <!-- 自身 -->
+          <!--「画像」の指定-->
+
+          <!--「名前」と「メッセージ」の指定-->
+          <div class="mydetail">
+            <div class="mytime">time</div>
+            <div class="mymessage">
+              <nl2br tag="div" :text="message" />
+            </div>
+          </div>
+          <div class="myimage flex">
+            <img :src="image" width="40" height="40" />
+            <div class="myname">{{ profileDeta.name }}</div>
+          </div>
         </div>
-        <!--「名前」と「メッセージ」の指定-->
-        <div class="item-detail">
-          <div class="item-name">{{ name }}</div>
-          <div class="item-message">
-            <nl2br tag="div" :text="message" />
+        <div v-else class="otheritem flex">
+          <!-- 自身ではない -->
+          <!--「画像」の指定-->
+          <div class="otherimage flex">
+            <img :src="image" width="40" height="40" />
+            <div class="othername">name</div>
+          </div>
+          <!--「名前」と「メッセージ」の指定-->
+          <div class="otherdetail">
+            <div class="othermessage">
+              <nl2br tag="div" :text="message" />
+            </div>
+            <div class="othertime">time</div>
           </div>
         </div>
       </section>
@@ -50,7 +73,9 @@ export default {
     return {
       user: {}, // ユーザー情報
       chat: [], // 取得したメッセージを入れる配列
-      input: "" // 入力したメッセージ
+      input: "", // 入力したメッセージ
+      usersData: [],
+      profileDeta: {}
     };
   },
   created() {
@@ -72,6 +97,23 @@ export default {
         ref_message.limitToLast(10).off("child_added", this.childAdded);
       }
     });
+    const currentUser = firebase.auth().currentUser;
+    //現在ログインしているユーザーを取得
+    this.uid = currentUser.uid;
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(currentUser.uid)
+      .get();
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(this.uid)
+      .get()
+      .then(snapshot => {
+        this.profileDeta = snapshot.data();
+        console.log(this.profileDeta);
+      });
   },
   methods: {
     // スクロール位置を一番下に移動
@@ -93,8 +135,11 @@ export default {
         key: snap.key,
         name: message.name,
         image: message.image,
-        message: message.message
+        message: message.message,
+        userid: message.userid
       });
+
+      console.log(this.chat);
       this.scrollBottom();
       //スクロールの一番下に追加。
     },
@@ -108,8 +153,11 @@ export default {
             {
               message: this.input,
               name: this.user.displayName,
-              image: this.user.photoURL
+              image: this.user.photoURL,
+              userid: this.user.uid,
+              time: firebase.database.ServerValue.TIMESTAMP
             },
+
             () => {
               this.input = ""; // フォームを空にする
             }
@@ -129,6 +177,8 @@ $gray-color: rgb(100, 100, 100);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
+// -- 全体 -- //
+
 * {
   color: $black-color;
 }
@@ -143,8 +193,9 @@ $black-color: rgb(0, 0, 0);
   flex-direction: column;
   background-color: rgba(20, 20, 20);
   &-tll {
+    position: relative;
     width: 100%;
-    color: #fff;
+    color: $white-color;
     font-family: "Roboto", sans-serif;
     background-color: $black-color;
     padding: 1rem 3rem;
@@ -155,47 +206,125 @@ $black-color: rgb(0, 0, 0);
   .content {
     margin: 0 auto;
     padding: 0 10px;
-    max-width: 600px;
-    .item {
+
+    // -- mymessage -- //
+
+    .myitem {
       position: relative;
+      margin: 2rem;
+    }
+
+    .mytime {
+      color: $white-color;
+      margin-right: 0.5rem;
       display: flex;
       align-items: flex-end;
-      margin: 0.8em;
     }
-    .item-image {
+
+    .mymessage {
+      display: inline-block;
+      position: relative;
+      margin: 0 20px 0 0;
+      padding: 10px;
+      max-width: 460px;
+      border-radius: 12px;
+      background: #00ec0ccb;
+      z-index: 5;
+    }
+
+    .mymessage::before {
+      position: absolute;
+      content: " ";
+      display: block;
+      right: -16px;
+      bottom: 12px;
+      border: 4px solid transparent;
+      border-left: 12px solid #00ec0ccb;
+    }
+
+    .myname {
+      color: $white-color;
+      font-size: 75%;
+      margin-top: 0.5rem;
+      font-weight: bold;
+    }
+
+    .myimage {
+      flex-direction: column;
+      padding-left: 1.4rem;
+      img {
+        border-radius: 20px;
+        vertical-align: top;
+        display: flex;
+        align-items: flex-end;
+      }
+    }
+    .mydetail {
+      margin: 0 0 0 auto;
+      display: flex;
+    }
+
+    // -- othermessage -- //
+
+    .otheritem {
+      position: relative;
+      margin: 2rem;
+      justify-content: flex-start;
+    }
+
+    .othertime {
+      color: $white-color;
+      margin-left: 0.5rem;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .othermessage {
+      display: inline-block;
+      position: relative;
+      margin: 0 0 0 20px;
+      padding: 10px;
+      max-width: 460px;
+      border-radius: 12px;
+      background: #00ec0ccb;
+      z-index: 5;
+    }
+
+    .othermessage::before {
+      position: absolute;
+      content: " ";
+      display: block;
+      left: -16px;
+      bottom: 12px;
+      border: 4px solid transparent;
+      border-right: 12px solid #00ec0ccb;
+    }
+
+    .othername {
+      color: $white-color;
+      font-size: 75%;
+      margin-top: 0.5rem;
+      font-weight: bold;
+    }
+
+    .otherimage {
+      flex-direction: column;
+      padding-right: 1.4rem;
       img {
         border-radius: 20px;
         vertical-align: top;
       }
     }
-    .item-detail {
+    .otherdetail {
       margin: 0 0 0 1.4em;
-      .item-name {
+      display: flex;
+      .othername {
         font-size: 75%;
-      }
-      .item-message {
-        display: inline-block;
-        position: relative;
-        margin: 0 0 0 20px;
-        padding: 10px;
-        max-width: 460px;
-        border-radius: 12px;
-        background: #00ec0ccb;
-        z-index: 5;
-      }
-      .item-message::before {
-        position: absolute;
-        content: " ";
-        display: block;
-        left: -16px;
-        bottom: 12px;
-        border: 4px solid transparent;
-        border-right: 12px solid #00ec0ccb;
       }
     }
   }
   .list {
-    width: 100%;
+    width: 75%;
     margin-bottom: 100px;
   }
   .message-inner {
@@ -242,6 +371,21 @@ $black-color: rgb(0, 0, 0);
 .chat-enter {
   opacity: 0;
   transform: translateX(-1rem);
+}
+
+//戻るボタン
+
+.back-btn-icon {
+  width: 22px;
+  height: 22px;
+  margin: 0.2rem;
+  cursor: pointer;
+}
+
+.back-btn {
+  position: absolute;
+  bottom: 12px;
+  left: 15px;
 }
 
 // -- neon -- //
