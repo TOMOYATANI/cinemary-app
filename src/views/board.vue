@@ -53,6 +53,7 @@ export default {
           //更にallDataの空箱に格納した"doc"データを格納
         });
       });
+      console.log(this.allData);
   },
   // methods: {
     //  // firebase databaseからコーヒーデータをダウンロード

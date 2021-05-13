@@ -62,7 +62,6 @@ export default {
         .collection("posts")
         .doc(this.$route.params.uid)
         .delete();
-      console.log(this.$route.params.uid);
       this.$swal({
         title: "内容確認",
         text: "投稿を削除しますか？",

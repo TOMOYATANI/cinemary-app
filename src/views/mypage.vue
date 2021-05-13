@@ -4,7 +4,7 @@
     <div class="mypage flex">
       <div class="mypage-inner flex">
         <div class="profile-inner-l flex">
-          <img class="profile-inner-l-img" src="../assets/アイコン.jpg" alt="デフォルト画像" />
+          <img class="profile-inner-l-img" :src="preview" alt="プロフィール画像" />
           <div class="profile-inner-l-name">{{ profileData.name }}</div>
         </div>
         <div class="profile-inner-r flex">
@@ -23,6 +23,7 @@
             @click="
               show();
               openModal();
+              
             "
             class="profile-edit flex"
           >プロフィール編集</button>
@@ -38,14 +39,11 @@
               <div class="profile-inner flex">
                 <div class="profile-contens flex">
                   <div class="profile-img-inner flex">
-                    <img
-                      src="../assets/アイコン.jpg"
-                      width="200"
-                      height="200"
-                      class="profile-img"
-                      alt="プロフィール画像"
-                    />
-                    <button class="profile-txt profile-update">プロフィール画像を編集する</button>
+                    <img :src="preview" width="200" height="200" class="profile-img" alt="プロフィール画像" />
+                    <label class="profile-txt profile-update">
+                      プロフィール画像を編集する
+                      <input type="file" @change="onFileChange" style="display:none" />
+                    </label>
                   </div>
                   <div class="line"></div>
                   <div class="profile-items flex">
@@ -160,7 +158,7 @@
                     "
                   >×</button>
                 </div>
-                <button @click="updateBtn" class="update-btn flex">更新</button>
+                <button @click="updateBtn(); uploadImage();" class="update-btn flex">更新</button>
               </div>
             </div>
           </modal>
@@ -342,12 +340,14 @@ export default {
         { id: 31, name: "ギャング・マフィア" }
       ],
       favMovie: "",
-      // uploadedImage: "",
+      uploadedImage: "",
       profileData: {},
       //配列にしないようにする。
       listData: [],
       bookmarkList: [],
-      open: false
+      open: false,
+      file: "",
+      preview: require("../assets/デフォルトの画像.jpg")
     };
   },
   components: {
@@ -370,7 +370,6 @@ export default {
             access: this.access,
             selfpr: this.selfpr,
             profession: this.profession,
-            uploadedImage: this.uploadedImage,
             genre: this.genre,
             favMovie: this.favMovie,
             time: firebase.firestore.FieldValue.serverTimestamp()
@@ -411,6 +410,52 @@ export default {
     },
     closeModal() {
       this.open = false;
+    },
+    onFileChange(e) {
+      const image = e.target.files; //選択された画像ファイルを選択
+      this.file = image[0]; //画像ファイルを1つだけ選択
+
+      // Firebase storageに保存するパス乱数で決めてthis.uploadUrlへ代入
+      const S =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      const N = 16;
+      this.uploadUrl = Array.from(crypto.getRandomValues(new Uint32Array(N)))
+        .map(n => S[n % S.length])
+        .join("");
+
+      let self = this;
+      let fileReader = new FileReader();
+      //FileReaderは、Fileオブジェクトからデータを読み込むことのみを目的としたオブジェクト
+      fileReader.onload = function() {
+        //fileReader.onloadは、読み込みが正常に完了した時に発火するイベント
+        self.preview = fileReader.result;
+        //fileReaderの結果をself.previewへ代入
+        //関数の中ではfileReaderの[this]を参照してしまうため、一旦[self]に代入して、[this.]の代わりに[self.] とする
+      };
+      fileReader.readAsDataURL(this.file);
+      //this.fileの値をデータURLとして読み込み、434行目が発火する。
+    },
+    uploadImage() {
+      //画像をfirebase storageに保存
+      firebase
+        .storage()
+        .ref(this.uploadUrl) //さっき決めたパスを参照して、
+        .put(this.file) //保存する
+        .then(() => {
+          //保存が成功したら、保存した画像ファイルの場所とともにfirestoreに保存する準備
+          const uploadedImage = {
+            uploadUrl: this.uploadUrl,
+            time: firebase.firestore.FieldValue.serverTimestamp()
+          };
+          // ここでfirebase databaseに保存する
+          firebase
+            .firestore()
+            .collection("users") //保存する場所を参照して、
+            .doc(this.$route.params.uid) //追加で保存setメソッドを使うと上書きされる
+            .add({
+              uploadedImage: uploadedImage
+            });
+        });
     }
   },
   created() {
@@ -464,46 +509,9 @@ export default {
         snapshot.forEach(doc => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.bookmarkList.push(doc.data());
-          console.log(this.bookmarkList);
         });
       });
   }
-  // onFileChange(e) {
-  //   const image = e.target.files; //選択された画像ファイルを選択
-  //   this.file = image[0]; //画像ファイルを1つだけ選択
-
-  //   // Firebase storageに保存するパスを決める
-  //   // this.uploadUrl = `upload-images/${this.}`;
-  // },
-  // uploadImage() {
-  //   //画像をfirebase storageに保存
-  //   firebase
-  //     .storage()
-  //     .ref(this.uploadUrl) //さっき決めたパスを参照して、
-  //     .put(this.file) //保存する
-  //     .then(() => {
-  //       //保存が成功したら、保存した画像ファイルの場所とともにfirebase databaseに保存する準備
-  //       const imageData = {
-  //         uploadUrl: this.uploadUrl,
-  //         createdAt: firebase.database.ServerValue.TIMESTAMP,
-  //       };
-  //       // ここでfirebase databaseに保存する
-  //       firebase
-  //         .database()
-  //         .ref("users") //保存する場所を参照して、
-  //         .push(imageData) //追加で保存setメソッドを使うと上書きされる
-  //         .then(() => {
-  //           alert("画像が保存できました。");
-  //           // this.$emit("", false); //親コンポーネントに伝達
-  //         })
-  //         .catch((error) => {
-  //           console.error("画像が保存できませんでした。", error);
-  //         });
-  //     })
-  //     .catch((error) => {
-  //       console.error("エラー発生しました。", error);
-  //     });
-  // },
 };
 </script>
 

@@ -9,15 +9,15 @@
     <!--Firebase から取得したリストを描画-->
     <transition-group name="chat" tag="div" class="list content">
       <!--chatの中の{ key, name, image, message ,userid }をそれぞれ取得-->
-      <section v-for="{ key, name, image, message, userid } in chat" :key="key">
+      <section v-for="{ key, name, image, message, userid ,time} in chat" :key="key">
         <div v-if="userid === user.uid" class="myitem flex">
           <!-- 自身 -->
           <!--「画像」の指定-->
 
           <!--「名前」と「メッセージ」の指定-->
           <div class="mydetail">
-            <div class="mytime">time</div>
-            <div class="mymessage">
+            <div class="mytime">{{$dayjs(time).format("hh:mm")}}</div>
+            <div @click.right.prevent="deleteMessage" class="mymessage">
               <nl2br tag="div" :text="message" />
             </div>
           </div>
@@ -35,10 +35,10 @@
           </div>
           <!--「名前」と「メッセージ」の指定-->
           <div class="otherdetail">
-            <div class="othermessage">
+            <div @click.right.prevent="deleteMessage" class="othermessage">
               <nl2br tag="div" :text="message" />
             </div>
-            <div class="othertime">time</div>
+            <div class="othertime">{{$dayjs(time).format("hh:mm")}}</div>
           </div>
         </div>
       </section>
@@ -65,7 +65,12 @@
 <script>
 import firebase from "firebase";
 import Nl2br from "vue-nl2br";
+import Vue from "vue";
 // 改行を <br> タグに変換するモジュール
+import dayjs from 'dayjs';
+
+dayjs.locale('ja')
+Vue.prototype.$dayjs = dayjs
 
 export default {
   components: { Nl2br },
@@ -136,7 +141,8 @@ export default {
         name: message.name,
         image: message.image,
         message: message.message,
-        userid: message.userid
+        userid: message.userid,
+        time: message.time
       });
 
       console.log(this.chat);
@@ -144,6 +150,7 @@ export default {
       //スクロールの一番下に追加。
     },
     doSend() {
+      const time = time;
       if (this.user.uid && this.input.length) {
         //  firebaseに書き込まれたメッセージを追加
         firebase
@@ -162,7 +169,34 @@ export default {
               this.input = ""; // フォームを空にする
             }
           );
+        console.log(time);
       }
+    },
+    deleteMessage() {
+      firebase
+        .firestore()
+        .database()
+        .ref()
+        .remove();
+      this.$swal({
+        title: "内容確認",
+        text: "メッセージを削除しますか？",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true
+      }).then(willDelete => {
+        if (willDelete) {
+          this.$swal("メッセージを削除しました", {
+            icon: "success"
+          });
+          this.$router.go({
+            path: `/chat/${this.$route.params.id}`,
+            force: true
+          });
+        } else {
+          this.$swal("キャンセルしました。");
+        }
+      });
     }
   }
 };
@@ -229,7 +263,7 @@ $black-color: rgb(0, 0, 0);
       max-width: 460px;
       border-radius: 12px;
       background: #00ec0ccb;
-      z-index: 5;
+      user-select: none;
     }
 
     .mymessage::before {
@@ -288,6 +322,7 @@ $black-color: rgb(0, 0, 0);
       border-radius: 12px;
       background: #00ec0ccb;
       z-index: 5;
+      user-select: none;
     }
 
     .othermessage::before {
