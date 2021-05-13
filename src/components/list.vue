@@ -2,7 +2,12 @@
   <div class="card">
     <div class="face face1 flex">
       <div class="content">
-        <img class="profile-icon" width="50" height="50" src="../assets/アイコン.jpg" />
+        <img
+          class="profile-icon"
+          width="50"
+          height="50"
+          src="../assets/アイコン.jpg"
+        />
         <h3>{{ list.title }}</h3>
       </div>
     </div>
@@ -10,11 +15,18 @@
       <div class="content flex">
         <button class="hide-btn" @click="deletePost">×</button>
         <p>{{ list.description }}</p>
-        <router-link :to="`/chat/${list.id}`" class="join-btn flex">ルームへ参加</router-link>
+        <router-link :to="`/chat/${list.id}`" class="join-btn flex"
+          >ルームへ参加</router-link
+        >
         <!-- to="`chat/${list.id}`"でchat/(取得したid)でページ遷移する。 -->
         <!-- ${ ~ }で囲ってあげないと文字列のままになってしまうので注意。 -->
         <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
-        <img src="../assets/ブックマーク.jpg" alt="ブックマーク" class="bookmark-icon" @click="savePost" />
+        <img
+          src="../assets/ブックマーク.jpg"
+          alt="ブックマーク"
+          class="bookmark-icon"
+          @click="savePost"
+        />
         <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
       </div>
     </div>
@@ -34,14 +46,13 @@ export default {
   props: {
     //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
     list: {
-      type: Object
+      type: Object,
       //list内にObject型で格納されてる
     },
     index: {
-      type: Number
+      type: Number,
       //index内にNumber型で格納されてる
-    }
-  
+    },
   },
   methods: {
     savePost() {
@@ -53,36 +64,46 @@ export default {
         .doc(this.$route.params.uid)
         .set({
           uid: this.$route.params.uid,
-          list: this.list
+          list: this.list,
         });
     },
     deletePost() {
-      firebase
+      const uid = firebase
         .firestore()
         .collection("posts")
-        .doc(this.$route.params.uid)
-        .delete();
-      this.$swal({
-        title: "内容確認",
-        text: "投稿を削除しますか？",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true
-      }).then(willDelete => {
-        if (willDelete) {
-          this.$swal("投稿を削除しました", {
-            icon: "success"
-          });
-          this.$router.go({
-            path: `/board/${this.$route.params.uid}`,
-            force: true
-          });
-        } else {
-          this.$swal("キャンセルしました。");
-        }
-      });
-    }
-  }
+        .doc();
+
+        console.log(uid);
+
+      if (uid == this.$route.params.uid) {
+        console.log(this.uid);
+        firebase
+          .firestore()
+          .collection("posts")
+          .doc(this.$route.params.uid)
+          .delete();
+        this.$swal({
+          title: "内容確認",
+          text: "投稿を削除しますか？",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        }).then((willDelete) => {
+          if (willDelete) {
+            this.$swal("投稿を削除しました", {
+              icon: "success",
+            });
+            this.$router.go({
+              path: `/board/${this.$route.params.uid}`,
+              force: true,
+            });
+          } else {
+            this.$swal("キャンセルしました。");
+          }
+        });
+      }
+    },
+  },
 };
 </script>
 

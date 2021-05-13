@@ -6,8 +6,12 @@
         <h1>あなたに合わせて映画をマッチ</h1>
         <p>Cinemary(シネマリー)は、気分にあった映画を提供するアプリです。</p>
         <p>その時のシーンに合う映画を選び、より良いひと時を過ごしませんか。</p>
-        <router-link to="/signup" class="post-btn" v-if="!authenticatedUser">今すぐ登録</router-link>
-        <router-link to="/board" class="post-btn flex" v-if="authenticatedUser">投稿</router-link>
+        <router-link to="/signup" class="post-btn" v-if="!authenticatedUser"
+          >今すぐ登録</router-link
+        >
+        <router-link to="/board" class="post-btn flex" v-if="authenticatedUser"
+          >投稿</router-link
+        >
       </div>
       <ul class="main-roop">
         <li class="main-roop-items">
@@ -39,7 +43,11 @@
       </ul>
       <ul class="main-roop">
         <li class="main-roop-items">
-          <img class="main-img" src="../assets/グレイテストショーマン.jpg" alt />
+          <img
+            class="main-img"
+            src="../assets/グレイテストショーマン.jpg"
+            alt
+          />
         </li>
         <li class="main-roop-items">
           <img class="main-img" src="../assets/セッション.jpg" alt />
@@ -81,7 +89,11 @@
       </ul>
       <ul class="main-roop">
         <li class="main-roop-items">
-          <img class="main-img" src="../assets/グレイテストショーマン.jpg" alt />
+          <img
+            class="main-img"
+            src="../assets/グレイテストショーマン.jpg"
+            alt
+          />
         </li>
         <li class="main-roop-items">
           <img class="main-img" src="../assets/セッション.jpg" alt />
@@ -100,36 +112,36 @@
 <script>
 import firebase from "firebase";
 import Header from "@/components/header.vue";
-import Vue from 'vue'
-import VueSwal from 'vue-swal'
-Vue.use(VueSwal)
+import Vue from "vue";
+import VueSwal from "vue-swal";
+Vue.use(VueSwal);
 
 export default {
   name: "signOut",
   data() {
     return {
       authenticatedUser: "",
-      isOpen: false
+      isOpen: false,
     };
   },
   components: {
-    Header
+    Header,
   },
   methods: {
     toggle() {
       this.isOpen = !this.isOpen;
       //「!」を先頭につける事で真偽が逆。
-    }
+    },
   },
   mounted() {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.authenticatedUser = true;
       } else {
         this.authenticatedUser = false;
       }
     });
-  }
+  },
 };
 </script>
 
@@ -145,7 +157,7 @@ $black-color: rgb(0, 0, 0);
 .main {
   width: 100%;
   height: 90vh;
-  background-color: rgba(0, 0, 0, 0.911);
+  background-color: rgba(20, 20, 20, 20);
   position: relative;
   overflow: hidden;
   &-tll {

@@ -55,4 +55,8 @@ ul {
 a {
   text-decoration: none;
 }
+
+html {
+  background-color: rgba(20, 20, 20);
+}
 </style>

@@ -433,7 +433,7 @@ export default {
         //関数の中ではfileReaderの[this]を参照してしまうため、一旦[self]に代入して、[this.]の代わりに[self.] とする
       };
       fileReader.readAsDataURL(this.file);
-      //this.fileの値をデータURLとして読み込み、434行目が発火する。
+      //this.fileの値をデータURLとして読み込み、431行目が発火する。
     },
     uploadImage() {
       //画像をfirebase storageに保存
@@ -447,15 +447,17 @@ export default {
             uploadUrl: this.uploadUrl,
             time: firebase.firestore.FieldValue.serverTimestamp()
           };
-          // ここでfirebase databaseに保存する
+          // ここでfirebase firestoreに保存する
+
           firebase
             .firestore()
             .collection("users") //保存する場所を参照して、
             .doc(this.$route.params.uid) //追加で保存setメソッドを使うと上書きされる
-            .add({
+            .set({
               uploadedImage: uploadedImage
             });
         });
+        console.log(this.file);
     }
   },
   created() {
@@ -479,7 +481,6 @@ export default {
           this.genre = this.profileData.genre || "";
           this.favMovie = this.profileData.favMovie || "";
           //全てのデータを取得して、profileDataへ代入。
-          // console.log(snapshot.data());
         });
     }
     firebase
