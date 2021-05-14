@@ -30,7 +30,7 @@
           </div>
           <div class="myimage flex">
             <img :src="image" width="40" height="40" />
-            <div class="myname">{{ profileDeta.name }}</div>
+            <div class="myname">{{ name }}</div>
           </div>
         </div>
         <div v-else class="otheritem flex">
@@ -90,6 +90,9 @@ export default {
       profileDeta: {},
     };
   },
+  props: {
+    preview: require("../assets/デフォルトの画像.jpg"),
+  },
   created() {
     firebase.auth().onAuthStateChanged((user) => {
       // ログイン状態ならuserが取得できる
@@ -124,7 +127,6 @@ export default {
       .get()
       .then((snapshot) => {
         this.profileDeta = snapshot.data();
-        console.log(this.profileDeta);
       });
   },
   methods: {
@@ -176,11 +178,12 @@ export default {
           );
       }
     },
-    deleteMessage() {
+    deleteMessage(key) {
       firebase
         .database()
-        .ref()
+        .ref(this.$route.params.id + "/" + key)
         .remove();
+      console.log(key);
       this.$swal({
         title: "内容確認",
         text: "メッセージを削除しますか？",

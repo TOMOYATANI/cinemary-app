@@ -4,7 +4,11 @@
     <div class="mypage flex">
       <div class="mypage-inner flex">
         <div class="profile-inner-l flex">
-          <img class="profile-inner-l-img" :src="preview" alt="プロフィール画像" />
+          <img
+            class="profile-inner-l-img"
+            :src="preview"
+            alt="プロフィール画像"
+          />
           <div class="profile-inner-l-name">{{ profileData.name }}</div>
         </div>
         <div class="profile-inner-r flex">
@@ -23,11 +27,18 @@
             @click="
               show();
               openModal();
-              
             "
             class="profile-edit flex"
-          >プロフィール編集</button>
-          <modal class="modal-inner" v-scroll-lock="open" name="edit" :width="1100" :height="740">
+          >
+            プロフィール編集
+          </button>
+          <modal
+            class="modal-inner"
+            v-scroll-lock="open"
+            name="edit"
+            :width="1100"
+            :height="740"
+          >
             <div data-modal="edit" aria-expanded="true" class="vm--overlay">
               <div class="vm--top-right-slot"></div>
             </div>
@@ -39,16 +50,31 @@
               <div class="profile-inner flex">
                 <div class="profile-contens flex">
                   <div class="profile-img-inner flex">
-                    <img :src="preview" width="200" height="200" class="profile-img" alt="プロフィール画像" />
+                    <img
+                      :src="preview"
+                      width="200"
+                      height="200"
+                      class="profile-img"
+                      alt="プロフィール画像"
+                    />
                     <label class="profile-txt profile-update">
                       プロフィール画像を編集する
-                      <input type="file" @change="onFileChange" style="display:none" />
+                      <input
+                        type="file"
+                        @change="onFileChange"
+                        style="display:none"
+                      />
                     </label>
                   </div>
                   <div class="line"></div>
                   <div class="profile-items flex">
                     <div class="profile-contens flex">
-                      <input type="text" class="profile-item" placeholder="名前" v-model="name" />
+                      <input
+                        type="text"
+                        class="profile-item"
+                        placeholder="名前"
+                        v-model="name"
+                      />
                     </div>
                     <div class="profile-contens flex">
                       <select
@@ -63,7 +89,8 @@
                           :key="sex.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ sex.name }}</option>
+                          >{{ sex.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -79,7 +106,8 @@
                           :key="age.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ age.name }}</option>
+                          >{{ age.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -88,14 +116,17 @@
                         v-model="access"
                         :style="{ color: access == '' ? 'gray' : 'white' }"
                       >
-                        <option class="profile-item" value hidden>居住地</option>
+                        <option class="profile-item" value hidden
+                          >居住地</option
+                        >
                         <option
                           v-for="access in accesses"
                           :value="access.name"
                           :key="access.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ access.name }}</option>
+                          >{{ access.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -111,7 +142,8 @@
                           :key="profession.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ profession.name }}</option>
+                          >{{ profession.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -131,14 +163,17 @@
                         class="profile-select"
                         :style="{ color: genre == '' ? 'gray' : 'white' }"
                       >
-                        <option class="profile-item" value hidden>好きなジャンル</option>
+                        <option class="profile-item" value hidden
+                          >好きなジャンル</option
+                        >
                         <option
                           v-for="genre in genres"
                           :value="genre.name"
                           :key="genre.id"
                           class="profile-item"
                           style="color: white;"
-                        >{{ genre.name }}</option>
+                          >{{ genre.name }}</option
+                        >
                       </select>
                     </div>
                     <div class="profile-contens flex">
@@ -156,9 +191,19 @@
                       hide();
                       closeModal();
                     "
-                  >×</button>
+                  >
+                    ×
+                  </button>
                 </div>
-                <button @click="updateBtn(); uploadImage();" class="update-btn flex">更新</button>
+                <button
+                  @click="
+                    updateBtn();
+                    uploadImage();
+                  "
+                  class="update-btn flex"
+                >
+                  更新
+                </button>
               </div>
             </div>
           </modal>
@@ -199,12 +244,24 @@
       <hr class="separate" />
       <h3 class="post-list flex">{{ profileData.name }} さんの投稿一覧</h3>
       <div class="profile-posts">
-        <List v-for="(list, index) in listData" :index="index" :list="list" :key="list.id" />
+        <List
+          v-for="(list, index) in listData"
+          :index="index"
+          :list="list"
+          :key="list.id"
+        />
       </div>
       <hr class="separate" />
-      <h3 class="bookmark-list flex">{{ profileData.name }} さんのブックマーク一覧</h3>
+      <h3 class="bookmark-list flex">
+        {{ profileData.name }} さんのブックマーク一覧
+      </h3>
       <div class="profile-posts">
-        <List v-for="(list, index) in bookmarkList" :index="index" :list="list" :key="list.id" />
+        <List
+          v-for="(list, index) in bookmarkList"
+          :index="index"
+          :list="list"
+          :key="list.id"
+        />
       </div>
     </div>
   </div>
@@ -240,7 +297,7 @@ export default {
         { name: "50 ~ 59歳" },
         { name: "60 ~ 69歳" },
         { name: "70 ~ 79歳" },
-        { name: "80際以上" }
+        { name: "80際以上" },
       ],
       access: "",
       accesses: [
@@ -290,7 +347,7 @@ export default {
         { name: "大分県" },
         { name: "宮崎県" },
         { name: "鹿児島県" },
-        { name: "沖縄県" }
+        { name: "沖縄県" },
       ],
       profession: "",
       professions: [
@@ -301,7 +358,7 @@ export default {
         { name: "パート・アルバイト" },
         { name: "専業主婦" },
         { name: "学生" },
-        { name: "その他" }
+        { name: "その他" },
       ],
       selfpr: "",
       genre: "",
@@ -337,7 +394,7 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" }
+        { id: 31, name: "ギャング・マフィア" },
       ],
       favMovie: "",
       uploadedImage: "",
@@ -347,12 +404,12 @@ export default {
       bookmarkList: [],
       open: false,
       file: "",
-      preview: require("../assets/デフォルトの画像.jpg")
+      preview: require("../assets/デフォルトの画像.jpg"),
     };
   },
   components: {
     Header,
-    List
+    List,
   },
   methods: {
     // updateBtn()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
@@ -372,7 +429,7 @@ export default {
             profession: this.profession,
             genre: this.genre,
             favMovie: this.favMovie,
-            time: firebase.firestore.FieldValue.serverTimestamp()
+            time: firebase.firestore.FieldValue.serverTimestamp(),
             //サーバ側で値設定
           },
           { merge: true }
@@ -383,15 +440,15 @@ export default {
         text: "この内容で投稿しますか？",
         icon: "info",
         buttons: true,
-        dangerMode: true
-      }).then(willDelete => {
+        dangerMode: true,
+      }).then((willDelete) => {
         if (willDelete) {
           this.$swal("投稿しました。", {
-            icon: "success"
+            icon: "success",
           });
           this.$router.go({
             path: `/mypage/${this.$route.params.uid}`,
-            force: true
+            force: true,
           });
           //プロフィール編集されたらページをリロード
         } else {
@@ -420,7 +477,7 @@ export default {
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
       const N = 16;
       this.uploadUrl = Array.from(crypto.getRandomValues(new Uint32Array(N)))
-        .map(n => S[n % S.length])
+        .map((n) => S[n % S.length])
         .join("");
 
       let self = this;
@@ -445,7 +502,7 @@ export default {
           //保存が成功したら、保存した画像ファイルの場所とともにfirestoreに保存する準備
           const uploadedImage = {
             uploadUrl: this.uploadUrl,
-            time: firebase.firestore.FieldValue.serverTimestamp()
+            time: firebase.firestore.FieldValue.serverTimestamp(),
           };
           // ここでfirebase firestoreに保存する
 
@@ -453,12 +510,24 @@ export default {
             .firestore()
             .collection("users") //保存する場所を参照して、
             .doc(this.$route.params.uid) //追加で保存setメソッドを使うと上書きされる
-            .set({
-              uploadedImage: uploadedImage
-            });
+            .set(
+              {
+                name: this.name,
+                sex: this.sex,
+                age: this.age,
+                access: this.access,
+                selfpr: this.selfpr,
+                profession: this.profession,
+                genre: this.genre,
+                favMovie: this.favMovie,
+                uploadedImage: uploadedImage,
+                time: firebase.firestore.FieldValue.serverTimestamp(),
+              },
+              { merge: true }
+            );
         });
-        console.log(this.file);
-    }
+      console.log(this.file);
+    },
   },
   created() {
     const currentUser = firebase.auth().currentUser;
@@ -469,7 +538,7 @@ export default {
         .collection("users")
         .doc(this.$route.params.uid)
         .get()
-        .then(snapshot => {
+        .then((snapshot) => {
           this.profileData = snapshot.data();
           this.name = this.profileData.name || "";
           this.sex = this.profileData.sex || "";
@@ -489,9 +558,9 @@ export default {
       .where("uid", "==", this.$route.params.uid)
       //uidをフィルタリングして現在のURLと合致するもののみを参照
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         //"posts"(参照先)のスナップショットを得る
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.listData.push(doc.data());
           // console.log(this.listData);
@@ -505,14 +574,14 @@ export default {
       .collection("bookmarks")
       .where("uid", "==", this.$route.params.uid)
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         //"posts"(参照先)のスナップショットを得る
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.bookmarkList.push(doc.data());
         });
       });
-  }
+  },
 };
 </script>
 
