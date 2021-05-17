@@ -9,7 +9,7 @@
         <router-link to="/signup" class="post-btn" v-if="!authenticatedUser"
           >今すぐ登録</router-link
         >
-        <router-link to="/board" class="post-btn flex" v-if="authenticatedUser"
+        <router-link :to="`/board/${this.uid}`" class="post-btn flex" v-if="authenticatedUser"
           >投稿</router-link
         >
       </div>

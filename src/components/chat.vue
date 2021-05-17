@@ -365,7 +365,7 @@ $black-color: rgb(0, 0, 0);
   .list {
     width: 75%;
     margin-bottom: 50px;
-    overflow: scroll;
+    overflow: hidden;
   }
   .message-inner {
     width: 100%;

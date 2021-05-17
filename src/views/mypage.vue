@@ -435,6 +435,7 @@ export default {
           { merge: true }
           //set()でmergeをtrueにすると、上書き。updetaと同様。
         );
+  
       this.$swal({
         title: "内容確認",
         text: "この内容で投稿しますか？",

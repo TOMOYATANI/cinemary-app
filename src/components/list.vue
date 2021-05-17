@@ -41,7 +41,9 @@ Vue.use(VueSwal);
 
 export default {
   data() {
-    return {};
+    return {
+      userid: "",
+    };
   },
   props: {
     //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
@@ -54,6 +56,19 @@ export default {
       //index内にNumber型で格納されてる
     },
   },
+  // created() {
+  //   firebase
+  //     .firestore()
+  //     .collection("posts")
+  //     .doc(this.$route.params.uid)
+  //     .get()
+  //     .then((doc) => {
+  //       if (doc.exists) {
+  //         this.userid.push(doc.data().uid);
+  //         console.log(doc.data());
+  //       }
+  //     });
+  // },
   methods: {
     savePost() {
       firebase
@@ -68,15 +83,7 @@ export default {
         });
     },
     deletePost() {
-      const uid = firebase
-        .firestore()
-        .collection("posts")
-        .doc();
-
-        console.log(uid);
-
-      if (uid == this.$route.params.uid) {
-        console.log(this.uid);
+      // if (this.userid == this.$route.params.uid) {
         firebase
           .firestore()
           .collection("posts")
@@ -101,7 +108,7 @@ export default {
             this.$swal("キャンセルしました。");
           }
         });
-      }
+      // }
     },
   },
 };
