@@ -18,6 +18,7 @@
         :key="key"
       >
         <div v-if="userid === user.uid" class="myitem flex">
+          {{ userDatas }}
           <!-- 自身 -->
           <!--「画像」の指定-->
 
@@ -88,10 +89,9 @@ export default {
       input: "", // 入力したメッセージ
       usersData: [],
       profileDeta: {},
+      userIds: [],
+      userDatas: [],
     };
-  },
-  props: {
-    preview: require("../assets/デフォルトの画像.jpg"),
   },
   created() {
     firebase.auth().onAuthStateChanged((user) => {
@@ -115,19 +115,18 @@ export default {
     const currentUser = firebase.auth().currentUser;
     //現在ログインしているユーザーを取得
     this.uid = currentUser.uid;
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(currentUser.uid)
-      .get();
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(this.uid)
-      .get()
-      .then((snapshot) => {
-        this.profileDeta = snapshot.data();
-      });
+
+    this.userIds.forEach((id) => {
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(id)
+        .get()
+        .then((snapshot) => {
+          this.userDatas.push(snapshot.data());
+        });
+    });
+    console.log(this.userIds);
   },
   methods: {
     // スクロール位置を一番下に移動
@@ -143,6 +142,8 @@ export default {
       //childAdded：データベースからアイテムのリストを取得する関数
       // 受け取ったメッセージをchatに追加
       const message = snap.val();
+      if (!this.userIds.includes(message.userid))
+        this.userIds.push(message.userid);
       //イベントのときにデータベース内の「message」データを取得。
       // データベースに新しい要素が追加されると随時呼び出される
       this.chat.push({
@@ -177,6 +178,10 @@ export default {
             }
           );
       }
+    },
+    returnUserData(id) {
+      const userData = this.userDatas.filter((user) => user.id === id);
+      return userData;
     },
     deleteMessage(key) {
       firebase

@@ -6,7 +6,7 @@
         <div class="profile-inner-l flex">
           <img
             class="profile-inner-l-img"
-            :src="preview"
+            :src="uploadedImage == '' ? preview : uploadedImage.fileUrl"
             alt="プロフィール画像"
           />
           <div class="profile-inner-l-name">{{ profileData.name }}</div>
@@ -51,7 +51,7 @@
                 <div class="profile-contens flex">
                   <div class="profile-img-inner flex">
                     <img
-                      :src="preview"
+                      :src="uploadedImage == '' ? preview : uploadedImage.fileUrl"
                       width="200"
                       height="200"
                       class="profile-img"
@@ -363,7 +363,6 @@ export default {
       selfpr: "",
       genre: "",
       genres: [
-        { id: 0, name: "ジャンル" },
         { id: 1, name: "アクション" },
         { id: 2, name: "ドラマ" },
         { id: 3, name: "恋愛" },
@@ -491,26 +490,26 @@ export default {
         //関数の中ではfileReaderの[this]を参照してしまうため、一旦[self]に代入して、[this.]の代わりに[self.] とする
       };
       fileReader.readAsDataURL(this.file);
-      //this.fileの値をデータURLとして読み込み、431行目が発火する。
+      //this.fileの値をデータURLとして読み込み、488行目が発火する。
     },
     uploadImage() {
       //画像をfirebase storageに保存
-      firebase
+      const uploadTask = firebase
         .storage()
         .ref(this.uploadUrl) //さっき決めたパスを参照して、
         .put(this.file) //保存する
-        .then(() => {
-          //保存が成功したら、保存した画像ファイルの場所とともにfirestoreに保存する準備
-          const uploadedImage = {
-            uploadUrl: this.uploadUrl,
-            time: firebase.firestore.FieldValue.serverTimestamp(),
-          };
-          // ここでfirebase firestoreに保存する
 
+      uploadTask
+        .then(() => {
+          uploadTask.snapshot.ref.getDownloadURL().then((fileUrl)=>{
+       const uploadedImage = {
+           fileUrl: fileUrl,
+           time: firebase.firestore.FieldValue.serverTimestamp(),
+          };
           firebase
             .firestore()
-            .collection("users") //保存する場所を参照して、
-            .doc(this.$route.params.uid) //追加で保存setメソッドを使うと上書きされる
+            .collection("users")
+            .doc(this.$route.params.uid) 
             .set(
               {
                 name: this.name,
@@ -526,8 +525,9 @@ export default {
               },
               { merge: true }
             );
+            console.log(fileUrl);
+          })
         });
-      console.log(this.file);
     },
   },
   created() {

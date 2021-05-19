@@ -13,7 +13,7 @@
     </div>
     <div class="face face2 flex">
       <div class="content flex">
-        <button class="hide-btn" @click="deletePost">×</button>
+        <button class="hide-btn" @click="deletePost(list.id)">×</button>
         <p>{{ list.description }}</p>
         <router-link :to="`/chat/${list.id}`" class="join-btn flex"
           >ルームへ参加</router-link
@@ -56,19 +56,19 @@ export default {
       //index内にNumber型で格納されてる
     },
   },
-  // created() {
-  //   firebase
-  //     .firestore()
-  //     .collection("posts")
-  //     .doc(this.$route.params.uid)
-  //     .get()
-  //     .then((doc) => {
-  //       if (doc.exists) {
-  //         this.userid.push(doc.data().uid);
-  //         console.log(doc.data());
-  //       }
-  //     });
-  // },
+  created() {
+    firebase
+      .firestore()
+      .collection("posts")
+      .doc(this.$route.params.uid)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          this.userid.push(doc.data().uid);
+          console.log(doc.data());
+        }
+      });
+  },
   methods: {
     savePost() {
       firebase
@@ -87,8 +87,9 @@ export default {
         firebase
           .firestore()
           .collection("posts")
-          .doc(this.$route.params.uid)
+          // .doc(this.$route.params.id + "/" + list.id)
           .delete();
+          console.log();
         this.$swal({
           title: "内容確認",
           text: "投稿を削除しますか？",

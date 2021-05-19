@@ -44,6 +44,8 @@ export default {
     firebase
       .firestore()
       .collection("posts")
+      .orderBy("time", "desc")
+      .limit(16)
       .get()
       .then((snapshot) => {
         //"posts"(参照先)のスナップショットを得る

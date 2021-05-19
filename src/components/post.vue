@@ -34,6 +34,7 @@
             <input
               type="text"
               class="post-item"
+              maxlength="50"
               placeholder="タイトル"
               v-model="title"
             />
@@ -44,6 +45,7 @@
               rows="1"
               v-model="description"
               placeholder="内容"
+              maxlength="50"
               :min-height="70"
               :max-height="70"
             ></textarea-autosize>
@@ -235,17 +237,18 @@ export default {
       firebase
         .firestore()
         .collection("posts")
-        .doc(this.$route.params.uid)
-        .set({
-          title: this.title,
-          description: this.description,
-          genre: this.genre,
-          time: firebase.firestore.FieldValue.serverTimestamp(),
-          //サーバ側で値設定
-          id: id,
-          //dataにデータを作ってないので、thisは付けなくてOK!
-          uid: this.$route.params.uid,
-        });
+        .add(
+          {
+            title: this.title,
+            description: this.description,
+            genre: this.genre,
+            time: firebase.firestore.FieldValue.serverTimestamp(),
+            //サーバ側で値設定
+            id: id,
+            //dataにデータを作ってないので、thisは付けなくてOK!
+            uid: this.$route.params.uid,
+          }
+        );
 
       this.$swal({
         title: "内容確認",
