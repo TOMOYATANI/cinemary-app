@@ -508,8 +508,8 @@ export default {
           };
           firebase
             .firestore()
-            .collection("users")
-            .doc(this.$route.params.uid) 
+            .collection("users") //保存する場所を参照して、
+            .doc(this.$route.params.uid) //追加で保存setメソッドを使うと上書きされる
             .set(
               {
                 name: this.name,

@@ -51,8 +51,9 @@ export default {
         //"posts"(参照先)のスナップショットを得る
         snapshot.forEach((doc) => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
-          this.allData.push(doc.data());
+          this.allData.push({ ...doc.data(), id: doc.id });
           //更にallDataの空箱に格納した"doc"データを格納
+          console.log(this.allData);
         });
       });
   },

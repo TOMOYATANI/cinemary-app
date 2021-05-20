@@ -9,11 +9,12 @@
           src="../assets/アイコン.jpg"
         />
         <h3>{{ list.title }}</h3>
+        {{ list.id }}
       </div>
     </div>
     <div class="face face2 flex">
       <div class="content flex">
-        <button class="hide-btn" @click="deletePost(list.id)">×</button>
+        <button class="hide-btn" @click="deletePost()">×</button>
         <p>{{ list.description }}</p>
         <router-link :to="`/chat/${list.id}`" class="join-btn flex"
           >ルームへ参加</router-link
@@ -56,19 +57,19 @@ export default {
       //index内にNumber型で格納されてる
     },
   },
-  created() {
-    firebase
-      .firestore()
-      .collection("posts")
-      .doc(this.$route.params.uid)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          this.userid.push(doc.data().uid);
-          console.log(doc.data());
-        }
-      });
-  },
+  // created() {
+  //   firebase
+  //     .firestore()
+  //     .collection("posts")
+  //     .doc(this.$route.params.uid)
+  //     .get()
+  //     .then((doc) => {
+  //       if (doc.exists) {
+  //         this.userid.push(doc.data().uid);
+  //         console.log(doc.data());
+  //       }
+  //     });
+  // },
   methods: {
     savePost() {
       firebase
@@ -83,32 +84,37 @@ export default {
         });
     },
     deletePost() {
+      // const listIDs = firebase
+      //   .firestore()
+      //   .collection("posts")
+      //   .doc().id;
+
       // if (this.userid == this.$route.params.uid) {
-        firebase
-          .firestore()
-          .collection("posts")
-          // .doc(this.$route.params.id + "/" + list.id)
-          .delete();
-          console.log();
-        this.$swal({
-          title: "内容確認",
-          text: "投稿を削除しますか？",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        }).then((willDelete) => {
-          if (willDelete) {
-            this.$swal("投稿を削除しました", {
-              icon: "success",
-            });
-            this.$router.go({
-              path: `/board/${this.$route.params.uid}`,
-              force: true,
-            });
-          } else {
-            this.$swal("キャンセルしました。");
-          }
-        });
+      firebase
+        .firestore()
+        .collection("posts")
+        .doc(this.list.id)
+        .delete();
+      console.log();
+      this.$swal({
+        title: "内容確認",
+        text: "投稿を削除しますか？",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          this.$swal("投稿を削除しました", {
+            icon: "success",
+          });
+          this.$router.go({
+            path: `/board/${this.$route.params.uid}`,
+            force: true,
+          });
+        } else {
+          this.$swal("キャンセルしました。");
+        }
+      });
       // }
     },
   },
