@@ -6,12 +6,19 @@
       <h2 class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
         <div class="post-items">
-          <List
-            v-for="(list, index) in allData"
-            :index="index"
-            :list="list"
-            :key="list.id"
-          />
+          <paginate name="paginate-log" :list="allData" :per="12">
+            <List
+              v-for="(list, index) in paginated('paginate-log')"
+              :index="index"
+              :list="list"
+              :key="list.id"
+            />
+          </paginate>
+          <paginate-links
+            for="paginate-log"
+            class="pagination"
+            :show-step-links="true"
+          ></paginate-links>
           <!--allDataのデータをlist関数とindex関数にそれぞれ格納-->
         </div>
       </div>
@@ -24,6 +31,9 @@ import firebase from "firebase";
 import Header from "@/components/header.vue";
 import Post from "@/components/post.vue";
 import List from "@/components/list.vue";
+import Vue from "vue";
+import VuePaginate from "vue-paginate";
+Vue.use(VuePaginate);
 
 export default {
   data() {
@@ -32,6 +42,7 @@ export default {
       contents: "",
       image: "",
       allData: [],
+      paginate: ["paginate-log"],
     };
   },
   components: {
@@ -45,7 +56,6 @@ export default {
       .firestore()
       .collection("posts")
       .orderBy("time", "desc")
-      .limit(16)
       .get()
       .then((snapshot) => {
         //"posts"(参照先)のスナップショットを得る
@@ -101,6 +111,32 @@ $black-color: rgb(0, 0, 0);
       flex-wrap: wrap;
     }
   }
+}
+
+// -- ページネーション --//
+
+ul {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.pagination {
+  margin: 2rem;
+  cursor: pointer;
+}
+
+.left-arrow{
+  margin: 1rem;
+}
+
+.right-arrow{
+  margin: 1rem;
+}
+
+.number{
+  margin: 1rem;
 }
 
 // -- neon --//

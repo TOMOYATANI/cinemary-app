@@ -90,7 +90,7 @@ export default {
       usersData: [],
       profileDeta: {},
       userIds: [],
-      userDatas: [],
+      userDatas:  {},
     };
   },
   created() {
@@ -116,7 +116,9 @@ export default {
     //現在ログインしているユーザーを取得
     this.uid = currentUser.uid;
 
+    console.log(this.userIds);
     this.userIds.forEach((id) => {
+      console.log(id);
       firebase
         .firestore()
         .collection("users")
@@ -124,9 +126,10 @@ export default {
         .get()
         .then((snapshot) => {
           this.userDatas.push(snapshot.data());
+          console.log(snapshot.data());
         });
     });
-    console.log(this.userIds);
+    console.log(this.userDatas);
   },
   methods: {
     // スクロール位置を一番下に移動

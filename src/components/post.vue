@@ -234,39 +234,36 @@ export default {
         .doc().id;
       //変数「id」に入れて、コレクションの"posts"を参照して、「id」を取得
 
-      firebase
-        .firestore()
-        .collection("posts")
-        .add(
-          {
-            title: this.title,
-            description: this.description,
-            genre: this.genre,
-            time: firebase.firestore.FieldValue.serverTimestamp(),
-            //サーバ側で値設定
-            id: id,
-            //dataにデータを作ってないので、thisは付けなくてOK!
-            uid: this.$route.params.uid,
-          }
-        );
-
       this.$swal({
         title: "内容確認",
         text: "この内容で投稿しますか？",
         icon: "info",
         buttons: true,
         dangerMode: true,
-      }).then((willDelete) => {
-        if (willDelete) {
+      })
+        .then(() => {
+          firebase
+            .firestore()
+            .collection("posts")
+            .add({
+              title: this.title,
+              description: this.description,
+              genre: this.genre,
+              time: firebase.firestore.FieldValue.serverTimestamp(),
+              //サーバ側で値設定
+              id: id,
+              //dataにデータを作ってないので、thisは付けなくてOK!
+              uid: this.$route.params.uid,
+            });
           this.$swal("投稿しました。", {
             icon: "success",
           });
-          this.$router.go({ path: "/board", force: true });
+          // this.$router.go({ path: "/board", force: true });
           //router.go(path:"/ ~ ")まで戻す。
-        } else {
+        })
+        .catch(() => {
           this.$swal("キャンセルしました。");
-        }
-      });
+        });
     },
     show() {
       this.$modal.show("post");
