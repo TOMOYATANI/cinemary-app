@@ -241,12 +241,14 @@
       <hr class="separate" />
       <h3 class="post-list flex">{{ profileData.name }} さんの投稿一覧</h3>
       <div class="profile-posts">
-        <List
-          v-for="(list, index) in listData"
-          :index="index"
-          :list="list"
-          :key="list.id"
-        />
+        <VueSlickCarousel v-bind="settings">
+          <List
+            v-for="(list, index) in listData"
+            :index="index"
+            :list="list"
+            :key="list.id"
+          />
+        </VueSlickCarousel>
       </div>
       <hr class="separate" />
       <h3 class="bookmark-list flex">
@@ -277,6 +279,10 @@ import VScrollLock from "v-scroll-lock";
 Vue.use(VScrollLock);
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
+import VueSlickCarousel from "vue-slick-carousel";
+import "vue-slick-carousel/dist/vue-slick-carousel.css";
+
+import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 
 export default {
   data() {
@@ -397,6 +403,13 @@ export default {
       profileData: {},
       //配列にしないようにする。
       listData: [],
+      settings: {
+        dots: true,
+        infinite: false,
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        initialSlide: 0,
+      },
       bookmarkList: [],
       open: false,
       file: "",
@@ -406,6 +419,7 @@ export default {
   components: {
     Header,
     List,
+    VueSlickCarousel,
   },
   methods: {
     onFileChange(e) {
@@ -440,8 +454,8 @@ export default {
         icon: "info",
         buttons: true,
         dangerMode: true,
-      }).then((willDelete) => {
-        if (willDelete) {
+      })
+        .then(() => {
           let uploadParam = {};
           if (this.uploadUrl) {
             const uploadTask = firebase
@@ -449,7 +463,6 @@ export default {
               .ref(this.uploadUrl)
               // .child() //さっき決めたパスを参照して、
               .put(this.file); //保存する
-
             uploadTask.then(() => {
               uploadTask.snapshot.ref.getDownloadURL().then((fileUrl) => {
                 const uploadedImage = {
@@ -489,11 +502,10 @@ export default {
             path: `/mypage/${this.$route.params.uid}`,
             force: true,
           });
-          //プロフィール編集されたらページをリロード
-        } else {
+        })
+        .catch(() => {
           this.$swal("キャンセルしました。");
-        }
-      });
+        });
     },
 
     show() {
@@ -507,6 +519,17 @@ export default {
     },
     closeModal() {
       this.open = false;
+    },
+     next() {
+        this.$refs.slick.next();
+    },
+    prev() {
+        this.$refs.slick.prev();
+    },
+    reInit() {
+        this.$nextTick(() => {
+            this.$refs.slick.reSlick();
+        });
     },
   },
   created() {
@@ -843,6 +866,12 @@ hr.separate {
       color: #fff;
     }
   }
+}
+
+// -- slick -- //
+
+.slick-slider{
+  width: 90%;
 }
 
 // -- ネオンカラー -- //

@@ -127,12 +127,12 @@ ul {
   cursor: pointer;
 }
 
-.left-arrow{
-  margin: 1rem;
-}
-
-.right-arrow{
-  margin: 1rem;
+.paginate-links {
+    padding: 1rem;
+    margin: 1rem;
+    font-weight: bold;
+    color: transparent;
+    text-shadow: 0 0 10px rgb(255 255 255), 0 0 15px rgb(150 150 150);
 }
 
 .number{

@@ -228,6 +228,9 @@ export default {
   methods: {
     // postItem()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
     postItem() {
+      const currentUser = firebase.auth().currentUser;
+      this.uid = currentUser.uid;
+
       const id = firebase
         .firestore()
         .collection("posts")
@@ -258,7 +261,7 @@ export default {
           this.$swal("投稿しました。", {
             icon: "success",
           });
-          // this.$router.go({ path: "/board", force: true });
+          // this.$router.go({ path: `/board/${this.uid}`, force: true });
           //router.go(path:"/ ~ ")まで戻す。
         })
         .catch(() => {

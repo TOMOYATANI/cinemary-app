@@ -2,13 +2,35 @@
   <div class="chat">
     <h1 class="chat-tll flex">
       <div class="flash neon">Chat Room</div>
-      <router-link :to="`/board/${this.uid}`" class="back-btn">
-        <img
-          src="../assets/戻る.jpg"
-          alt="チャット終了"
-          class="back-btn-icon"
-        />
-      </router-link>
+        <slide right style="left: auto; right: 36px; top:20px;">
+          <router-link to="/" class="header-link neon3 flash">HOME</router-link>
+          <router-link to="/about" class="header-link neon3 flash"
+            >ABOUT</router-link
+          >
+          <router-link
+            :to="`/board/${this.uid}`"
+            class="header-link neon3 flash"
+            >POST</router-link
+          >
+          <router-link
+            to="/signup"
+            class="header-link neon3 flash"
+            v-if="!authenticatedUser"
+            >SINGUP</router-link
+          >
+          <router-link
+            to="/signin"
+            class="header-link neon3 flash"
+            v-if="!authenticatedUser"
+            >SINGIN</router-link
+          >
+          <router-link
+            :to="`/mypage/${this.uid}`"
+            class="header-link neon3 flash"
+            >MYPAGE</router-link
+          >
+        </slide>
+      <div id="page-wrap"></div>
     </h1>
     <!--Firebase から取得したリストを描画-->
     <transition-group name="chat" tag="div" class="list content">
@@ -24,7 +46,7 @@
 
           <!--「名前」と「メッセージ」の指定-->
           <div class="mydetail">
-            <div class="mytime">{{ $dayjs(time).format("hh:mm") }}</div>
+            <div class="mytime">{{ $dayjs(time).format("HH:mm") }}</div>
             <div @click.right.prevent="deleteMessage(key)" class="mymessage">
               <nl2br tag="div" :text="message" />
             </div>
@@ -46,7 +68,7 @@
             <div class="othermessage">
               <nl2br tag="div" :text="message" />
             </div>
-            <div class="othertime">{{ $dayjs(time).format("hh:mm") }}</div>
+            <div class="othertime">{{ $dayjs(time).format("HH:mm") }}</div>
           </div>
         </div>
       </section>
@@ -76,6 +98,8 @@ import Nl2br from "vue-nl2br";
 import Vue from "vue";
 // 改行を <br> タグに変換するモジュール
 import dayjs from "dayjs";
+import { Slide } from "vue-burger-menu";
+Vue.component("slide", Slide);
 
 dayjs.locale("ja");
 Vue.prototype.$dayjs = dayjs;
@@ -90,7 +114,8 @@ export default {
       usersData: [],
       profileDeta: {},
       userIds: [],
-      userDatas:  {},
+      userDatas: {},
+      authenticatedUser: "",
     };
   },
   created() {
@@ -117,12 +142,16 @@ export default {
     this.uid = currentUser.uid;
 
     console.log(this.userIds);
-    this.userIds.forEach((id) => {
-      console.log(id);
+
+    console.log(this.userIds[0]);
+    console.log(typeof this.userIds);
+    Object.keys(this.userIds).forEach(prop =>{
+    console.log(this.userIds[prop]);
+
       firebase
         .firestore()
         .collection("users")
-        .doc(id)
+        .doc(this.userIds[prop])
         .get()
         .then((snapshot) => {
           this.userDatas.push(snapshot.data());
@@ -212,6 +241,16 @@ export default {
         }
       });
     },
+  },
+  mounted() {
+    //以下、ユーザーが認証済みであれば「ログアウト」を表示
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.authenticatedUser = true;
+      } else {
+        this.authenticatedUser = false;
+      }
+    });
   },
 };
 </script>
@@ -421,19 +460,29 @@ $black-color: rgb(0, 0, 0);
   transform: translateX(-1rem);
 }
 
-//戻るボタン
+//ハンバーガーメニュー
 
-.back-btn-icon {
-  width: 22px;
-  height: 22px;
-  margin: 0.2rem;
+.bm-burger-button {
   cursor: pointer;
+  height: 30px;
+  left: 36px;
+  position: absolute;
+  top: 20px;
+  width: 36px;
+  color: $white-color;
 }
 
-.back-btn {
-  position: absolute;
-  bottom: 12px;
-  left: 15px;
+.bm-menu {
+  background-color: $black-color !important;
+  height: 100%;
+  left: 0;
+  overflow-x: hidden;
+  padding-top: 60px;
+  position: fixed;
+  top: 0;
+  transition: 0.5s;
+  width: 0;
+  z-index: 1000;
 }
 
 // -- neon -- //
@@ -441,6 +490,12 @@ $black-color: rgb(0, 0, 0);
   color: transparent;
   -webkit-text-stroke: 1px rgb(255, 255, 255);
   text-shadow: 0 0 10px rgb(255, 255, 255), 0 0 15px rgb(150, 150, 150);
+}
+
+.neon3 {
+  color: transparent;
+  -webkit-text-stroke: 0.5px #0f0;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.5);
 }
 
 .flash {
