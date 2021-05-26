@@ -136,7 +136,6 @@ $black-color: rgb(0, 0, 0);
   }
   &-link {
     color: #fff;
-    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     text-decoration: none;
     background-color: transparent;
     border: none;

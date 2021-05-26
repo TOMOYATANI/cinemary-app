@@ -74,8 +74,8 @@ export default {
           icon: "warning",
           buttons: true,
           dangerMode: true,
-        })
-          .then(() => {
+        }).then((willDelete) => {
+          if (willDelete) {
             firebase
               .firestore()
               .collection("posts")
@@ -84,14 +84,14 @@ export default {
             this.$swal("投稿を削除しました", {
               icon: "success",
             });
-            // this.$router.go({
-            //   path: `/board/${this.$route.params.uid}`,
-            //   force: true,
-            // });
-          })
-          .catch(() => {
+            this.$router.go({
+              path: `/board/${this.$route.params.uid}`,
+              force: true,
+            });
+          } else {
             this.$swal("キャンセルしました。");
-          });
+          }
+        });
       }
     },
     // uploadedImage(src) {
@@ -109,12 +109,18 @@ export default {
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
-// -- ヘッダー -- //
+// -- 共通 -- //
 
 a {
   text-decoration: none;
   color: $black-color;
 }
+
+div{
+  color: $white-color;
+}
+
+// -- ヘッダー -- //
 
 .join-btn {
   outline: none;

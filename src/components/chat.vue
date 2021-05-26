@@ -1,37 +1,33 @@
 <template>
   <div class="chat">
-    <h1 class="chat-tll flex">
-      <div class="flash neon">Chat Room</div>
-        <slide right style="left: auto; right: 36px; top:20px;">
-          <router-link to="/" class="header-link neon3 flash">HOME</router-link>
-          <router-link to="/about" class="header-link neon3 flash"
-            >ABOUT</router-link
-          >
-          <router-link
-            :to="`/board/${this.uid}`"
-            class="header-link neon3 flash"
-            >POST</router-link
-          >
-          <router-link
-            to="/signup"
-            class="header-link neon3 flash"
-            v-if="!authenticatedUser"
-            >SINGUP</router-link
-          >
-          <router-link
-            to="/signin"
-            class="header-link neon3 flash"
-            v-if="!authenticatedUser"
-            >SINGIN</router-link
-          >
-          <router-link
-            :to="`/mypage/${this.uid}`"
-            class="header-link neon3 flash"
-            >MYPAGE</router-link
-          >
-        </slide>
+    <div class="chat-header flex">
+      <h1 class="chat-tll flash neon flex">Chat Room</h1>
+      <slide right disableOutsideClick width="200">
+        <router-link to="/" class="header-link neon3 flash">HOME</router-link>
+        <router-link to="/about" class="header-link neon3 flash"
+          >ABOUT</router-link
+        >
+        <router-link :to="`/board/${this.uid}`" class="header-link neon3 flash"
+          >POST</router-link
+        >
+        <router-link
+          to="/signup"
+          class="header-link neon3 flash"
+          v-if="!authenticatedUser"
+          >SINGUP</router-link
+        >
+        <router-link
+          to="/signin"
+          class="header-link neon3 flash"
+          v-if="!authenticatedUser"
+          >SINGIN</router-link
+        >
+        <router-link :to="`/mypage/${this.uid}`" class="header-link neon3 flash"
+          >MYPAGE</router-link
+        >
+      </slide>
       <div id="page-wrap"></div>
-    </h1>
+    </div>
     <!--Firebase から取得したリストを描画-->
     <transition-group name="chat" tag="div" class="list content">
       <!--chatの中の{ key, name, image, message ,userid }をそれぞれ取得-->
@@ -40,14 +36,14 @@
         :key="key"
       >
         <div v-if="userid === user.uid" class="myitem flex">
-          {{ userDatas }}
+          <!-- {{ userDatas }} -->
           <!-- 自身 -->
           <!--「画像」の指定-->
 
           <!--「名前」と「メッセージ」の指定-->
           <div class="mydetail">
             <div class="mytime">{{ $dayjs(time).format("HH:mm") }}</div>
-            <div @click.right.prevent="deleteMessage(key)" class="mymessage">
+            <div @click.right.prevent="deleteMessage(key)" class="mymessage" :style="{color: black}">
               <nl2br tag="div" :text="message" />
             </div>
           </div>
@@ -142,16 +138,16 @@ export default {
     this.uid = currentUser.uid;
 
     console.log(this.userIds);
-
-    console.log(this.userIds[0]);
+    Array.isArray(this.userIds);
+    console.log(Array.isArray(this.userIds));
     console.log(typeof this.userIds);
-    Object.keys(this.userIds).forEach(prop =>{
-    console.log(this.userIds[prop]);
 
+    this.userIds.value.forEach((id) => {
+      console.log(id);
       firebase
         .firestore()
         .collection("users")
-        .doc(this.userIds[prop])
+        .doc(id)
         .get()
         .then((snapshot) => {
           this.userDatas.push(snapshot.data());
@@ -173,9 +169,12 @@ export default {
       //snapshotとは、ある時点における特定のデータベース参照にあるデータの全体像を写し取ったもの
       //childAdded：データベースからアイテムのリストを取得する関数
       // 受け取ったメッセージをchatに追加
-      const message = snap.val();
-      if (!this.userIds.includes(message.userid))
-        this.userIds.push(message.userid);
+      const message = JSON.parse(JSON.stringify(snap.val()));
+      if (!this.userIds.includes(String(message.userid)))
+        this.userIds.push(String(message.userid));
+      //this.userIds（配列）にuserid含まれていていなければthis.userIds（配列）に追加。
+
+      console.log(this.userIds);
       //イベントのときにデータベース内の「message」データを取得。
       // データベースに新しい要素が追加されると随時呼び出される
       this.chat.push({
@@ -213,6 +212,7 @@ export default {
     },
     returnUserData(id) {
       const userData = this.userDatas.filter((user) => user.id === id);
+      //this.userDatas（配列）に入っている値をログイン中のuesr.idとidが一致したものをuserData（配列）に再び代入。
       return userData;
     },
     deleteMessage(key) {
@@ -255,7 +255,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
 
 // -- 変数 -- //
@@ -266,7 +266,7 @@ $black-color: rgb(0, 0, 0);
 
 // -- 全体 -- //
 
-* {
+div {
   color: $black-color;
 }
 
@@ -278,16 +278,18 @@ $black-color: rgb(0, 0, 0);
   width: 100%;
   flex-direction: column;
   background-color: rgba(20, 20, 20);
-  &-tll {
-    position: relative;
-    width: 100%;
+  .chat-header {
+    position: sticky;
     color: $white-color;
-    font-family: "Roboto", sans-serif;
     background-color: $black-color;
     padding: 1rem 3rem;
-    position: sticky;
     top: 0;
     z-index: 999;
+    .chat-tll {
+      width: 100%;
+      font-family: "Roboto", sans-serif;
+      display: flex;
+    }
   }
   .content {
     margin: 0 auto;
@@ -462,6 +464,20 @@ $black-color: rgb(0, 0, 0);
 
 //ハンバーガーメニュー
 
+.header-link {
+    color: $white-color;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    cursor: hand;
+    margin-left: 3rem;
+    font-family: "Roboto", sans-serif;
+ }
+
 .bm-burger-button {
   cursor: pointer;
   height: 30px;
@@ -470,10 +486,11 @@ $black-color: rgb(0, 0, 0);
   top: 20px;
   width: 36px;
   color: $white-color;
+  
 }
 
 .bm-menu {
-  background-color: $black-color !important;
+  background-color: $black-color;
   height: 100%;
   left: 0;
   overflow-x: hidden;
@@ -483,6 +500,21 @@ $black-color: rgb(0, 0, 0);
   transition: 0.5s;
   width: 0;
   z-index: 1000;
+}
+
+.line-style {
+  height: 20%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  background-color: lightgray;
+}
+
+.cross-style {
+    cursor: pointer;
+    position: absolute;
+    left: 25px;
+    top: 12px;
 }
 
 // -- neon -- //

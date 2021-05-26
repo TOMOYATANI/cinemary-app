@@ -1,5 +1,5 @@
 <template>
-  <div class="post-inner">
+  <div class="post-content">
     <button
       @click="
         show();
@@ -25,7 +25,7 @@
         <div class="vm--top-right-slot"></div>
       </div>
       <div class="modal-header flex">
-        <h2 class="post-tll flex">Cinemaryを投稿する</h2>
+        <h2 class="post-title flex">Cinemaryを投稿する</h2>
         <hr class="separate" />
       </div>
       <div class="modal-body">
@@ -243,8 +243,8 @@ export default {
         icon: "info",
         buttons: true,
         dangerMode: true,
-      })
-        .then(() => {
+      }).then((willDelete) => {
+        if (willDelete) {
           firebase
             .firestore()
             .collection("posts")
@@ -261,13 +261,44 @@ export default {
           this.$swal("投稿しました。", {
             icon: "success",
           });
-          // this.$router.go({ path: `/board/${this.uid}`, force: true });
+          this.$router.push({ path: `/board/${this.uid}`, force: true });
           //router.go(path:"/ ~ ")まで戻す。
-        })
-        .catch(() => {
+        } else {
           this.$swal("キャンセルしました。");
-        });
+        }
+      });
     },
+    // this.$swal({
+    //   title: "内容確認",
+    //   text: "この内容で投稿しますか？",
+    //   icon: "info",
+    //   buttons: true,
+    //   dangerMode: true,
+    // })
+    //   .then(() => {
+    //     firebase
+    //       .firestore()
+    //       .collection("posts")
+    //       .add({
+    //         title: this.title,
+    //         description: this.description,
+    //         genre: this.genre,
+    //         time: firebase.firestore.FieldValue.serverTimestamp(),
+    //         //サーバ側で値設定
+    //         id: id,
+    //         //dataにデータを作ってないので、thisは付けなくてOK!
+    //         uid: this.$route.params.uid,
+    //       });
+    //     this.$swal("投稿しました。", {
+    //       icon: "success",
+    //     });
+    //     // this.$router.go({ path: `/board/${this.uid}`, force: true });
+    //     //router.go(path:"/ ~ ")まで戻す。
+    //   })
+    //   .catch(() => {
+    //     this.$swal("キャンセルしました。");
+    //   });
+
     show() {
       this.$modal.show("post");
     },
@@ -338,6 +369,7 @@ textarea::placeholder {
     padding-top: 3rem;
     color: $white-color;
     font-family: "Roboto", sans-serif;
+    display: flex;
   }
   .search-main-contens {
     position: relative;
@@ -415,7 +447,7 @@ textarea::placeholder {
 
 // -- 投稿フォーム -- //
 
-.post-inner {
+.post-content {
   width: 100%;
   position: relative;
   flex-direction: column;
@@ -454,7 +486,7 @@ textarea::placeholder {
   .modal-header {
     flex-direction: column;
     background-color: $black-color;
-    .post-tll {
+   .post-title {
       padding-top: 3rem;
       color: $white-color;
       font-family: "Roboto", sans-serif;

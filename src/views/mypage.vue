@@ -454,8 +454,8 @@ export default {
         icon: "info",
         buttons: true,
         dangerMode: true,
-      })
-        .then(() => {
+      }).then((willDelete) => {
+        if (willDelete) {
           let uploadParam = {};
           if (this.uploadUrl) {
             const uploadTask = firebase
@@ -502,12 +502,12 @@ export default {
             path: `/mypage/${this.$route.params.uid}`,
             force: true,
           });
-        })
-        .catch(() => {
+          //プロフィール編集されたらページをリロード
+        } else {
           this.$swal("キャンセルしました。");
-        });
+        }
+      });
     },
-
     show() {
       this.$modal.show("edit");
     },
@@ -601,6 +601,10 @@ $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
 // -- 共通 -- //
+
+div{
+  color: $white-color;
+}
 
 ::placeholder {
   color: gray;

@@ -6,7 +6,7 @@
       <h2 class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
         <div class="post-items">
-          <paginate name="paginate-log" :list="allData" :per="12">
+          <paginate name="paginate-log" tag="ol" :list="allData" :per="12">
             <List
               v-for="(list, index) in paginated('paginate-log')"
               :index="index"
@@ -16,9 +16,10 @@
           </paginate>
           <paginate-links
             for="paginate-log"
-            class="pagination"
+            class="pagination flex"
             :show-step-links="true"
-          ></paginate-links>
+          >
+          </paginate-links>
           <!--allDataのデータをlist関数とindex関数にそれぞれ格納-->
         </div>
       </div>
@@ -70,7 +71,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
 // -- 変数 -- //
 
@@ -115,7 +116,7 @@ $black-color: rgb(0, 0, 0);
 
 // -- ページネーション --//
 
-ul {
+ol {
   width: 90%;
   display: flex;
   justify-content: center;
@@ -125,17 +126,30 @@ ul {
 .pagination {
   margin: 2rem;
   cursor: pointer;
+
 }
 
 .paginate-links {
-    padding: 1rem;
-    margin: 1rem;
-    font-weight: bold;
-    color: transparent;
-    text-shadow: 0 0 10px rgb(255 255 255), 0 0 15px rgb(150 150 150);
+  padding: 1rem;
+  margin: 1rem;
+  font-weight: bold;
+  color: transparent;
+  text-shadow: 0 0 10px rgb(255 255 255), 0 0 15px rgb(150 150 150);
 }
 
-.number{
+ul.paginate-links > li.left-arrow > a {
+  margin: 1rem;
+}
+
+ul.paginate-links > li.right-arrow > a {
+  margin: 1rem;
+}
+
+ul.paginate-links > li.number > a {
+  margin: 1rem;
+}
+
+ul.paginate-links > li.ellipses > a {
   margin: 1rem;
 }
 
