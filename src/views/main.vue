@@ -121,17 +121,10 @@ export default {
   data() {
     return {
       authenticatedUser: "",
-      isOpen: false,
     };
   },
   components: {
     Header,
-  },
-  methods: {
-    toggle() {
-      this.isOpen = !this.isOpen;
-      //「!」を先頭につける事で真偽が逆。
-    },
   },
   mounted() {
     firebase.auth().onAuthStateChanged((user) => {

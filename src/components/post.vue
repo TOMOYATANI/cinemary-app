@@ -230,43 +230,47 @@ export default {
     postItem() {
       const currentUser = firebase.auth().currentUser;
       this.uid = currentUser.uid;
-
       const id = firebase
         .firestore()
         .collection("posts")
         .doc().id;
       //変数「id」に入れて、コレクションの"posts"を参照して、「id」を取得
-
       this.$swal({
         title: "内容確認",
         text: "この内容で投稿しますか？",
         icon: "info",
         buttons: true,
         dangerMode: true,
-      }).then((willDelete) => {
-        if (willDelete) {
-          firebase
-            .firestore()
-            .collection("posts")
-            .add({
-              title: this.title,
-              description: this.description,
-              genre: this.genre,
-              time: firebase.firestore.FieldValue.serverTimestamp(),
-              //サーバ側で値設定
-              id: id,
-              //dataにデータを作ってないので、thisは付けなくてOK!
-              uid: this.$route.params.uid,
+      })
+        .then((willDelete) => {
+          if (willDelete) {
+            firebase
+              .firestore()
+              .collection("posts")
+              .add({
+                title: this.title,
+                description: this.description,
+                genre: this.genre,
+                time: firebase.firestore.FieldValue.serverTimestamp(),
+                //サーバ側で値設定
+                id: id,
+                //dataにデータを作ってないので、thisは付けなくてOK!
+                uid: this.$route.params.uid,
+              });
+            this.$swal("投稿しました。", {
+              icon: "success",
             });
-          this.$swal("投稿しました。", {
-            icon: "success",
+            // this.$router.push({ path: `/board/${this.uid}`, force: true });
+            //router.go(path:"/ ~ ")まで戻す。
+          } else {
+            this.$swal("キャンセルしました。");
+          }
+        })
+        .catch(() => {
+          this.$swal("投稿出来ませんでした。", {
+            icon: "error",
           });
-          this.$router.push({ path: `/board/${this.uid}`, force: true });
-          //router.go(path:"/ ~ ")まで戻す。
-        } else {
-          this.$swal("キャンセルしました。");
-        }
-      });
+        });
     },
     // this.$swal({
     //   title: "内容確認",
@@ -486,7 +490,7 @@ textarea::placeholder {
   .modal-header {
     flex-direction: column;
     background-color: $black-color;
-   .post-title {
+    .post-title {
       padding-top: 3rem;
       color: $white-color;
       font-family: "Roboto", sans-serif;

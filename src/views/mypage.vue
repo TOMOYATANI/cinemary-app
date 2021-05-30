@@ -9,16 +9,16 @@
             :src="uploadedImage == '' ? preview : uploadedImage.fileUrl"
             alt="プロフィール画像"
           />
-          <div class="profile-inner-l-name">{{ profileData.name }}</div>
+          <div class="profile-inner-l-name txt">{{ profileData.name }}</div>
         </div>
         <div class="profile-inner-r flex">
           <div class="item-inner">
             <div class="post">
-              <div>{{ listData.length }}</div>
+              <div class="txt">{{ listData.length }}</div>
               <p>POSTS</p>
             </div>
             <div class="bookmark">
-              <div>{{ bookmarkList.length }}</div>
+              <div class="txt">{{ bookmarkList.length }}</div>
               <p>BOOKMARK</p>
             </div>
           </div>
@@ -241,6 +241,48 @@
       <hr class="separate" />
       <h3 class="post-list flex">{{ profileData.name }} さんの投稿一覧</h3>
       <div class="profile-posts">
+        <paginate name="paginate-listData" tag="ol" :list="listData" :per="3">
+          <List
+            v-for="(list, index) in paginated('paginate-listData')"
+            :index="index"
+            :list="list"
+            :key="list.id"
+          />
+        </paginate>
+        <paginate-links
+          for="paginate-listData"
+          class="pagination flex"
+          :show-step-links="true"
+        >
+        </paginate-links>
+      </div>
+      <hr class="separate" />
+      <h3 class="bookmark-list flex">
+        {{ profileData.name }} さんのブックマーク一覧
+      </h3>
+      <div class="profile-posts">
+        <paginate
+          name="paginate-bookmarkList"
+          tag="ol"
+          :list="bookmarkList"
+          :per="3"
+        >
+          <List
+            v-for="(list, index) in paginated('paginate-bookmarkList')"
+            :index="index"
+            :list="list"
+            :key="list.id"
+          />
+        </paginate>
+        <paginate-links
+          for="paginate-bookmarkList"
+          class="pagination flex"
+          :show-step-links="true"
+        >
+        </paginate-links>
+      </div>
+    </div>
+    <!-- <div class="profile-posts">
         <VueSlickCarousel v-bind="settings">
           <List
             v-for="(list, index) in listData"
@@ -261,8 +303,8 @@
           :list="list"
           :key="list.id"
         />
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
   </div>
 </template>
 
@@ -279,8 +321,10 @@ import VScrollLock from "v-scroll-lock";
 Vue.use(VScrollLock);
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
-import VueSlickCarousel from "vue-slick-carousel";
-import "vue-slick-carousel/dist/vue-slick-carousel.css";
+import VuePaginate from "vue-paginate";
+Vue.use(VuePaginate);
+// import VueSlickCarousel from "vue-slick-carousel";
+// import "vue-slick-carousel/dist/vue-slick-carousel.css";
 
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 
@@ -403,13 +447,14 @@ export default {
       profileData: {},
       //配列にしないようにする。
       listData: [],
-      settings: {
-        dots: true,
-        infinite: false,
-        slidesToShow: 3,
-        slidesToScroll: 3,
-        initialSlide: 0,
-      },
+      paginate: ["paginate-listData", "paginate-bookmarkList"],
+      // settings: {
+      //   dots: true,
+      //   infinite: false,
+      //   slidesToShow: 3,
+      //   slidesToScroll: 3,
+      //   initialSlide: 0,
+      // },
       bookmarkList: [],
       open: false,
       file: "",
@@ -419,7 +464,7 @@ export default {
   components: {
     Header,
     List,
-    VueSlickCarousel,
+    // VueSlickCarousel,
   },
   methods: {
     onFileChange(e) {
@@ -450,7 +495,7 @@ export default {
     updateBtn() {
       this.$swal({
         title: "内容確認",
-        text: "この内容で投稿しますか？",
+        text: "この内容で更新しますか？",
         icon: "info",
         buttons: true,
         dangerMode: true,
@@ -460,53 +505,73 @@ export default {
           if (this.uploadUrl) {
             const uploadTask = firebase
               .storage()
-              .ref(this.uploadUrl)
-              // .child() //さっき決めたパスを参照して、
+              .ref(this.uploadUrl) //さっき決めたパスを参照して、
+              // .child(this.uploadUrl)
               .put(this.file); //保存する
             uploadTask.then(() => {
               uploadTask.snapshot.ref.getDownloadURL().then((fileUrl) => {
-                const uploadedImage = {
+                //this.fileに保存されたrefを参照してファイルのダウンロード URL を取得して、fileUrlへ代入。
+                this.$set(this, "uploadedImage", {
                   fileUrl: fileUrl,
                   time: firebase.firestore.FieldValue.serverTimestamp(),
-                };
-                uploadParam = { uploadedImage: uploadedImage };
+                });
+                console.log(fileUrl, this.uploadUrl);
+                uploadParam = { uploadedImage: this.uploadedImage };
+                //uploadParamへuploadedImageを代入。
+                firebase
+                  //画像をfirestoreに保存
+                  .firestore()
+                  .collection("users") //保存する場所を参照して、
+                  .doc(this.$route.params.uid) //追加で保存setメソッドを使うと上書きされる
+                  .set(
+                    {
+                      name: this.name,
+                      sex: this.sex,
+                      age: this.age,
+                      access: this.access,
+                      selfpr: this.selfpr,
+                      profession: this.profession,
+                      genre: this.genre,
+                      favMovie: this.favMovie,
+                      ...uploadParam,
+                      time: firebase.firestore.FieldValue.serverTimestamp(),
+                      //サーバ側で値設定
+                    },
+                    { merge: true }
+                    //set()でmergeをtrueにすると、上書き。updetaと同様。
+                  );
+
+                const currentUser = firebase.auth().currentUser;
+                currentUser
+                  .updateProfile({
+                    photoURL: fileUrl,
+                  })
+                  .then(() => {});
+                // .catch((err)=>{
+                // console.log(err);
+                // });
               });
             });
           }
-          firebase
-            //画像をfirebase storageに保存
-            .firestore()
-            .collection("users") //保存する場所を参照して、
-            .doc(this.$route.params.uid) //追加で保存setメソッドを使うと上書きされる
-            .set(
-              {
-                name: this.name,
-                sex: this.sex,
-                age: this.age,
-                access: this.access,
-                selfpr: this.selfpr,
-                profession: this.profession,
-                genre: this.genre,
-                favMovie: this.favMovie,
-                ...uploadParam,
-                time: firebase.firestore.FieldValue.serverTimestamp(),
-                //サーバ側で値設定
-              },
-              { merge: true }
-              //set()でmergeをtrueにすると、上書き。updetaと同様。
-            );
-          this.$swal("投稿しました。", {
+          console.log(this.uploadedImage);
+
+          this.$swal("更新しました。", {
             icon: "success",
           });
-          this.$router.go({
-            path: `/mypage/${this.$route.params.uid}`,
-            force: true,
-          });
+          // this.$router.go({
+          //   path: `/mypage/${this.$route.params.uid}`,
+          //   force: true,
+          // });
           //プロフィール編集されたらページをリロード
         } else {
           this.$swal("キャンセルしました。");
         }
       });
+      // .catch(() => {
+      //   this.$swal("更新出来ませんでした。", {
+      //     icon: "error",
+      //   });
+      // });
     },
     show() {
       this.$modal.show("edit");
@@ -519,17 +584,6 @@ export default {
     },
     closeModal() {
       this.open = false;
-    },
-     next() {
-        this.$refs.slick.next();
-    },
-    prev() {
-        this.$refs.slick.prev();
-    },
-    reInit() {
-        this.$nextTick(() => {
-            this.$refs.slick.reSlick();
-        });
     },
   },
   created() {
@@ -591,7 +645,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
 
 // -- 変数 -- //
@@ -602,7 +656,7 @@ $black-color: rgb(0, 0, 0);
 
 // -- 共通 -- //
 
-div{
+.txt {
   color: $white-color;
 }
 
@@ -874,7 +928,7 @@ hr.separate {
 
 // -- slick -- //
 
-.slick-slider{
+.slick-slider {
   width: 90%;
 }
 

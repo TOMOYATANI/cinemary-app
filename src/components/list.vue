@@ -66,7 +66,6 @@ export default {
     deletePost() {
       const currentUser = firebase.auth().currentUser;
       this.uid = currentUser.uid;
-
       if (this.list.uid == this.uid) {
         this.$swal({
           title: "内容確認",
@@ -74,24 +73,30 @@ export default {
           icon: "warning",
           buttons: true,
           dangerMode: true,
-        }).then((willDelete) => {
-          if (willDelete) {
-            firebase
-              .firestore()
-              .collection("posts")
-              .doc(this.list.id)
-              .delete();
-            this.$swal("投稿を削除しました", {
-              icon: "success",
+        })
+          .then((willDelete) => {
+            if (willDelete) {
+              firebase
+                .firestore()
+                .collection("posts")
+                .doc(this.list.id)
+                .delete();
+              this.$swal("投稿を削除しました", {
+                icon: "success",
+              });
+              // this.$router.go({
+              //   path: `/board/${this.$route.params.uid}`,
+              //   force: true,
+              // });
+            } else {
+              this.$swal("キャンセルしました。");
+            }
+          })
+          .catch(() => {
+            this.$swal("投稿を削除出来ません。", {
+              icon: "error",
             });
-            this.$router.go({
-              path: `/board/${this.$route.params.uid}`,
-              force: true,
-            });
-          } else {
-            this.$swal("キャンセルしました。");
-          }
-        });
+          });
       }
     },
     // uploadedImage(src) {
@@ -116,7 +121,7 @@ a {
   color: $black-color;
 }
 
-div{
+div {
   color: $white-color;
 }
 

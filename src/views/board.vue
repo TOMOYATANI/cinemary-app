@@ -17,6 +17,7 @@
           <paginate-links
             for="paginate-log"
             class="pagination flex"
+            @click="postTop"
             :show-step-links="true"
           >
           </paginate-links>
@@ -50,6 +51,20 @@ export default {
     Header,
     Post,
     List,
+  },
+  methods: {
+    postTop() {
+      const postTop = document.getElementById(".post-tll");
+      const postTop_position = postTop.getBoundingClientRect();
+
+      window.scrollTo(0, postTop_position.top);
+    },
+    returnUserData(id) {
+      const userData = this.userDatas.find((user) => user.uid === id);
+      //this.userDatas（配列）に入っている値をログイン中のuesr.uidとidが一致したものを一つuserData（配列）に保存。
+      return userData;
+    },
+    
   },
   created() {
     // "posts"コレクションの全ドキュメントを取得。
@@ -126,7 +141,6 @@ ol {
 .pagination {
   margin: 2rem;
   cursor: pointer;
-
 }
 
 .paginate-links {

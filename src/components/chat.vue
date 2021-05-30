@@ -36,28 +36,37 @@
         :key="key"
       >
         <div v-if="userid === user.uid" class="myitem flex">
-          <!-- {{ userDatas }} -->
           <!-- 自身 -->
           <!--「画像」の指定-->
 
           <!--「名前」と「メッセージ」の指定-->
           <div class="mydetail">
             <div class="mytime">{{ $dayjs(time).format("HH:mm") }}</div>
-            <div @click.right.prevent="deleteMessage(key)" class="mymessage" :style="{color: black}">
+            <div @click.right.prevent="deleteMessage(key)" class="mymessage">
               <nl2br tag="div" :text="message" />
             </div>
           </div>
           <div class="myimage flex">
-            <img :src="image" width="40" height="40" />
-            <div class="myname">{{ name }}</div>
+            <img :src="user.photoURL" width="50" height="50" />
+            <div class="myname">{{ user.displayName }}</div>
           </div>
         </div>
         <div v-else class="otheritem flex">
           <!-- 自身ではない -->
           <!--「画像」の指定-->
           <div class="otherimage flex">
-            <img :src="image" width="40" height="40" />
-            <div class="othername">name</div>
+            <img
+              :src="
+                returnUserData(userid)
+                  ? returnUserData(userid).uploadedImage.fileUrl
+                  : preview
+              "
+              width="50"
+              height="50"
+            />
+            <div class="othername">
+              {{ returnUserData(userid) ? returnUserData(userid).name : "匿名" }}
+            </div>
           </div>
           <!--「名前」と「メッセージ」の指定-->
           <div class="otherdetail">
@@ -107,17 +116,18 @@ export default {
       user: {}, // ユーザー情報
       chat: [], // 取得したメッセージを入れる配列
       input: "", // 入力したメッセージ
-      usersData: [],
       profileDeta: {},
       userIds: [],
-      userDatas: {},
+      userDatas: [],
       authenticatedUser: "",
+      preview: require("../assets/デフォルト画像.jpg"),
     };
   },
   created() {
     firebase.auth().onAuthStateChanged((user) => {
       // ログイン状態ならuserが取得できる
       this.user = user ? user : {};
+
       //firebase.database()で以下のデータベースの読み書きを行う。
       const ref_message = firebase.database().ref(this.$route.params.id);
       //[router.vue]にて「/ ~ /:id」と指定しルートがマッチした時、
@@ -136,25 +146,6 @@ export default {
     const currentUser = firebase.auth().currentUser;
     //現在ログインしているユーザーを取得
     this.uid = currentUser.uid;
-
-    console.log(this.userIds);
-    Array.isArray(this.userIds);
-    console.log(Array.isArray(this.userIds));
-    console.log(typeof this.userIds);
-
-    this.userIds.value.forEach((id) => {
-      console.log(id);
-      firebase
-        .firestore()
-        .collection("users")
-        .doc(id)
-        .get()
-        .then((snapshot) => {
-          this.userDatas.push(snapshot.data());
-          console.log(snapshot.data());
-        });
-    });
-    console.log(this.userDatas);
   },
   methods: {
     // スクロール位置を一番下に移動
@@ -170,11 +161,20 @@ export default {
       //childAdded：データベースからアイテムのリストを取得する関数
       // 受け取ったメッセージをchatに追加
       const message = JSON.parse(JSON.stringify(snap.val()));
-      if (!this.userIds.includes(String(message.userid)))
+      if (!this.userIds.includes(String(message.userid))) {
         this.userIds.push(String(message.userid));
-      //this.userIds（配列）にuserid含まれていていなければthis.userIds（配列）に追加。
-
-      console.log(this.userIds);
+        //this.userIds（配列）にuserid含まれていていなければthis.userIds（配列）に追加。
+        let self = this;
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(message.userid)
+          .get()
+          .then((snapshot) => {
+            self.userDatas.push(snapshot.data());
+          });
+          //メッセージを送信したuserid(ログイン中のユーザーid)の情報をuserDatasに保存
+      }
       //イベントのときにデータベース内の「message」データを取得。
       // データベースに新しい要素が追加されると随時呼び出される
       this.chat.push({
@@ -211,8 +211,8 @@ export default {
       }
     },
     returnUserData(id) {
-      const userData = this.userDatas.filter((user) => user.id === id);
-      //this.userDatas（配列）に入っている値をログイン中のuesr.idとidが一致したものをuserData（配列）に再び代入。
+      const userData = this.userDatas.find((user) => user.uid === id);
+      //this.userDatas（配列）に入っている値をログイン中のuesr.uidとidが一致したものを一つuserData（配列）に保存。
       return userData;
     },
     deleteMessage(key) {
@@ -227,19 +227,25 @@ export default {
         icon: "warning",
         buttons: true,
         dangerMode: true,
-      }).then((willDelete) => {
-        if (willDelete) {
-          this.$swal("メッセージを削除しました", {
-            icon: "success",
+      })
+        .then((willDelete) => {
+          if (willDelete) {
+            this.$swal("メッセージを削除しました", {
+              icon: "success",
+            });
+            // this.$router.go({
+            //   path: `/chat/${this.$route.params.id}`,
+            //   force: true,
+            // });
+          } else {
+            this.$swal("キャンセルしました。");
+          }
+        })
+        .catch(() => {
+          this.$swal("メッセージを削除出来ません。", {
+            icon: "error",
           });
-          this.$router.go({
-            path: `/chat/${this.$route.params.id}`,
-            force: true,
-          });
-        } else {
-          this.$swal("キャンセルしました。");
-        }
-      });
+        });
     },
   },
   mounted() {
@@ -436,6 +442,7 @@ div {
         padding: 0.65rem;
         outline: none;
         color: $black-color;
+        background-color: $white-color;
       }
       .send-button {
         width: 2rem;
@@ -465,18 +472,18 @@ div {
 //ハンバーガーメニュー
 
 .header-link {
-    color: $white-color;
-    text-decoration: none;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    cursor: hand;
-    margin-left: 3rem;
-    font-family: "Roboto", sans-serif;
- }
+  color: $white-color;
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  cursor: hand;
+  margin-left: 3rem;
+  font-family: "Roboto", sans-serif;
+}
 
 .bm-burger-button {
   cursor: pointer;
@@ -486,7 +493,6 @@ div {
   top: 20px;
   width: 36px;
   color: $white-color;
-  
 }
 
 .bm-menu {
@@ -511,10 +517,10 @@ div {
 }
 
 .cross-style {
-    cursor: pointer;
-    position: absolute;
-    left: 25px;
-    top: 12px;
+  cursor: pointer;
+  position: absolute;
+  left: 25px;
+  top: 12px;
 }
 
 // -- neon -- //
