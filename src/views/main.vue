@@ -9,7 +9,10 @@
         <router-link to="/signup" class="post-btn" v-if="!authenticatedUser"
           >今すぐ登録</router-link
         >
-        <router-link :to="`/board/${this.uid}`" class="post-btn flex" v-if="authenticatedUser"
+        <router-link
+          :to="`/board/${this.uid}`"
+          class="post-btn flex"
+          v-if="authenticatedUser"
           >投稿</router-link
         >
       </div>
@@ -221,5 +224,59 @@ $black-color: rgb(0, 0, 0);
     transform: translateY(-300%);
   }
   //(-300%)にすることで途切れずにループを実行。
+}
+
+/* <====== Media Queries======> */
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.main-tll h1[data-v-c9a65f5a] {
+  @include sp {
+    font-size: 1.5rem;
+  }
+}
+
+.main-tll p[data-v-c9a65f5a] {
+  @include sp {
+    font-size: 0.7rem;
+  }
+}
+
+.main-tll[data-v-c9a65f5a] {
+  @include sp {
+    padding: 1.3rem;
+  }
+}
+
+.main .post-btn[data-v-c9a65f5a] {
+  @include sp {
+    width: 5rem;
+    margin-top: 1.2rem;
+    padding: 0.4rem;
+  }
+}
+
+.main-img[data-v-c9a65f5a] {
+  @include sp {
+    padding: 0.1rem;
+  }
 }
 </style>

@@ -48,25 +48,33 @@
           </div>
           <div class="myimage flex">
             <img :src="user.photoURL" width="50" height="50" />
-            <div class="myname">{{ user.displayName }}</div>
+            <div class="myname flex">
+              {{user.displayName}}
+            </div>
           </div>
         </div>
         <div v-else class="otheritem flex">
           <!-- 自身ではない -->
           <!--「画像」の指定-->
           <div class="otherimage flex">
-            <img
-              :src="
-                returnUserData(userid)
-                  ? returnUserData(userid).uploadedImage.fileUrl
-                  : preview
-              "
-              width="50"
-              height="50"
-            />
-            <div class="othername">
-              {{ returnUserData(userid) ? returnUserData(userid).name : "匿名" }}
-            </div>
+            <router-link :to="`/mypage/${returnUserData(userid).uid}`">
+              <img
+                :src="
+                  returnUserData(userid)
+                    ? returnUserData(userid).uploadedImage.fileUrl
+                    : preview
+                "
+                width="50"
+                height="50"
+              />
+              <div class="othername flex">
+                {{
+                  returnUserData(userid)
+                    ? returnUserData(userid).name
+                    : "NO NAME"
+                }}
+              </div>
+            </router-link>
           </div>
           <!--「名前」と「メッセージ」の指定-->
           <div class="otherdetail">
@@ -116,7 +124,6 @@ export default {
       user: {}, // ユーザー情報
       chat: [], // 取得したメッセージを入れる配列
       input: "", // 入力したメッセージ
-      profileDeta: {},
       userIds: [],
       userDatas: [],
       authenticatedUser: "",
@@ -127,7 +134,7 @@ export default {
     firebase.auth().onAuthStateChanged((user) => {
       // ログイン状態ならuserが取得できる
       this.user = user ? user : {};
-
+      //userにはログイン中のユーザー情報(Authenticationのデータ)が保存されている
       //firebase.database()で以下のデータベースの読み書きを行う。
       const ref_message = firebase.database().ref(this.$route.params.id);
       //[router.vue]にて「/ ~ /:id」と指定しルートがマッチした時、
@@ -173,7 +180,7 @@ export default {
           .then((snapshot) => {
             self.userDatas.push(snapshot.data());
           });
-          //メッセージを送信したuserid(ログイン中のユーザーid)の情報をuserDatasに保存
+        //メッセージを送信したuserid(ログイン中のユーザーid)の情報をuserDatasに保存
       }
       //イベントのときにデータベース内の「message」データを取得。
       // データベースに新しい要素が追加されると随時呼び出される
@@ -212,7 +219,8 @@ export default {
     },
     returnUserData(id) {
       const userData = this.userDatas.find((user) => user.uid === id);
-      //this.userDatas（配列）に入っている値をログイン中のuesr.uidとidが一致したものを一つuserData（配列）に保存。
+      //methodsなので引数に渡した値(id)はtemplate内の引数(userid)を渡していることになる。
+      //this.userDatas（配列）に入っている値uesr.uidとidが一致したものを一つuserData（配列）に保存。
       return userData;
     },
     deleteMessage(key) {
@@ -274,10 +282,6 @@ $black-color: rgb(0, 0, 0);
 
 div {
   color: $black-color;
-}
-
-.header {
-  display: none;
 }
 
 .chat {
@@ -419,7 +423,7 @@ div {
   }
   .list {
     width: 75%;
-    margin-bottom: 50px;
+    padding-bottom: 50px;
     overflow: hidden;
   }
   .message-inner {
@@ -566,6 +570,35 @@ div {
   }
   79% {
     opacity: 1;
+  }
+}
+
+/* <====== Media Queries======> */
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.bm-burger-button {
+  @include sp {
+    display: flex;
+    top: 28px;
   }
 }
 </style>

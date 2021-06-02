@@ -2,9 +2,15 @@
   <div class="card">
     <div class="face face1 flex">
       <div class="content">
-        <img class="profile-icon" width="50" height="50" src="uploadedImage" />
+        <img
+          class="profile-icon"
+          width="50"
+          height="50"
+          :src="
+            returnUserData() ? returnUserData().uploadedImage.fileUrl : preview
+          "
+        />
         <h3>{{ list.title }}</h3>
-        {{ list.id }}
       </div>
     </div>
     <div class="face face2 flex">
@@ -37,7 +43,10 @@ Vue.use(VueSwal);
 
 export default {
   data() {
-    return {};
+    return {
+      // userDatas: [],
+      preview: require("../assets/デフォルト画像.jpg"),
+    };
   },
   props: {
     //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
@@ -49,8 +58,33 @@ export default {
       type: Number,
       //index内にNumber型で格納されてる
     },
+    userDatas:{
+      type: Array,
+      //親コンポーネント(board.vue)のuserDatasをpropsで渡している。
+    }
   },
+
+  created() {
+    firebase
+      .firestore()
+      .collection("users")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          this.userDatas.push(JSON.parse(JSON.stringify(doc.data())));
+        });
+      });
+  },
+  
   methods: {
+    returnUserData() {
+      const userData = this.userDatas.find(
+        (tmpUserData) => this.list.uid === tmpUserData.uid
+      );
+      //this.userDatas（配列）に入っている値uidはuserDatas.uidとしても直接取れない為、tmpUserDataの引数に渡してからuidを取得する
+      //そのuidとidが一致したものを一つuserData（配列）に保存。
+      return userData;
+    },
     savePost() {
       firebase
         .firestore()
@@ -99,11 +133,6 @@ export default {
           });
       }
     },
-    // uploadedImage(src) {
-    //   if (src != "") {
-    //     return require(`@/assets/img/${src}`);
-    //   }
-    // },
   },
 };
 </script>

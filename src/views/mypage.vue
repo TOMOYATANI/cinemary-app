@@ -6,9 +6,10 @@
         <div class="profile-inner-l flex">
           <img
             class="profile-inner-l-img"
-            :src="uploadedImage == '' ? preview : uploadedImage.fileUrl"
+            :src="preview == '' ? uploadedImage.fileUrl : preview"
             alt="プロフィール画像"
           />
+          <!--returnUserData(userid)にて一致したものの画像を表示。無ければpreviewに格納しているデフォルトを画像を表示。-->
           <div class="profile-inner-l-name txt">{{ profileData.name }}</div>
         </div>
         <div class="profile-inner-r flex">
@@ -29,6 +30,7 @@
               openModal();
             "
             class="profile-edit flex"
+            :style="this.uid == this.$route.params.uid ? 'display:flex;':'display:none;' "
           >
             プロフィール編集
           </button>
@@ -51,14 +53,13 @@
                 <div class="profile-contens flex">
                   <div class="profile-img-inner flex">
                     <img
-                      :src="
-                        uploadedImage == '' ? preview : uploadedImage.fileUrl
-                      "
+                      :src="preview == '' ? uploadedImage.fileUrl : preview"
                       width="200"
                       height="200"
                       class="profile-img"
                       alt="プロフィール画像"
                     />
+                    <!--previewが空の場合、fileUrl（画像）を表示。空の場合はpreviewを表示。-->
                     <label class="profile-txt profile-update">
                       プロフィール画像を編集する
                       <input
@@ -253,6 +254,7 @@
           for="paginate-listData"
           class="pagination flex"
           :show-step-links="true"
+          :style="listData== '' ? 'display:none;' : 'display:flex;' "
         >
         </paginate-links>
       </div>
@@ -278,33 +280,11 @@
           for="paginate-bookmarkList"
           class="pagination flex"
           :show-step-links="true"
+          :style="bookmarkList== '' ? 'display:none;' : 'display:flex;' "
         >
         </paginate-links>
       </div>
     </div>
-    <!-- <div class="profile-posts">
-        <VueSlickCarousel v-bind="settings">
-          <List
-            v-for="(list, index) in listData"
-            :index="index"
-            :list="list"
-            :key="list.id"
-          />
-        </VueSlickCarousel>
-      </div>
-      <hr class="separate" />
-      <h3 class="bookmark-list flex">
-        {{ profileData.name }} さんのブックマーク一覧
-      </h3>
-      <div class="profile-posts">
-        <List
-          v-for="(list, index) in bookmarkList"
-          :index="index"
-          :list="list"
-          :key="list.id"
-        />
-      </div> -->
-    <!-- </div> -->
   </div>
 </template>
 
@@ -323,10 +303,6 @@ import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
 import VuePaginate from "vue-paginate";
 Vue.use(VuePaginate);
-// import VueSlickCarousel from "vue-slick-carousel";
-// import "vue-slick-carousel/dist/vue-slick-carousel.css";
-
-import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 
 export default {
   data() {
@@ -443,28 +419,24 @@ export default {
         { id: 31, name: "ギャング・マフィア" },
       ],
       favMovie: "",
-      uploadedImage: "",
       profileData: {},
       //配列にしないようにする。
       listData: [],
       paginate: ["paginate-listData", "paginate-bookmarkList"],
-      // settings: {
-      //   dots: true,
-      //   infinite: false,
-      //   slidesToShow: 3,
-      //   slidesToScroll: 3,
-      //   initialSlide: 0,
-      // },
       bookmarkList: [],
       open: false,
       file: "",
-      preview: require("../assets/デフォルトの画像.jpg"),
+      preview: "",
+      uploadedImage: {
+      fileUrl: require("../assets/デフォルトの画像.jpg"),
+      time: null,
+      }
+      //fileUrlの初期値にデフォルトの画像を表示。
     };
   },
   components: {
     Header,
     List,
-    // VueSlickCarousel,
   },
   methods: {
     onFileChange(e) {
@@ -493,86 +465,106 @@ export default {
     },
     // updateBtn()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
     updateBtn() {
-      this.$swal({
-        title: "内容確認",
-        text: "この内容で更新しますか？",
-        icon: "info",
-        buttons: true,
-        dangerMode: true,
-      }).then((willDelete) => {
-        if (willDelete) {
-          let uploadParam = {};
-          if (this.uploadUrl) {
-            const uploadTask = firebase
-              .storage()
-              .ref(this.uploadUrl) //さっき決めたパスを参照して、
-              // .child(this.uploadUrl)
-              .put(this.file); //保存する
-            uploadTask.then(() => {
-              uploadTask.snapshot.ref.getDownloadURL().then((fileUrl) => {
-                //this.fileに保存されたrefを参照してファイルのダウンロード URL を取得して、fileUrlへ代入。
-                this.$set(this, "uploadedImage", {
-                  fileUrl: fileUrl,
-                  time: firebase.firestore.FieldValue.serverTimestamp(),
-                });
-                console.log(fileUrl, this.uploadUrl);
-                uploadParam = { uploadedImage: this.uploadedImage };
-                //uploadParamへuploadedImageを代入。
-                firebase
-                  //画像をfirestoreに保存
-                  .firestore()
-                  .collection("users") //保存する場所を参照して、
-                  .doc(this.$route.params.uid) //追加で保存setメソッドを使うと上書きされる
-                  .set(
-                    {
-                      name: this.name,
-                      sex: this.sex,
-                      age: this.age,
-                      access: this.access,
-                      selfpr: this.selfpr,
-                      profession: this.profession,
-                      genre: this.genre,
-                      favMovie: this.favMovie,
-                      ...uploadParam,
-                      time: firebase.firestore.FieldValue.serverTimestamp(),
-                      //サーバ側で値設定
-                    },
-                    { merge: true }
-                    //set()でmergeをtrueにすると、上書き。updetaと同様。
-                  );
-
-                const currentUser = firebase.auth().currentUser;
-                currentUser
-                  .updateProfile({
-                    photoURL: fileUrl,
-                  })
-                  .then(() => {});
-                // .catch((err)=>{
-                // console.log(err);
-                // });
+            this.$swal({
+                title: "内容確認",
+                text: "この内容で更新しますか？",
+                icon: "info",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    let uploadParam = {};
+                    if (this.uploadUrl) {
+                        const uploadTask = firebase
+                            .storage()
+                            .ref(this.uploadUrl) //さっき決めたパスを参照して、
+                            // .child(this.uploadUrl)
+                            .put(this.file); //保存する
+                        uploadTask.then(() => {
+                            uploadTask.snapshot.ref.getDownloadURL().then((fileUrl) => {
+                                //this.fileに保存されたrefを参照してファイルのダウンロード URL を取得して、fileUrlへ代入。
+                                this.$set(this, "uploadedImage", {
+                                    fileUrl: fileUrl,
+                                    time: firebase.firestore.FieldValue.serverTimestamp(),
+                                });
+                                console.log(fileUrl, this.uploadUrl);
+                                uploadParam = { uploadedImage: this.uploadedImage };
+                                //uploadParamへuploadedImageを代入。
+                                firebase
+                                    //画像をfirestoreに保存
+                                    .firestore()
+                                    .collection("users") //保存する場所を参照して、
+                                    .doc(this.$route.params.uid) //追加で保存setメソッドを使うと上書きされる
+                                    .set(
+                                        {
+                                            name: this.name,
+                                            sex: this.sex,
+                                            age: this.age,
+                                            access: this.access,
+                                            selfpr: this.selfpr,
+                                            profession: this.profession,
+                                            genre: this.genre,
+                                            favMovie: this.favMovie,
+                                            ...uploadParam,
+                                            time: firebase.firestore.FieldValue.serverTimestamp(),
+                                            //サーバ側で値設定
+                                        },
+                                        { merge: true }
+                                        //set()でmergeをtrueにすると、上書き。updetaと同様。
+                                    );
+                                const currentUser = firebase.auth().currentUser;
+                                currentUser
+                                    .updateProfile({
+                                        photoURL: fileUrl,
+                                    })
+                                    .then(() => { })
+                                .catch(()=>{
+                                });
+                            });
+                        });
+                    }
+                    firebase
+                        //画像をfirestoreに保存
+                        .firestore()
+                        .collection("users") //保存する場所を参照して、
+                        .doc(this.$route.params.uid) //追加で保存setメソッドを使うと上書きされる
+                        .set(
+                            {
+                                name: this.name,
+                                sex: this.sex,
+                                age: this.age,
+                                access: this.access,
+                                selfpr: this.selfpr,
+                                profession: this.profession,
+                                genre: this.genre,
+                                favMovie: this.favMovie,
+                                ...uploadParam,
+                                time: firebase.firestore.FieldValue.serverTimestamp(),
+                                //サーバ側で値設定
+                            },
+                            { merge: true }
+                            //set()でmergeをtrueにすると、上書き。updetaと同様。
+                        );
+                    this.$swal("更新しました。", {
+                        icon: "success",
+                    });
+                    // this.$router.go({
+                    //   path: `/mypage/${this.$route.params.uid}`,
+                    //   force: true,
+                    // });
+                    //プロフィール編集されたらページをリロード
+                } else {
+                    this.$swal("キャンセルしました。");
+                }
+            })
+            .catch(() => {
+              this.$swal("更新出来ませんでした。", {
+                icon: "error",
               });
+              this.preview = ""
+              //更新をキャンセルした場合、空にする。
             });
-          }
-          console.log(this.uploadedImage);
-
-          this.$swal("更新しました。", {
-            icon: "success",
-          });
-          // this.$router.go({
-          //   path: `/mypage/${this.$route.params.uid}`,
-          //   force: true,
-          // });
-          //プロフィール編集されたらページをリロード
-        } else {
-          this.$swal("キャンセルしました。");
-        }
-      });
-      // .catch(() => {
-      //   this.$swal("更新出来ませんでした。", {
-      //     icon: "error",
-      //   });
-      // });
-    },
+        },
     show() {
       this.$modal.show("edit");
     },
@@ -604,7 +596,8 @@ export default {
           this.access = this.profileData.access || "";
           this.selfpr = this.profileData.selfpr || "";
           this.profession = this.profileData.profession || "";
-          this.uploadedImage = this.profileData.uploadedImage || "";
+          this.$set(this, "uploadedImage",this.profileData.uploadedImage || this.uploadedImage);
+          //変更検知がvue側行わせる為に上記を追記。
           this.genre = this.profileData.genre || "";
           this.favMovie = this.profileData.favMovie || "";
           //全てのデータを取得して、profileDataへ代入。
@@ -614,7 +607,7 @@ export default {
       .firestore()
       .collection("posts")
       .orderBy("time", "desc")
-      .where("uid", "==", this.uid)
+      .where("uid", "==", this.$route.params.uid)
       //uidをフィルタリングして現在のURLと合致するもののみを参照
       .get()
       .then((snapshot) => {
@@ -926,17 +919,45 @@ hr.separate {
   }
 }
 
-// -- slick -- //
-
-.slick-slider {
-  width: 90%;
-}
-
 // -- ネオンカラー -- //
 
 .neon {
   color: transparent;
   -webkit-text-stroke: 0.5px rgb(255, 0, 0);
   text-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+}
+
+/* <====== Media Queries======> */
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.mypage-inner .profile-inner-l {
+   @include sp {
+   padding: 1rem;
+  }
+}
+
+.mypage-inner .profile-inner-r {
+      @include sp {
+   padding: 1rem;
+  }
 }
 </style>

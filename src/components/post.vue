@@ -84,7 +84,7 @@
       <h2 class="search-tll neon flex">Cinemaryを検索する</h2>
       <hr class="separate" />
       <div class="search-main-contens flex">
-        <!-- <ais-instant-search
+        <ais-instant-search
           :search-client="searchClient"
           index-name="cinemary-app"
         >
@@ -92,7 +92,7 @@
             placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
             class="search-main-item"
           />
-        </ais-instant-search> -->
+        </ais-instant-search>
         <!-- <input
           type="text"
           class="search-main-item"
@@ -139,17 +139,16 @@ import VScrollLock from "v-scroll-lock";
 Vue.use(VScrollLock);
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
-// import algoliasearch from "algoliasearch/lite";
-// import "instantsearch.css/themes/satellite.css";
+import algoliasearch from "algoliasearch/lite";
+import "instantsearch.css/themes/satellite.css";
 
 export default {
   data() {
     return {
-      // searchClient: algoliasearch(
-      //   "VRXF7X7FPR",
-      //   "3b859896d42aa2c4576114dd3cd5735e"
-      // ),
-      db: null,
+      searchClient: algoliasearch(
+        "VRXF7X7FPR",
+        "3b859896d42aa2c4576114dd3cd5735e"
+      ),
       time: "",
       title: "",
       description: "",
@@ -225,6 +224,11 @@ export default {
     };
   },
   components: {},
+  props: {
+    allData: {
+      type: Object,
+    },
+  },
   methods: {
     // postItem()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
     postItem() {
@@ -260,7 +264,8 @@ export default {
             this.$swal("投稿しました。", {
               icon: "success",
             });
-            // this.$router.push({ path: `/board/${this.uid}`, force: true });
+            // Array.prototype.push(this.allData)
+            // this.$router.go({ path: `/board/${this.uid}`, force: true });
             //router.go(path:"/ ~ ")まで戻す。
           } else {
             this.$swal("キャンセルしました。");
@@ -272,37 +277,6 @@ export default {
           });
         });
     },
-    // this.$swal({
-    //   title: "内容確認",
-    //   text: "この内容で投稿しますか？",
-    //   icon: "info",
-    //   buttons: true,
-    //   dangerMode: true,
-    // })
-    //   .then(() => {
-    //     firebase
-    //       .firestore()
-    //       .collection("posts")
-    //       .add({
-    //         title: this.title,
-    //         description: this.description,
-    //         genre: this.genre,
-    //         time: firebase.firestore.FieldValue.serverTimestamp(),
-    //         //サーバ側で値設定
-    //         id: id,
-    //         //dataにデータを作ってないので、thisは付けなくてOK!
-    //         uid: this.$route.params.uid,
-    //       });
-    //     this.$swal("投稿しました。", {
-    //       icon: "success",
-    //     });
-    //     // this.$router.go({ path: `/board/${this.uid}`, force: true });
-    //     //router.go(path:"/ ~ ")まで戻す。
-    //   })
-    //   .catch(() => {
-    //     this.$swal("キャンセルしました。");
-    //   });
-
     show() {
       this.$modal.show("post");
     },
@@ -439,7 +413,6 @@ textarea::placeholder {
 // -- algolia --//
 
 .ais-SearchBox-input {
-  width: 30rem;
   outline: none;
   border: none;
   height: 2.5rem;
@@ -572,5 +545,34 @@ textarea::placeholder {
   color: transparent;
   -webkit-text-stroke: 0.2px rgb(255, 0, 0);
   text-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 50px rgba(255, 0, 0, 0.5);
+}
+
+/* <====== Media Queries======> */
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.post-tll {
+  @include sp {
+    width: 200px;
+    margin: 3rem;
+  }
 }
 </style>

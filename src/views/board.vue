@@ -3,7 +3,7 @@
     <Header />
     <Post />
     <div class="post">
-      <h2 class="post-tll neon">投稿一覧</h2>
+      <h2 id="top" class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
         <div class="post-items">
           <paginate name="paginate-log" tag="ol" :list="allData" :per="12">
@@ -11,13 +11,14 @@
               v-for="(list, index) in paginated('paginate-log')"
               :index="index"
               :list="list"
+              :userDatas="userDatas" 
               :key="list.id"
             />
           </paginate>
           <paginate-links
             for="paginate-log"
             class="pagination flex"
-            @click="postTop"
+            v-scroll-to="postTop"
             :show-step-links="true"
           >
           </paginate-links>
@@ -36,6 +37,8 @@ import List from "@/components/list.vue";
 import Vue from "vue";
 import VuePaginate from "vue-paginate";
 Vue.use(VuePaginate);
+const VueScrollTo = require("vue-scrollto");
+Vue.use(VueScrollTo);
 
 export default {
   data() {
@@ -45,26 +48,14 @@ export default {
       image: "",
       allData: [],
       paginate: ["paginate-log"],
+      postTop: "#top",
+      userDatas: [],
     };
   },
   components: {
     Header,
     Post,
     List,
-  },
-  methods: {
-    postTop() {
-      const postTop = document.getElementById(".post-tll");
-      const postTop_position = postTop.getBoundingClientRect();
-
-      window.scrollTo(0, postTop_position.top);
-    },
-    returnUserData(id) {
-      const userData = this.userDatas.find((user) => user.uid === id);
-      //this.userDatas（配列）に入っている値をログイン中のuesr.uidとidが一致したものを一つuserData（配列）に保存。
-      return userData;
-    },
-    
   },
   created() {
     // "posts"コレクションの全ドキュメントを取得。
@@ -80,6 +71,16 @@ export default {
           this.allData.push({ ...doc.data(), id: doc.id });
           //更にallDataの空箱に格納した"doc"データを格納
           console.log(this.allData);
+        });
+      });
+
+    firebase
+      .firestore()
+      .collection("users")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          this.userDatas.push(JSON.parse(JSON.stringify(doc.data())));
         });
       });
   },

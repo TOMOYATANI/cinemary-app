@@ -82,7 +82,7 @@
             <p>STEP3</p>
             <h3>映画が決定！</h3>
             <p class="step-txt">
-              チャットを通じて、あなたの気分にあった映画が決まります。
+              チャットを通じて、その時のあなたの気分にあった映画が決まります。
             </p>
           </div>
         </div>
@@ -269,5 +269,53 @@ p {
 .neon {
   -webkit-text-stroke: 0.2px rgb(255, 0, 0);
   text-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+}
+
+/* <====== Media Queries======> */
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+p[data-v-e7ab893a] {
+  @include sp {
+    font-size: 0.8rem;
+  }
+}
+
+.about ul .remark[data-v-e7ab893a] {
+  @include sp {
+    width: 400px;
+  }
+}
+
+.about .flow .flow-item img[data-v-e7ab893a] {
+   @include sp {
+    width: 55px;
+    height: 55px;
+  }
+}
+
+.about .flow .flow-item h3[data-v-e7ab893a] {
+    @include sp {
+    padding: 0.3rem;
+    font-size: 1rem;
+  }
 }
 </style>

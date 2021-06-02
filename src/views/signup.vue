@@ -49,8 +49,9 @@ export default {
 
         .then((userCredential) => {
           userCredential.user.updateProfile({
+            //userCredential引数を渡して新規登録したユーザーをauthでプロフィール情報を登録。
             displayName: self.name,
-            photoURL:""
+            photoURL: require("../assets/デフォルト画像.jpg"),
           });
           //新規登録時に取得したemailとpasswordを引数であるuserCredential(ユーザー資格情報)に渡す。
           this.$swal("登録に成功しました。", {

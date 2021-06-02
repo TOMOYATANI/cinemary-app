@@ -48,11 +48,59 @@
         </button>
       </li>
     </ul>
+    <!-- <slide right disableOutsideClick width="200">
+      <li>
+      <router-link to="/" class="header-link neon3 flash">HOME</router-link>
+      </li>
+      <li>
+      <router-link to="/about" class="header-link neon3 flash"
+        >ABOUT</router-link
+      >
+      </li>
+      <li>
+      <router-link :to="`/board/${this.uid}`" class="header-link neon3 flash"
+        >POST</router-link
+      >
+      </li>
+      <li>
+      <router-link
+        to="/signup"
+        class="header-link neon3 flash"
+        v-if="!authenticatedUser"
+        >SINGUP</router-link
+      >
+      </li>
+      <li>
+      <router-link
+        to="/signin"
+        class="header-link neon3 flash"
+        v-if="!authenticatedUser"
+        >SINGIN</router-link
+      >
+      </li>
+      <li>
+      <router-link :to="`/mypage/${this.uid}`" class="header-link neon3 flash"
+        >MYPAGE</router-link
+      >
+      </li>
+      <li v-if="authenticatedUser">
+        <button
+          class="header-link neon3 flash"
+          @click="signOut"
+          v-if="authenticatedUser"
+        >
+          SINGOUT
+        </button>
+      </li>
+    </slide> -->
   </header>
 </template>
 
 <script>
 import firebase from "firebase";
+import Vue from "vue";
+import { Slide } from "vue-burger-menu";
+Vue.component("slide", Slide);
 
 export default {
   name: "signOut",
@@ -155,10 +203,6 @@ $black-color: rgb(0, 0, 0);
   }
 }
 
-.isOpen {
-  display: block;
-}
-
 a.header-ttl:hover,
 a.header-ttl:hover span {
   color: rgba(200, 200, 200, 0.6);
@@ -219,4 +263,44 @@ a.header-ttl:hover span {
     opacity: 1;
   }
 }
+/* <====== Media Queries======> */
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.header-menu {
+  @include sp {
+    display: none;
+  }
+}
+
+// .bm-burger-button{
+//    @include pc {
+//     display: none;
+//   }
+//    @include tab {
+//     display: none;
+//   }
+//   @include sp {
+//     display: flex;
+//     top: 28px;
+//   }
+// }
 </style>
