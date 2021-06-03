@@ -131,47 +131,41 @@ export default {
     };
   },
   created() {
+    const currentUser = firebase.auth().currentUser;
+    this.uid = currentUser.uid;
+
     firebase.auth().onAuthStateChanged((user) => {
       // ログイン状態ならuserが取得できる
       this.user = user ? user : {};
-      //userにはログイン中のユーザー情報(Authenticationのデータ)が保存されている
-      //firebase.database()で以下のデータベースの読み書きを行う。
+      //userにはログイン中のユーザー情報(Firebaseのデータ)が保存されている。
       const ref_message = firebase.database().ref(this.$route.params.id);
-      //[router.vue]にて「/ ~ /:id」と指定しルートがマッチした時、
-      //この動的セグメントの値は全てのコンポーネント内で this.$route.params として利用可能になる。
+
       if (user) {
         this.chat = [];
-        // limitToLast(10)で並べ替えられた「message」の最後の10個を取得。
-        // on()は、message に変更があったときのハンドラを登録
-        //child_addedは、データベースのリスト「message」を取得。
+        //limitToLast(10)で並べ替えられた「ref_message」の最後の10個を取得し、on()で変更があったときのハンドラを登録。
         ref_message.limitToLast(10).on("child_added", this.childAdded);
       } else {
-        // message に変更があったときのハンドラを解除
+        //off()は、変更があったときのハンドラを解除
         ref_message.limitToLast(10).off("child_added", this.childAdded);
       }
     });
-    const currentUser = firebase.auth().currentUser;
-    //現在ログインしているユーザーを取得
-    this.uid = currentUser.uid;
   },
   methods: {
     // スクロール位置を一番下に移動
     scrollBottom() {
       this.$nextTick(() => {
-        //this.$nextTickは、再描画を待つ。
-        //絶対値からbody要素の高さを取得
+        //this.$nextTickは、再描画を待つ。絶対値からbody要素の高さを取得。
         window.scrollTo(0, document.body.clientHeight);
       });
     },
     childAdded(snap) {
-      //snapshotとは、ある時点における特定のデータベース参照にあるデータの全体像を写し取ったもの
-      //childAdded：データベースからアイテムのリストを取得する関数
-      // 受け取ったメッセージをchatに追加
       const message = JSON.parse(JSON.stringify(snap.val()));
       if (!this.userIds.includes(String(message.userid))) {
         this.userIds.push(String(message.userid));
         //this.userIds（配列）にuserid含まれていていなければthis.userIds（配列）に追加。
+        
         let self = this;
+        
         firebase
           .firestore()
           .collection("users")
@@ -182,8 +176,7 @@ export default {
           });
         //メッセージを送信したuserid(ログイン中のユーザーid)の情報をuserDatasに保存
       }
-      //イベントのときにデータベース内の「message」データを取得。
-      // データベースに新しい要素が追加されると随時呼び出される
+      //データベースに新しい要素が追加されると随時呼び出される
       this.chat.push({
         key: snap.key,
         name: message.name,
@@ -198,7 +191,7 @@ export default {
     doSend() {
       const time = time;
       if (this.user.uid && this.input.length) {
-        //  firebaseに書き込まれたメッセージを追加
+        //以下でFirebaseに書き込まれたメッセージを追加
         firebase
           .database()
           .ref(this.$route.params.id)
@@ -212,14 +205,14 @@ export default {
             },
 
             () => {
-              this.input = ""; // フォームを空にする
+              this.input = ""; //フォームを空にする
             }
           );
       }
     },
     returnUserData(id) {
       const userData = this.userDatas.find((user) => user.uid === id);
-      //methodsなので引数に渡した値(id)はtemplate内の引数(userid)を渡していることになる。
+      //methodsなので引数に渡した値(id)はtemplate内の引数(userid)を渡していること。
       //this.userDatas（配列）に入っている値uesr.uidとidが一致したものを一つuserData（配列）に保存。
       return userData;
     },
@@ -228,7 +221,6 @@ export default {
         .database()
         .ref(this.$route.params.id + "/" + key)
         .remove();
-      console.log(key);
       this.$swal({
         title: "内容確認",
         text: "メッセージを削除しますか？",
@@ -241,10 +233,10 @@ export default {
             this.$swal("メッセージを削除しました", {
               icon: "success",
             });
-            // this.$router.go({
-            //   path: `/chat/${this.$route.params.id}`,
-            //   force: true,
-            // });
+            this.$router.go({
+              path: `/chat/${this.$route.params.id}`,
+              force: true,
+            });
           } else {
             this.$swal("キャンセルしました。");
           }
@@ -257,7 +249,7 @@ export default {
     },
   },
   mounted() {
-    //以下、ユーザーが認証済みであれば「ログアウト」を表示
+    //以下、ユーザーが認証済みであれば表示・非表示を設定
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.authenticatedUser = true;

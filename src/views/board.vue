@@ -6,7 +6,7 @@
       <h2 id="top" class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
         <div class="post-items">
-          <paginate name="paginate-log" tag="ol" :list="allData" :per="12">
+          <paginate name="paginate-log" tag="ol" :list="postData" :per="12">
             <List
               v-for="(list, index) in paginated('paginate-log')"
               :index="index"
@@ -22,7 +22,7 @@
             :show-step-links="true"
           >
           </paginate-links>
-          <!--allDataのデータをlist関数とindex関数にそれぞれ格納-->
+          <!--postDataのデータをlist関数とindex関数にそれぞれ格納-->
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@ export default {
       title: "",
       contents: "",
       image: "",
-      allData: [],
+      postData: [],
       paginate: ["paginate-log"],
       postTop: "#top",
       userDatas: [],
@@ -68,9 +68,8 @@ export default {
         //"posts"(参照先)のスナップショットを得る
         snapshot.forEach((doc) => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
-          this.allData.push({ ...doc.data(), id: doc.id });
-          //更にallDataの空箱に格納した"doc"データを格納
-          console.log(this.allData);
+          this.postData.push({ ...doc.data(), id: doc.id });
+          //更にpostDataの空配列に格納した"doc"データを格納
         });
       });
 

@@ -35,27 +35,22 @@ export default {
     Header,
   },
   methods: {
-    //以下、「メールアドレス」と「パスワード」を使ったサインインの実装。
     signIn() {
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
-        //ユーザーがフォームに入力したら、signInWithEmailAndPassword メソッドを呼び出します。
+        //ユーザーがログインフォームへ入力したら、signInWithEmailAndPassword メソッドを呼び出す。
         .then((res) => {
-          //ログイン時に取得したemailとpasswordを引数であるresに渡す。
-
           this.$swal("ログインに成功しました。 ", {
             icon: "success",
           });
           this.uid = res.user.uid;
-          //this.uidに 「res.user.uid;」を格納
 
           return (
             firebase
               .firestore()
               .collection("users")
-              .doc(res.user.uid)
-              //usersのドキュメントを参照して、上記で引数として受けたresのuid取得
+              .doc(this.uid)
               .get()
           );
         })

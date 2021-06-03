@@ -107,11 +107,9 @@ export default {
   data() {
     return {
       authenticatedUser: "",
-      pages: "",
     };
   },
   methods: {
-    //ログアウトを実装
     signOut() {
       firebase
         .auth()
@@ -119,12 +117,13 @@ export default {
         .then(() => {
           this.$router.push("/signin");
         })
-        .catch(() => {});
+        .catch(() => {this.$swal("ログアウト出来ませんでした。", {
+            icon: "error",
+          });});
     },
   },
   created() {
     const currentUser = firebase.auth().currentUser;
-    //現在ログインしているユーザーを取得
     this.uid = currentUser.uid;
 
     firebase
@@ -134,7 +133,6 @@ export default {
       .get();
   },
   mounted() {
-    //以下、ユーザーが認証済みであれば「ログアウト」を表示
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.authenticatedUser = true;

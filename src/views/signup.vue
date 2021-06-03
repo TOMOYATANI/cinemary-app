@@ -38,45 +38,42 @@ export default {
     Header,
   },
   methods: {
-    //以下、「メールアドレス」と「パスワード」を使った新規登録の実装。
     signUp() {
       let self = this;
 
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
-        //ユーザーから提供されたメールアドレスとパスワードを検証し、それらをcreateUserWithEmailAndPassword メソッドに渡す。
+        //メールアドレスとパスワードを検証し、それらをcreateUserWithEmailAndPassword メソッドに渡す。
 
         .then((userCredential) => {
           userCredential.user.updateProfile({
-            //userCredential引数を渡して新規登録したユーザーをauthでプロフィール情報を登録。
+            //新規登録時に取得したemailとpasswordを引数として（userCredential）渡す。
+            //userCredential引数に渡して新規登録したユーザーをFirebaseでプロフィール情報を登録。
             displayName: self.name,
             photoURL: require("../assets/デフォルト画像.jpg"),
           });
-          //新規登録時に取得したemailとpasswordを引数であるuserCredential(ユーザー資格情報)に渡す。
           this.$swal("登録に成功しました。", {
             icon: "success",
           });
           this.uid = userCredential.user.uid;
-          //this.uidに 「userCredential.user.uid;」を格納
 
           return (
             firebase
               .firestore()
               .collection("users")
-              .doc(userCredential.user.uid)
-              //usersのドキュメントを参照して、上記で引数として受けたuserCredentialのuid取得
+              .doc(this.uid)
               .set({
                 name: this.name,
                 time: firebase.firestore.FieldValue.serverTimestamp(),
                 uid: userCredential.user.uid,
-                //各マイページにページ遷移する為にuidをfirestoreに格納
+                //各マイページにページ遷移出来るようにする為にuidをfirestoreに格納
               })
           );
         })
         .then(() => {
           this.$router.push(`/mypage/${this.uid}`);
-          //新規登録後、「/mypage/userCredential.user.uid」で該当ページに遷移
+          //新規登録後、「/mypage/(該当ユーザー)」へページ遷移
         })
         .catch(() => {
           this.$swal("登録情報が正しくありません。", {

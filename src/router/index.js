@@ -7,6 +7,7 @@ import About from "../views/about.vue";
 import Mypage from "../views/mypage.vue";
 import Board from "../views/board.vue";
 import Chat from "../components/chat.vue";
+import Bookmark from "../components/bookmark.vue";
 import firebase from "firebase";
 
 Vue.use(VueRouter);
@@ -51,6 +52,11 @@ const routes = [
     component: Chat,
     meta: { requiresAuth: true },
   },
+  {
+    path: "/bookmark/:uid",
+    name: "Bookmark",
+    component: Bookmark,
+  },
 ];
 
 const router = new VueRouter({
@@ -79,7 +85,7 @@ router.beforeEach((to, from, next) => {
     });
   } else {
     next();
-    //同じ階層にある要素を取得できるのですが、対象要素の次に配置されている要素だけを取得する
+    //同じ階層にある要素を取得できるが、対象要素の次に配置されている要素だけを取得。
   }
 });
 

@@ -88,10 +88,17 @@
           :search-client="searchClient"
           index-name="cinemary-app"
         >
-          <ais-search-box
-            placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
-            class="search-main-item"
-          />
+          <ais-search-box>
+            <div slot-scope="{ currentRefinement, isSearchStalled, refine }">
+              <input
+                placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
+                class="search-main-item"
+                type="search"
+                :value="currentRefinement"
+                @input="$emit(refine($event.currentTarget.value))"
+              />
+            </div>
+          </ais-search-box>
         </ais-instant-search>
         <!-- <input
           type="text"
@@ -223,22 +230,22 @@ export default {
       open: false,
     };
   },
-  components: {},
   props: {
-    allData: {
-      type: Object,
+    postData: {
+      type: Array,
     },
   },
   methods: {
-    // postItem()が押下されたら、dbインスタンスを初期化して"posts"という名前のコレクションへの参照
     postItem() {
       const currentUser = firebase.auth().currentUser;
       this.uid = currentUser.uid;
       const id = firebase
+
         .firestore()
         .collection("posts")
         .doc().id;
-      //変数「id」に入れて、コレクションの"posts"を参照して、「id」を取得
+      //.doc().firebaseでコレクションの"posts"を参照して、「id」を取得
+
       this.$swal({
         title: "内容確認",
         text: "この内容で投稿しますか？",
@@ -256,17 +263,18 @@ export default {
                 description: this.description,
                 genre: this.genre,
                 time: firebase.firestore.FieldValue.serverTimestamp(),
-                //サーバ側で値設定
                 id: id,
-                //dataにデータを作ってないので、thisは付けなくてOK!
                 uid: this.$route.params.uid,
+              })
+              .then(() => {
+                this.$swal("投稿しました。", {
+                  icon: "success",
+                });
+                this.$router.go({ path: `/board/${this.uid}`, force: true });
+              })
+              .catch(() => {
+                console.log("err");
               });
-            this.$swal("投稿しました。", {
-              icon: "success",
-            });
-            // Array.prototype.push(this.allData)
-            // this.$router.go({ path: `/board/${this.uid}`, force: true });
-            //router.go(path:"/ ~ ")まで戻す。
           } else {
             this.$swal("キャンセルしました。");
           }
@@ -353,14 +361,15 @@ textarea::placeholder {
     position: relative;
     margin: 0.8rem;
     .search-main-item {
-      width: 30rem;
+      width: 31.5rem;
       outline: none;
       border: none;
       height: 2.5rem;
       border-bottom: 1px solid #ddd;
-      color: $white-color;
+      border-radius: 5px;
+      color: $black-color;
       font-size: 1rem;
-      background-color: $black-color;
+      padding-left: 0.7rem;
     }
   }
   .search-items {

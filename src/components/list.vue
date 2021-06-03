@@ -44,7 +44,7 @@ Vue.use(VueSwal);
 export default {
   data() {
     return {
-      // userDatas: [],
+      userDatas: [],
       preview: require("../assets/デフォルト画像.jpg"),
     };
   },
@@ -52,19 +52,19 @@ export default {
     //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
     list: {
       type: Object,
-      //list内にObject型で格納されてる
+      //親コンポーネント(board.vue)のlist[Object型]をpropsで渡している。
     },
     index: {
       type: Number,
-      //index内にNumber型で格納されてる
+      //親コンポーネント(board.vue)のindex[Number型]をpropsで渡している。
     },
-    userDatas:{
-      type: Array,
-      //親コンポーネント(board.vue)のuserDatasをpropsで渡している。
-    }
+    // userDatas: {
+    //   type: Array,
+    //   //親コンポーネント(board.vue)のuserDatas[Array型]をpropsで渡している。
+    // },
   },
 
-  created() {
+created() {
     firebase
       .firestore()
       .collection("users")
@@ -75,14 +75,14 @@ export default {
         });
       });
   },
-  
+
   methods: {
     returnUserData() {
       const userData = this.userDatas.find(
         (tmpUserData) => this.list.uid === tmpUserData.uid
       );
-      //this.userDatas（配列）に入っている値uidはuserDatas.uidとしても直接取れない為、tmpUserDataの引数に渡してからuidを取得する
-      //そのuidとidが一致したものを一つuserData（配列）に保存。
+      //this.userDatas（配列）に入っている値(uid)は、userDatas.uidとしても直接取れない為、tmpUserDataの引数に渡してからuidを取得する
+      //そのuidとidが一致したものを一つuserData（配列）へ格納。
       return userData;
     },
     savePost() {
@@ -100,6 +100,7 @@ export default {
     deletePost() {
       const currentUser = firebase.auth().currentUser;
       this.uid = currentUser.uid;
+
       if (this.list.uid == this.uid) {
         this.$swal({
           title: "内容確認",
@@ -114,14 +115,21 @@ export default {
                 .firestore()
                 .collection("posts")
                 .doc(this.list.id)
-                .delete();
-              this.$swal("投稿を削除しました", {
-                icon: "success",
-              });
-              // this.$router.go({
-              //   path: `/board/${this.$route.params.uid}`,
-              //   force: true,
-              // });
+                .delete()
+                .then(() => {
+                  this.$swal("投稿を削除しました", {
+                    icon: "success",
+                  });
+                  this.$router.go({
+                    path: `/board/${this.$route.params.uid}`,
+                    force: true,
+                  });
+                })
+                .catch(() => {
+                  this.$swal("投稿を削除出来ません。", {
+                    icon: "error",
+                  });
+                });
             } else {
               this.$swal("キャンセルしました。");
             }
