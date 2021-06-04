@@ -1,21 +1,12 @@
 <template>
   <div class="post-content">
-    <button
-      @click="
+    <button @click="
         show();
         openModal();
-      "
-      class="post-comment flex"
-    >
+      " class="post-comment flex">
       <img class="comment-icon" src="../assets/コメント.jpg" alt="コメント" />
     </button>
-    <modal
-      class="modal-inner"
-      v-scroll-lock="open"
-      name="post"
-      :width="750"
-      :height="550"
-    >
+    <modal class="modal-inner" v-scroll-lock="open" name="post" :width="750" :height="550">
       <div
         data-modal="post"
         aria-expanded="true"
@@ -31,13 +22,7 @@
       <div class="modal-body">
         <div class="post-items flex">
           <div class="post-contens flex">
-            <input
-              type="text"
-              class="post-item"
-              maxlength="50"
-              placeholder="タイトル"
-              v-model="title"
-            />
+            <input type="text" class="post-item" maxlength="50" placeholder="タイトル" v-model="title" />
           </div>
           <div class="post-contens flex">
             <textarea-autosize
@@ -63,8 +48,7 @@
                 :key="genre.id"
                 class="post-item"
                 style="color: white;"
-                >{{ genre.name }}</option
-              >
+              >{{ genre.name }}</option>
             </select>
           </div>
           <button class="post-btn" @click.prevent="postItem">投稿</button>
@@ -74,9 +58,7 @@
               hide();
               closeModal();
             "
-          >
-            ×
-          </button>
+          >×</button>
         </div>
       </div>
     </modal>
@@ -84,18 +66,17 @@
       <h2 class="search-tll neon flex">Cinemaryを検索する</h2>
       <hr class="separate" />
       <div class="search-main-contens flex">
-        <ais-instant-search
-          :search-client="searchClient"
-          index-name="cinemary-app"
-        >
+        <ais-instant-search :search-client="searchClient" index-name="cinemary-app">
           <ais-search-box>
-            <div slot-scope="{ currentRefinement, isSearchStalled, refine }">
+            <div slot-scope="{searchData}">
+              <!--スロットとは、親コンポーネント側から、子のコンポーネントのテンプレートの一部を埋め込む機能
+                スコープ付きスロット、子コンポーネントのスロットに渡された値に、親コンポーネントからアクセスできる機能/>-->
               <input
                 placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
                 class="search-main-item"
                 type="search"
-                :value="currentRefinement"
-                @input="$emit(refine($event.currentTarget.value))"
+                :value="searchResult"
+                @input="$emit(searchData.value)"
               />
             </div>
           </ais-search-box>
@@ -104,7 +85,7 @@
           type="text"
           class="search-main-item"
           placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
-        /> -->
+        />-->
         <!-- </div> -->
         <!-- <div class="search-items flex">
         <div class="search-contens flex">
@@ -129,7 +110,7 @@
         </div>
         <button class="search-btn">
           <img src="../assets/検索.jpg" alt="検索" class="search-icon" />
-        </button> -->
+        </button>-->
       </div>
     </div>
   </div>
@@ -191,7 +172,7 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" },
+        { id: 31, name: "ギャング・マフィア" }
       ],
       searchGenre: "",
       searchGenres: [
@@ -225,16 +206,16 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" },
+        { id: 31, name: "ギャング・マフィア" }
       ],
-      open: false,
+      open: false
     };
   },
-  props: {
-    postData: {
-      type: Array,
-    },
-  },
+  // props: {
+  //   postData: {
+  //     type: Array
+  //   }
+  // },
   methods: {
     postItem() {
       const currentUser = firebase.auth().currentUser;
@@ -251,9 +232,9 @@ export default {
         text: "この内容で投稿しますか？",
         icon: "info",
         buttons: true,
-        dangerMode: true,
+        dangerMode: true
       })
-        .then((willDelete) => {
+        .then(willDelete => {
           if (willDelete) {
             firebase
               .firestore()
@@ -264,11 +245,11 @@ export default {
                 genre: this.genre,
                 time: firebase.firestore.FieldValue.serverTimestamp(),
                 id: id,
-                uid: this.$route.params.uid,
+                uid: this.$route.params.uid
               })
               .then(() => {
                 this.$swal("投稿しました。", {
-                  icon: "success",
+                  icon: "success"
                 });
                 this.$router.go({ path: `/board/${this.uid}`, force: true });
               })
@@ -281,7 +262,7 @@ export default {
         })
         .catch(() => {
           this.$swal("投稿出来ませんでした。", {
-            icon: "error",
+            icon: "error"
           });
         });
     },
@@ -296,8 +277,8 @@ export default {
     },
     closeModal() {
       this.open = false;
-    },
-  },
+    }
+  }
 };
 </script>
 

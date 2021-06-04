@@ -2,18 +2,12 @@
   <div>
     <Header />
     <div class="bookmarkList flex">
-      <h2 class="bookmarkList-title flex">
-        {{ bookmarkData.name }} さんのブックマーク一覧
-      </h2>
+      <h3 class="bookmarkList-title flex">{{ bookmarkData.name }} さんのブックマーク一覧</h3>
       <hr class="separate" />
-      <h3 class="bookmarkList-lists flex"></h3>
-      <div class="profile-posts">
-        <paginate
-          name="paginate-bookmarkList"
-          tag="ol"
-          :list="bookmarkList"
-          :per="3"
-        >
+      <div class="bookmarkList-posts">
+        {{bookmarkList.list}}
+        <paginate name="paginate-bookmarkList" tag="ol" :list="bookmarkList" :per="3">
+          
           <List
             v-for="(list, index) in paginated('paginate-bookmarkList')"
             :index="index"
@@ -26,8 +20,7 @@
           class="pagination flex"
           :show-step-links="true"
           :style="bookmarkList == '' ? 'display:none;' : 'display:flex;'"
-        >
-        </paginate-links>
+        ></paginate-links>
       </div>
     </div>
   </div>
@@ -46,29 +39,41 @@ export default {
     return {
       bookmarkData: {},
       paginate: ["paginate-bookmarkList"],
-      bookmarkList: [],
+      bookmarkList: []
     };
   },
   components: {
     Header,
-    List,
+    List
   },
+
+  methods: {},
+
   created() {
-    const currentUser = firebase.auth().currentUser;
-    this.uid = currentUser.uid;
 
     firebase
       .firestore()
       .collection("users")
       .doc(this.$route.params.uid)
       .get()
-      .then((snapshot) => {
+      .then(snapshot => {
         this.bookmarkData = snapshot.data();
-        //   .then((doc) => {
-        //     this.bookmarkData.push(doc.data());
       });
-    console.log(this.bookmarkData);
-  },
+
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(this.$route.params.uid)
+      .collection("bookmarks")
+      .orderBy("time", "desc")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          this.bookmarkList.push(doc.data());
+        });
+        console.log(this.bookmarkList);
+      });
+  }
 };
 </script>
 
@@ -83,7 +88,7 @@ $black-color: rgb(0, 0, 0);
   color: $white-color;
 }
 hr.separate {
-  width: 70%;
+  width: 60%;
   display: block;
   height: 0;
   border: 0;
@@ -111,8 +116,9 @@ hr.separate {
     margin-bottom: 1rem;
     justify-content: flex-start;
   }
-  .profile-posts {
+  .bookmarkList-posts {
     width: 90%;
+    height: 26.5rem;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;

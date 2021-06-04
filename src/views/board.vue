@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <Post />
+    <Post @input="$emit($event.searchData.value)"/>
     <div class="post">
       <h2 id="top" class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
@@ -50,6 +50,7 @@ export default {
       paginate: ["paginate-log"],
       postTop: "#top",
       userDatas: [],
+      searchData:[]
     };
   },
   components: {

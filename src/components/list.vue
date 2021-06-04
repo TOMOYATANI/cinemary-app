@@ -17,18 +17,9 @@
       <div class="content flex">
         <button class="hide-btn" @click="deletePost">×</button>
         <p>{{ list.description }}</p>
-        <router-link :to="`/chat/${list.id}`" class="join-btn flex"
-          >ルームへ参加</router-link
-        >
-        <!-- to="`chat/${list.id}`"でchat/(取得したid)でページ遷移する。 -->
-        <!-- ${ ~ }で囲ってあげないと文字列のままになってしまうので注意。 -->
+        <router-link :to="`/chat/${list.id}`" class="join-btn flex">ルームへ参加</router-link>
         <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
-        <img
-          src="../assets/ブックマーク.jpg"
-          alt="ブックマーク"
-          class="bookmark-icon"
-          @click="savePost"
-        />
+        <img src="../assets/ブックマーク.jpg" alt="ブックマーク" class="bookmark-icon" @click="savePost" />
         <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
       </div>
     </div>
@@ -45,32 +36,32 @@ export default {
   data() {
     return {
       userDatas: [],
-      preview: require("../assets/デフォルト画像.jpg"),
+      preview: require("../assets/デフォルト画像.jpg")
     };
   },
   props: {
     //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
     list: {
-      type: Object,
+      type: Array
       //親コンポーネント(board.vue)のlist[Object型]をpropsで渡している。
     },
     index: {
-      type: Number,
+      type: Number
       //親コンポーネント(board.vue)のindex[Number型]をpropsで渡している。
-    },
+    }
     // userDatas: {
     //   type: Array,
     //   //親コンポーネント(board.vue)のuserDatas[Array型]をpropsで渡している。
     // },
   },
 
-created() {
+  created() {
     firebase
       .firestore()
       .collection("users")
       .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
+      .then(snapshot => {
+        snapshot.forEach(doc => {
           this.userDatas.push(JSON.parse(JSON.stringify(doc.data())));
         });
       });
@@ -79,7 +70,7 @@ created() {
   methods: {
     returnUserData() {
       const userData = this.userDatas.find(
-        (tmpUserData) => this.list.uid === tmpUserData.uid
+        tmpUserData => this.list.uid === tmpUserData.uid
       );
       //this.userDatas（配列）に入っている値(uid)は、userDatas.uidとしても直接取れない為、tmpUserDataの引数に渡してからuidを取得する
       //そのuidとidが一致したものを一つuserData（配列）へ格納。
@@ -91,10 +82,15 @@ created() {
         .collection("users")
         .doc(this.$route.params.uid)
         .collection("bookmarks")
-        .doc(this.$route.params.uid)
-        .set({
+        .add({
           uid: this.$route.params.uid,
           list: this.list,
+          time: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+        .then(() => {
+          this.$swal("お気に入りに追加しました。", {
+            icon: "success"
+          });
         });
     },
     deletePost() {
@@ -107,9 +103,9 @@ created() {
           text: "投稿を削除しますか？",
           icon: "warning",
           buttons: true,
-          dangerMode: true,
+          dangerMode: true
         })
-          .then((willDelete) => {
+          .then(willDelete => {
             if (willDelete) {
               firebase
                 .firestore()
@@ -118,16 +114,16 @@ created() {
                 .delete()
                 .then(() => {
                   this.$swal("投稿を削除しました", {
-                    icon: "success",
+                    icon: "success"
                   });
                   this.$router.go({
                     path: `/board/${this.$route.params.uid}`,
-                    force: true,
+                    force: true
                   });
                 })
                 .catch(() => {
                   this.$swal("投稿を削除出来ません。", {
-                    icon: "error",
+                    icon: "error"
                   });
                 });
             } else {
@@ -136,12 +132,12 @@ created() {
           })
           .catch(() => {
             this.$swal("投稿を削除出来ません。", {
-              icon: "error",
+              icon: "error"
             });
           });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
