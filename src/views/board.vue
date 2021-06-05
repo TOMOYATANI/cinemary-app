@@ -1,7 +1,8 @@
 <template>
   <div>
     <Header />
-    <Post @input="$emit($event.searchData.value)"/>
+    <Post @searchData="search" />
+    <!--子コンポーネントから$emitで受けたデータを関数とする。※searchに()を付けるとvalueの引数が取れないので注意。-->
     <div class="post">
       <h2 id="top" class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
@@ -11,7 +12,7 @@
               v-for="(list, index) in paginated('paginate-log')"
               :index="index"
               :list="list"
-              :userDatas="userDatas" 
+              :userDatas="userDatas"
               :key="list.id"
             />
           </paginate>
@@ -20,8 +21,7 @@
             class="pagination flex"
             v-scroll-to="postTop"
             :show-step-links="true"
-          >
-          </paginate-links>
+          ></paginate-links>
           <!--postDataのデータをlist関数とindex関数にそれぞれ格納-->
         </div>
       </div>
@@ -50,13 +50,32 @@ export default {
       paginate: ["paginate-log"],
       postTop: "#top",
       userDatas: [],
-      searchData:[]
+      searchData: []
     };
   },
   components: {
     Header,
     Post,
-    List,
+    List
+  },
+
+  methods: {
+    search() {
+      //引数にvalue
+      //ジャンルで絞る
+      //postData内を一旦クリアさせてpush
+      firebase
+        .firestore()
+        .collection("posts")
+        .orderBy("genre")
+        .orderBy("time", "desc")
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            this.postData.push({ ...doc.data(), id: doc.id });
+          });
+        });
+    }
   },
   created() {
     // "posts"コレクションの全ドキュメントを取得。
@@ -65,25 +84,26 @@ export default {
       .collection("posts")
       .orderBy("time", "desc")
       .get()
-      .then((snapshot) => {
+      .then(snapshot => {
         //"posts"(参照先)のスナップショットを得る
-        snapshot.forEach((doc) => {
+        snapshot.forEach(doc => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.postData.push({ ...doc.data(), id: doc.id });
           //更にpostDataの空配列に格納した"doc"データを格納
         });
+         console.log(this.postData);
       });
 
     firebase
       .firestore()
       .collection("users")
       .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
+      .then(snapshot => {
+        snapshot.forEach(doc => {
           this.userDatas.push(JSON.parse(JSON.stringify(doc.data())));
         });
       });
-  },
+  }
 };
 </script>
 

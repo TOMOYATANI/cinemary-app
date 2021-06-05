@@ -42,7 +42,7 @@ export default {
   props: {
     //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
     list: {
-      type: Array
+      type: Object
       //親コンポーネント(board.vue)のlist[Object型]をpropsで渡している。
     },
     index: {

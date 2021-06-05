@@ -66,51 +66,13 @@
       <h2 class="search-tll neon flex">Cinemaryを検索する</h2>
       <hr class="separate" />
       <div class="search-main-contens flex">
-        <ais-instant-search :search-client="searchClient" index-name="cinemary-app">
-          <ais-search-box>
-            <div slot-scope="{searchData}">
-              <!--スロットとは、親コンポーネント側から、子のコンポーネントのテンプレートの一部を埋め込む機能
-                スコープ付きスロット、子コンポーネントのスロットに渡された値に、親コンポーネントからアクセスできる機能/>-->
-              <input
-                placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
-                class="search-main-item"
-                type="search"
-                :value="searchResult"
-                @input="$emit(searchData.value)"
-              />
-            </div>
-          </ais-search-box>
-        </ais-instant-search>
-        <!-- <input
-          type="text"
-          class="search-main-item"
+        <input
           placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
-        />-->
-        <!-- </div> -->
-        <!-- <div class="search-items flex">
-        <div class="search-contens flex">
-          <input type="text" class="search-item" placeholder="タイトル" />
-        </div>
-        <div class="search-contens flex">
-          <select
-            class="search-select"
-            v-model="searchGenre"
-            :style="{ color: genre == '' ? 'gray' : 'white' }"
-          >
-            <option class="search-item" value hidden>ジャンルを選択</option>
-            <option
-              v-for="searchGenre in searchGenres"
-              :value="searchGenre.name"
-              :key="searchGenre.id"
-              class="search-item"
-              style="color: white;"
-              >{{ searchGenre.name }}</option
-            >
-          </select>
-        </div>
-        <button class="search-btn">
-          <img src="../assets/検索.jpg" alt="検索" class="search-icon" />
-        </button>-->
+          class="search-main-item"
+          type="search"
+          @input="searchData($event.target.value)"
+        />
+         <!--searchDataというイベントを設定して、valueを渡す。valueを渡す際は「$event.target」が必要。-->
       </div>
     </div>
   </div>
@@ -127,16 +89,10 @@ import VScrollLock from "v-scroll-lock";
 Vue.use(VScrollLock);
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
-import algoliasearch from "algoliasearch/lite";
-import "instantsearch.css/themes/satellite.css";
 
 export default {
   data() {
     return {
-      searchClient: algoliasearch(
-        "VRXF7X7FPR",
-        "3b859896d42aa2c4576114dd3cd5735e"
-      ),
       time: "",
       title: "",
       description: "",
@@ -277,7 +233,12 @@ export default {
     },
     closeModal() {
       this.open = false;
+    },
+    searchData(value) {
+      this.$emit("searchData", value);
     }
+    //searchDataを$emitで親コンポーネントにvalueとして値を渡す。
+    //第一引数にはメソッドを定義、第二引数には値を渡す。
   }
 };
 </script>
