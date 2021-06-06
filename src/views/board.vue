@@ -60,21 +60,28 @@ export default {
   },
 
   methods: {
-    search() {
-      //引数にvalue
-      //ジャンルで絞る
-      //postData内を一旦クリアさせてpush
-      firebase
-        .firestore()
-        .collection("posts")
-        .orderBy("genre")
-        .orderBy("time", "desc")
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            this.postData.push({ ...doc.data(), id: doc.id });
-          });
+    // search() {
+    //   //引数にvalue
+    //   //ジャンルで絞る
+    //   //postData内を一旦クリアさせてpush
+    //   firebase
+    //     .firestore()
+    //     .collection("posts")
+    //     .orderBy("genre")
+    //     .orderBy("time", "desc")
+    //     .get()
+    //     .then(snapshot => {
+    //       snapshot.forEach(doc => {
+    //         this.postData.push({ ...doc.data(), id: doc.id });
+    //       });
+    //     });
+    // }
+    search(value) {
+      if (value != "") {
+        this.postData = this.postData.filter(v => {
+          return ~v.genre.indexOf(value);
         });
+      }
     }
   },
   created() {
@@ -91,7 +98,7 @@ export default {
           this.postData.push({ ...doc.data(), id: doc.id });
           //更にpostDataの空配列に格納した"doc"データを格納
         });
-         console.log(this.postData);
+        console.log(this.postData);
       });
 
     firebase
