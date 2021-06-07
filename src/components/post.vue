@@ -67,12 +67,11 @@
       <hr class="separate" />
       <div class="search-main-contens flex">
         <input
-          placeholder="例）アクション  恋愛  ミステリー  SF  ホラー  ミュージカル  etc.."
+          placeholder="例）アクション 恋愛 ミステリー SF ホラー ミュージカル etc.."
           class="search-main-item"
           type="search"
-          @input="searchData($event.target.value)"
+          v-model="inputValue"
         />
-         <!--searchDataというイベントを設定して、valueを渡す。valueを渡す際は「$event.target」が必要。-->
       </div>
     </div>
   </div>
@@ -130,48 +129,28 @@ export default {
         { id: 30, name: "歴史" },
         { id: 31, name: "ギャング・マフィア" }
       ],
-      searchGenre: "",
-      searchGenres: [
-        { id: 1, name: "アクション" },
-        { id: 2, name: "ドラマ" },
-        { id: 3, name: "恋愛" },
-        { id: 4, name: "ホラー" },
-        { id: 5, name: "戦争" },
-        { id: 6, name: "音楽" },
-        { id: 7, name: "ミュージカル" },
-        { id: 8, name: "スポーツ" },
-        { id: 9, name: "SF" },
-        { id: 10, name: "青春" },
-        { id: 11, name: "コメディ" },
-        { id: 12, name: "アニメ" },
-        { id: 13, name: "アドベンチャー・冒険" },
-        { id: 14, name: "アート・コンテンボラリー" },
-        { id: 15, name: "クライム" },
-        { id: 16, name: "ドキュメンタリー" },
-        { id: 17, name: "ショートフィルム・短編" },
-        { id: 18, name: "サスペンス" },
-        { id: 19, name: "ファミリー" },
-        { id: 20, name: "スリラー" },
-        { id: 21, name: "ヤクザ・任侠" },
-        { id: 22, name: "ファンタジー" },
-        { id: 23, name: "時代劇" },
-        { id: 24, name: "ミステリー" },
-        { id: 25, name: "伝記" },
-        { id: 26, name: "西部劇" },
-        { id: 27, name: "パニック" },
-        { id: 28, name: "オムニバス" },
-        { id: 29, name: "バイオレンス" },
-        { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" }
-      ],
       open: false
     };
   },
-  // props: {
-  //   postData: {
-  //     type: Array
-  //   }
-  // },
+  props: {
+    value: {
+      type: String,
+      required: true
+      //文字列型を必須で要求する
+    }
+  },
+  computed: {
+    inputValue: {
+      get() {
+        return this.value;
+        //getterとは、変数から値を取得して呼び出し元に返す関数。ここではpropsで親より受けた値(value)を返している。
+      },
+      set(value) {
+        this.$emit("input", value);
+        //setterとは、変数に値(value)を設定する関数。ここでは入力フォーム(input)に入力された値(value)を返している。
+      }
+    }
+  },
   methods: {
     postItem() {
       const currentUser = firebase.auth().currentUser;
@@ -233,12 +212,7 @@ export default {
     },
     closeModal() {
       this.open = false;
-    },
-    searchData(value) {
-      this.$emit("searchData", value);
     }
-    //searchDataを$emitで親コンポーネントにvalueとして値を渡す。
-    //第一引数にはメソッドを定義、第二引数には値を渡す。
   }
 };
 </script>

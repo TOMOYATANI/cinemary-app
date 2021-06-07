@@ -1,13 +1,19 @@
 <template>
   <div>
     <Header />
-    <Post @searchData="search" />
-    <!--子コンポーネントから$emitで受けたデータを関数とする。※searchに()を付けるとvalueの引数が取れないので注意。-->
+    <Post v-model="searchWord" />
     <div class="post">
       <h2 id="top" class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
         <div class="post-items">
-          <paginate name="paginate-log" tag="ol" :list="postData" :per="12">
+          <paginate
+            name="paginate-log"
+            tag="ol"
+            :list="filteredPostData"
+            :per="12"
+            v-if="filteredPostData.length !== 0"
+          >
+          <!-- filteredPostDataにて該当する投稿がある場合、表示。 -->
             <List
               v-for="(list, index) in paginated('paginate-log')"
               :index="index"
@@ -16,13 +22,16 @@
               :key="list.id"
             />
           </paginate>
+          <div v-else class="nothing">" {{searchWord}} " に該当する投稿はありませんでした。</div>
+          <!-- filteredPostDataにて該当する投稿がない場合、上記を表示させる。 -->
           <paginate-links
             for="paginate-log"
             class="pagination flex"
             v-scroll-to="postTop"
             :show-step-links="true"
+            :style="filteredPostData.length !== 0 == '' ? 'display:none;' : 'display:flex;'"
           ></paginate-links>
-          <!--postDataのデータをlist関数とindex関数にそれぞれ格納-->
+          <!-- filteredPostDataにて該当する投稿がない場合、非表示。投稿がある場合、表示。 -->
         </div>
       </div>
     </div>
@@ -50,7 +59,7 @@ export default {
       paginate: ["paginate-log"],
       postTop: "#top",
       userDatas: [],
-      searchData: []
+      searchWord: ""
     };
   },
   components: {
@@ -58,29 +67,17 @@ export default {
     Post,
     List
   },
-
-  methods: {
-    // search() {
-    //   //引数にvalue
-    //   //ジャンルで絞る
-    //   //postData内を一旦クリアさせてpush
-    //   firebase
-    //     .firestore()
-    //     .collection("posts")
-    //     .orderBy("genre")
-    //     .orderBy("time", "desc")
-    //     .get()
-    //     .then(snapshot => {
-    //       snapshot.forEach(doc => {
-    //         this.postData.push({ ...doc.data(), id: doc.id });
-    //       });
-    //     });
-    // }
-    search(value) {
-      if (value != "") {
-        this.postData = this.postData.filter(v => {
-          return ~v.genre.indexOf(value);
+  computed: {
+    filteredPostData() {
+      if (this.searchWord != "") {
+        return this.postData.filter(v => {
+          return ~v.genre.indexOf(this.searchWord);
+          //検索内容(this.searchWord)と同じ内容(genre)を持つ要素の位置を返す。存在しない場合、-1を返す。
+          //しかし、-1は今回ない為、「~v」とビット反転演算子(符号を反転してマイナス1した数)を使って、-1 → 0となる。
         });
+      } else {
+        return this.postData;
+        //サーチ内容がない場合はそのまま、それ以外はフィルタ結果を返す
       }
     }
   },
@@ -97,8 +94,8 @@ export default {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.postData.push({ ...doc.data(), id: doc.id });
           //更にpostDataの空配列に格納した"doc"データを格納
+          //...とは、配列を外に出すという意
         });
-        console.log(this.postData);
       });
 
     firebase
@@ -154,6 +151,13 @@ $black-color: rgb(0, 0, 0);
       justify-content: center;
       flex-wrap: wrap;
     }
+  }
+  .nothing {
+    color: $white-color;
+    font-family: "Roboto", sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 8rem;
   }
 }
 

@@ -5,16 +5,20 @@
       <h3 class="bookmarkList-title flex">{{ bookmarkData.name }} さんのブックマーク一覧</h3>
       <hr class="separate" />
       <div class="bookmarkList-posts">
-        {{bookmarkList.list}}
-        <paginate name="paginate-bookmarkList" tag="ol" :list="bookmarkList" :per="3">
-          
+        <paginate
+          name="paginate-bookmarkList"
+          tag="ol"
+          :list="bookmarkList"
+          :per="3"
+          v-if="bookmarkList.length !== 0"
+        >
           <List
-            v-for="(list, index) in paginated('paginate-bookmarkList')"
-            :index="index"
+            v-for="(list) in paginated('paginate-bookmarkList')"
             :list="list"
             :key="list.id"
           />
         </paginate>
+        <div v-else class="nothing flex">ブックマークされた投稿はありません</div>
         <paginate-links
           for="paginate-bookmarkList"
           class="pagination flex"
@@ -50,7 +54,6 @@ export default {
   methods: {},
 
   created() {
-
     firebase
       .firestore()
       .collection("users")
@@ -67,8 +70,8 @@ export default {
       .collection("bookmarks")
       .orderBy("time", "desc")
       .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
+      .then(snapshot => {
+        snapshot.forEach(doc => {
           this.bookmarkList.push(doc.data());
         });
         console.log(this.bookmarkList);
@@ -118,10 +121,16 @@ hr.separate {
   }
   .bookmarkList-posts {
     width: 90%;
-    height: 26.5rem;
+    height: 27rem;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+  }
+  .nothing {
+    color: $white-color;
+    font-family: "Roboto", sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
   }
 }
 /* <====== Media Queries======> */

@@ -234,32 +234,6 @@
           :style="listData == '' ? 'display:none;' : 'display:flex;'"
         ></paginate-links>
       </div>
-      <!-- <hr class="separate" />
-      <h3 class="bookmark-list flex">
-        {{ profileData.name }} さんのブックマーク一覧
-      </h3>
-      <div class="profile-posts">
-        <paginate
-          name="paginate-bookmarkList"
-          tag="ol"
-          :list="bookmarkList"
-          :per="3"
-        >
-          <List
-            v-for="(list, index) in paginated('paginate-bookmarkList')"
-            :index="index"
-            :list="list"
-            :key="list.id"
-          />
-        </paginate>
-        <paginate-links
-          for="paginate-bookmarkList"
-          class="pagination flex"
-          :show-step-links="true"
-          :style="bookmarkList == '' ? 'display:none;' : 'display:flex;'"
-        >
-        </paginate-links>
-      </div>-->
     </div>
   </div>
 </template>

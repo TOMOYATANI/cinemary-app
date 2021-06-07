@@ -19,7 +19,7 @@
         <p>{{ list.description }}</p>
         <router-link :to="`/chat/${list.id}`" class="join-btn flex">ルームへ参加</router-link>
         <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
-        <img src="../assets/ブックマーク.jpg" alt="ブックマーク" class="bookmark-icon" @click="savePost" />
+        <img src="../assets/ブックマーク.jpg" alt="ブックマーク" class="bookmark-icon" @click="savePost()" />
         <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
       </div>
     </div>
@@ -42,13 +42,18 @@ export default {
   props: {
     //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
     list: {
-      type: Object
+      type: Object,
+      required: true
       //親コンポーネント(board.vue)のlist[Object型]をpropsで渡している。
     },
     index: {
-      type: Number
+      type: Number,
       //親コンポーネント(board.vue)のindex[Number型]をpropsで渡している。
-    }
+    },
+    // bookmark: {
+    //   type: Object,
+    //   required: true
+    // }
     // userDatas: {
     //   type: Array,
     //   //親コンポーネント(board.vue)のuserDatas[Array型]をpropsで渡している。
@@ -76,22 +81,61 @@ export default {
       //そのuidとidが一致したものを一つuserData（配列）へ格納。
       return userData;
     },
+
     savePost() {
-      firebase
+      const id = firebase
         .firestore()
         .collection("users")
         .doc(this.$route.params.uid)
         .collection("bookmarks")
-        .add({
-          uid: this.$route.params.uid,
-          list: this.list,
-          time: firebase.firestore.FieldValue.serverTimestamp(),
-        })
-        .then(() => {
-          this.$swal("お気に入りに追加しました。", {
-            icon: "success"
+        .doc().id;
+
+      let num = 0;
+      num++;
+
+      console.log(num);
+
+      if (num % 2 == 0) {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(this.$route.params.uid)
+          .collection("bookmarks")
+          .doc()
+          .delete()
+          .then(() => {
+            this.$swal("ブックマークを取り消ししました。", {
+              icon: "success"
+            });
+          })
+          .catch(() => {
+            this.$swal("ブックマークを取り消し出来ません。", {
+              icon: "error"
+            });
           });
-        });
+      } else {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(this.$route.params.uid)
+          .collection("bookmarks")
+          .add({
+            id: id,
+            uid: this.$route.params.uid,
+            list: this.list,
+            time: firebase.firestore.FieldValue.serverTimestamp()
+          })
+          .then(() => {
+            this.$swal("ブックマークに追加しました。", {
+              icon: "success"
+            });
+          })
+          .catch(() => {
+            this.$swal("ブックマークを追加出来ません。", {
+              icon: "error"
+            });
+          });
+      }
     },
     deletePost() {
       const currentUser = firebase.auth().currentUser;
