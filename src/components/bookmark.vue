@@ -2,7 +2,7 @@
   <div>
     <Header />
     <div class="bookmarkList flex">
-      <h3 class="bookmarkList-title flex">{{ bookmarkData.name }} さんのブックマーク一覧</h3>
+      <h3 class="bookmarkList-title flex">{{ profileData.name }} さんのブックマーク一覧</h3>
       <hr class="separate" />
       <div class="bookmarkList-posts">
         <paginate
@@ -12,12 +12,9 @@
           :per="3"
           v-if="bookmarkList.length !== 0"
         >
-          <List
-            v-for="(list) in paginated('paginate-bookmarkList')"
-            :list="list"
-            :key="list.id"
-          />
+          <List v-for="(list) in paginated('paginate-bookmarkList')" :list="list" :key="list.id" />
         </paginate>
+
         <div v-else class="nothing flex">ブックマークされた投稿はありません</div>
         <paginate-links
           for="paginate-bookmarkList"
@@ -41,7 +38,7 @@ Vue.use(VuePaginate);
 export default {
   data() {
     return {
-      bookmarkData: {},
+      profileData: {},
       paginate: ["paginate-bookmarkList"],
       bookmarkList: []
     };
@@ -51,16 +48,15 @@ export default {
     List
   },
 
-  methods: {},
-
   created() {
+
     firebase
       .firestore()
       .collection("users")
       .doc(this.$route.params.uid)
       .get()
       .then(snapshot => {
-        this.bookmarkData = snapshot.data();
+        this.profileData = snapshot.data();
       });
 
     firebase
@@ -74,7 +70,6 @@ export default {
         snapshot.forEach(doc => {
           this.bookmarkList.push(doc.data());
         });
-        console.log(this.bookmarkList);
       });
   }
 };
@@ -121,7 +116,6 @@ hr.separate {
   }
   .bookmarkList-posts {
     width: 90%;
-    height: 27rem;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -131,9 +125,12 @@ hr.separate {
     font-family: "Roboto", sans-serif;
     font-size: 1.2rem;
     font-weight: bold;
+    padding: 13rem;
   }
 }
-/* <====== Media Queries======> */
+
+// -- メディアクエリ -- //
+
 $breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;

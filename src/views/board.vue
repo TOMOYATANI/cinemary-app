@@ -1,7 +1,8 @@
 <template>
   <div>
     <Header />
-    <Post v-model="searchWord" />
+       <Search v-model="searchWord" />
+    <Post />
     <div class="post">
       <h2 id="top" class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
@@ -43,6 +44,7 @@ import firebase from "firebase";
 import Header from "@/components/header.vue";
 import Post from "@/components/post.vue";
 import List from "@/components/list.vue";
+import Search from "@/components/search.vue";
 import Vue from "vue";
 import VuePaginate from "vue-paginate";
 Vue.use(VuePaginate);
@@ -65,7 +67,8 @@ export default {
   components: {
     Header,
     Post,
-    List
+    List,
+    Search
   },
   computed: {
     filteredPostData() {
@@ -124,7 +127,7 @@ $black-color: rgb(0, 0, 0);
   background-color: $black-color;
 }
 
-// -- 投稿一覧 -- //
+// -- テンプレート -- //
 
 .post {
   background-color: $black-color;
@@ -199,7 +202,7 @@ ul.paginate-links > li.ellipses > a {
   margin: 1rem;
 }
 
-// -- neon --//
+// --ネオン --//
 
 .neon {
   display: inline-block;

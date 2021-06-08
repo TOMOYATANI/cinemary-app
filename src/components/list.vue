@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="list">
     <div class="face face1 flex">
       <div class="content">
         <img
@@ -19,7 +19,12 @@
         <p>{{ list.description }}</p>
         <router-link :to="`/chat/${list.id}`" class="join-btn flex">ルームへ参加</router-link>
         <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
-        <img src="../assets/ブックマーク.jpg" alt="ブックマーク" class="bookmark-icon" @click="savePost()" />
+        <img
+          src="../assets/ブックマーク.jpg"
+          alt="ブックマーク"
+          class="bookmark-icon"
+          @click="saveBookmark();deleteBookmark();"
+        />
         <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
       </div>
     </div>
@@ -35,6 +40,7 @@ Vue.use(VueSwal);
 export default {
   data() {
     return {
+      bookmarkId: "",
       userDatas: [],
       preview: require("../assets/デフォルト画像.jpg")
     };
@@ -47,13 +53,9 @@ export default {
       //親コンポーネント(board.vue)のlist[Object型]をpropsで渡している。
     },
     index: {
-      type: Number,
+      type: Number
       //親コンポーネント(board.vue)のindex[Number型]をpropsで渡している。
-    },
-    // bookmark: {
-    //   type: Object,
-    //   required: true
-    // }
+    }
     // userDatas: {
     //   type: Array,
     //   //親コンポーネント(board.vue)のuserDatas[Array型]をpropsで渡している。
@@ -82,61 +84,63 @@ export default {
       return userData;
     },
 
-    savePost() {
-      const id = firebase
+    saveBookmark() {
+      const ref = firebase
         .firestore()
         .collection("users")
         .doc(this.$route.params.uid)
         .collection("bookmarks")
-        .doc().id;
+        .doc();
 
-      let num = 0;
-      num++;
+      const id = ref.id;
 
-      console.log(num);
-
-      if (num % 2 == 0) {
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(this.$route.params.uid)
-          .collection("bookmarks")
-          .doc()
-          .delete()
-          .then(() => {
-            this.$swal("ブックマークを取り消ししました。", {
-              icon: "success"
-            });
-          })
-          .catch(() => {
-            this.$swal("ブックマークを取り消し出来ません。", {
-              icon: "error"
-            });
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(this.$route.params.uid)
+        .collection("bookmarks")
+        .doc(id)
+        .set({
+          bookmarkId: id,
+          ...this.list,
+          time: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+          this.$swal("ブックマークに追加しました。", {
+            icon: "success"
           });
-      } else {
-        firebase
-          .firestore()
-          .collection("users")
-          .doc(this.$route.params.uid)
-          .collection("bookmarks")
-          .add({
-            id: id,
-            uid: this.$route.params.uid,
-            list: this.list,
-            time: firebase.firestore.FieldValue.serverTimestamp()
-          })
-          .then(() => {
-            this.$swal("ブックマークに追加しました。", {
-              icon: "success"
-            });
-          })
-          .catch(() => {
-            this.$swal("ブックマークを追加出来ません。", {
-              icon: "error"
-            });
+        })
+        .catch(() => {
+          this.$swal("ブックマークを追加出来ません。", {
+            icon: "error"
           });
-      }
+        });
     },
+
+    deleteBookmark() {
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(this.$route.params.uid)
+        .collection("bookmarks")
+        .doc(this.list.bookmarkId)
+        .delete()
+        .then(() => {
+          this.$swal("ブックマークを取り消ししました。", {
+            icon: "success"
+          });
+          this.$router.go({
+            path: `/bookmark/${this.$route.params.uid}`,
+            force: true
+          });
+        })
+        .catch(() => {
+          this.$swal("ブックマークを取り消し出来ません。", {
+            icon: "error"
+          });
+        });
+    },
+
     deletePost() {
       const currentUser = firebase.auth().currentUser;
       this.uid = currentUser.uid;
@@ -202,7 +206,7 @@ div {
   color: $white-color;
 }
 
-// -- ヘッダー -- //
+// -- テンプレート -- //
 
 .join-btn {
   outline: none;
@@ -212,7 +216,7 @@ div {
   cursor: pointer;
 }
 
-.card {
+.list {
   width: 300px;
   height: 400px;
   position: relative;
@@ -293,8 +297,6 @@ div {
   cursor: pointer;
 }
 
-// -- 削除ボタン -- //@at-root
-
 .hide-btn {
   position: absolute;
   top: 7px;
@@ -309,27 +311,27 @@ div {
   background-color: white;
 }
 
-// -- hover-animation -- //
+// -- ネオン -- //
 
-.card:hover .face.face1 {
+.list:hover .face.face1 {
   transform: translateY(0);
   box-shadow: inset 0 0 60px whitesmoke, inset 20px 0 80px #f0f,
     inset -20px 0 80px #0ff, inset 20px 0 300px #f0f, inset -20px 0 300px #0ff,
     0 0 50px #fff, -10px 0 80px #f0f, 10px 0 80px #0ff;
 }
 
-.card:hover .face.face1 .content {
+.list:hover .face.face1 .content {
   opacity: 1;
 }
 
-.card .face.face1 .content .join-btn {
+.list .face.face1 .content .join-btn {
   transition: 0.5s;
 }
-.card:hover .face.face2 {
+.list:hover .face.face2 {
   transform: translateY(0);
 }
 
-.card .face.face2 .content .join-btn:hover {
+.list .face.face2 .content .join-btn:hover {
   background: #333;
   color: whitesmoke;
   box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);

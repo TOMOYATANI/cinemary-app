@@ -2,20 +2,7 @@
   <div>
     <Header />
     <div class="main">
-      <div class="main-tll flex">
-        <h1>あなたに合わせて映画をマッチ</h1>
-        <p>Cinemary(シネマリー)は、気分にあった映画を提供するアプリです。</p>
-        <p>その時のシーンに合う映画を選び、より良いひと時を過ごしませんか。</p>
-        <router-link to="/signup" class="post-btn" v-if="!authenticatedUser"
-          >今すぐ登録</router-link
-        >
-        <router-link
-          :to="`/board/${this.uid}`"
-          class="post-btn flex"
-          v-if="authenticatedUser"
-          >投稿</router-link
-        >
-      </div>
+      <Maintitle class="tll"/>
       <ul class="main-roop">
         <li class="main-roop-items">
           <img class="main-img" src="../assets/アベンジャーズ.jpg" alt />
@@ -46,11 +33,7 @@
       </ul>
       <ul class="main-roop">
         <li class="main-roop-items">
-          <img
-            class="main-img"
-            src="../assets/グレイテストショーマン.jpg"
-            alt
-          />
+          <img class="main-img" src="../assets/グレイテストショーマン.jpg" alt />
         </li>
         <li class="main-roop-items">
           <img class="main-img" src="../assets/セッション.jpg" alt />
@@ -92,11 +75,7 @@
       </ul>
       <ul class="main-roop">
         <li class="main-roop-items">
-          <img
-            class="main-img"
-            src="../assets/グレイテストショーマン.jpg"
-            alt
-          />
+          <img class="main-img" src="../assets/グレイテストショーマン.jpg" alt />
         </li>
         <li class="main-roop-items">
           <img class="main-img" src="../assets/セッション.jpg" alt />
@@ -113,31 +92,14 @@
 </template>
 
 <script>
-import firebase from "firebase";
 import Header from "@/components/header.vue";
-import Vue from "vue";
-import VueSwal from "vue-swal";
-Vue.use(VueSwal);
+import Maintitle from "@/components/maintitle.vue";
 
 export default {
-  name: "signOut",
-  data() {
-    return {
-      authenticatedUser: "",
-    };
-  },
   components: {
     Header,
-  },
-  mounted() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.authenticatedUser = true;
-      } else {
-        this.authenticatedUser = false;
-      }
-    });
-  },
+    Maintitle
+  }
 };
 </script>
 
@@ -148,7 +110,7 @@ $gray-color: rgb(100, 100, 100);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
-// -- メイン -- //
+// -- テンプレート -- //
 
 .main {
   width: 100%;
@@ -156,43 +118,11 @@ $black-color: rgb(0, 0, 0);
   background-color: rgba(20, 20, 20, 20);
   position: relative;
   overflow: hidden;
-  &-tll {
-    flex-direction: column;
+  .tll {
     z-index: 1;
-    font-weight: bold;
-    color: gray;
-    background-color: aliceblue;
-    border-radius: 2rem;
     position: absolute;
     top: 30%;
     left: 15%;
-    padding: 2.3rem;
-    box-shadow: 0 0 10px lightgrey;
-    width: 70%;
-    h1 {
-      color: rgb(80, 80, 80);
-    }
-    p {
-      color: rgb(80, 80, 80);
-    }
-  }
-  .post-btn {
-    width: 7rem;
-    margin-top: 1.5rem;
-    padding: 0.5rem;
-    display: inline-block;
-    letter-spacing: 2px;
-    overflow: hidden;
-    color: #fff;
-    background: #fc8f01;
-    box-shadow: 0 0 10px #fc8f01, 0 0 50px #fc8f01, 0 0 0px;
-    outline: none;
-    border: none;
-    border-radius: 0.5rem;
-    font-weight: bold;
-    font-size: 0.9rem;
-    cursor: pointer;
-    text-align: center;
   }
   &-roop {
     width: 100%;
@@ -226,7 +156,7 @@ $black-color: rgb(0, 0, 0);
   //(-300%)にすることで途切れずにループを実行。
 }
 
-/* <====== Media Queries======> */
+// -- メディアクエリ -- //
 
 $breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;

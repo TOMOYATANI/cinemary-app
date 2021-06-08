@@ -261,7 +261,8 @@ a.header-ttl:hover span {
     opacity: 1;
   }
 }
-/* <====== Media Queries======> */
+
+// -- メディアクエリ -- //
 
 $breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
