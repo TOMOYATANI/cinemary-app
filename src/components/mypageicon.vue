@@ -78,4 +78,40 @@ $black-color: rgb(0, 0, 0);
     }
   }
 }
+
+// -- メディアクエリ -- //
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.mypage-icon .profile-inner-img[data-v-3d31f544] {
+  @include sp {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+.mypage-icon .profile-inner-name[data-v-3d31f544] {
+  @include sp {
+    font-size: 18px;
+    padding: 0.9rem;
+  }
+}
 </style>

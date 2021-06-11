@@ -20,10 +20,16 @@
         <router-link :to="`/chat/${list.id}`" class="join-btn flex">ルームへ参加</router-link>
         <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
         <img
-          src="../assets/ブックマーク.jpg"
+          src="../assets/ブックマーク保存.jpg"
           alt="ブックマーク"
           class="bookmark-icon"
-          @click="saveBookmark();deleteBookmark();"
+          @click="saveBookmark"
+        />
+        <img
+          src="../assets/ブックマーク未保存.jpg"
+          alt="ブックマーク"
+          class="bookmark-icon"
+          @click="deleteBookmark"
         />
         <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
       </div>
@@ -55,11 +61,12 @@ export default {
     index: {
       type: Number
       //親コンポーネント(board.vue)のindex[Number型]をpropsで渡している。
+    },
+    bookmark: {
+      type: Object,
+      required: true,
+      default:() => {},
     }
-    // userDatas: {
-    //   type: Array,
-    //   //親コンポーネント(board.vue)のuserDatas[Array型]をpropsで渡している。
-    // },
   },
 
   created() {
@@ -83,6 +90,11 @@ export default {
       //そのuidとidが一致したものを一つuserData（配列）へ格納。
       return userData;
     },
+
+    // hasBookmark(book) {
+    //   // ブックマークリスト内にbook idがあればtrue それ以外はfalse
+    //   return this.bookmarkList.some(value => value.id === book.id);
+    // },
 
     saveBookmark() {
       const ref = firebase
@@ -335,5 +347,27 @@ div {
   background: #333;
   color: whitesmoke;
   box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+// -- メディアクエリ -- //
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
 }
 </style>

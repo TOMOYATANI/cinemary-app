@@ -11,9 +11,7 @@
             </div>
             <p>STEP1</p>
             <h3>無料会員登録</h3>
-            <p class="step-txt">
-              会員登録をすると全てのサービスが使用でき、全ての投稿を閲覧できます。
-            </p>
+            <p class="step-txt">会員登録をすると全てのサービスが使用でき、全ての投稿を閲覧できます。</p>
           </div>
           <div class="step">
             <div>
@@ -21,9 +19,7 @@
             </div>
             <p>STEP2</p>
             <h3>投稿</h3>
-            <p class="step-txt">
-              自分の気分を投稿したり、自分の気になる投稿に書き込みができます。
-            </p>
+            <p class="step-txt">自分の気分を投稿したり、自分の気になる投稿に書き込みができます。</p>
           </div>
           <div class="step">
             <div>
@@ -31,14 +27,10 @@
             </div>
             <p>STEP3</p>
             <h3>映画が決定！</h3>
-            <p class="step-txt">
-              チャットを通じて、その時のあなたの気分にあった映画が決まります。
-            </p>
+            <p class="step-txt">チャットを通じて、その時のあなたの気分にあった映画が決まります。</p>
           </div>
         </div>
-        <router-link to="/signup" class="first-btn" v-if="!authenticatedUser"
-          >今すぐ登録</router-link
-        >
+        <router-link to="/signup" class="first-btn" v-if="!authenticatedUser">今すぐ登録</router-link>
       </div>
     </div>
   </div>
@@ -51,18 +43,18 @@ export default {
   name: "signOut",
   data() {
     return {
-      authenticatedUser: "",
+      authenticatedUser: ""
     };
   },
   mounted() {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.authenticatedUser = true;
       } else {
         this.authenticatedUser = false;
       }
     });
-  },
+  }
 };
 </script>
 
@@ -167,4 +159,64 @@ p {
   text-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
 }
 
+// -- メディアクエリ -- //
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.about .flow[data-v-5a126e4a] {
+  @include sp {
+    height: 22rem;
+  }
+}
+
+.about .flow .flow-item img[data-v-5a126e4a] {
+  @include sp {
+    width: 55px;
+    height: 55px;
+  }
+  @include tab {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.about .flow .flow-item h3[data-v-5a126e4a] {
+  @include sp {
+    padding: 0.3rem;
+    font-size: 0.9rem;
+  }
+  @include tab {
+    padding: 0.4rem;
+    font-size: 1rem;
+  }
+}
+
+.about .flow .flow-item .step-txt[data-v-5a126e4a] {
+  @include sp {
+    padding: 0.9rem;
+    font-size: 12px;
+  }
+  @include sp {
+    padding: 1rem;
+    font-size: 13px;
+  }
+}
 </style>

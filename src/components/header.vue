@@ -8,91 +8,34 @@
         <router-link to="/" class="header-link neon3 flash">HOME</router-link>
       </li>
       <li>
-        <router-link to="/about" class="header-link neon3 flash"
-          >ABOUT</router-link
-        >
+        <router-link to="/about" class="header-link neon3 flash">ABOUT</router-link>
       </li>
       <li>
-        <router-link :to="`/board/${this.uid}`" class="header-link neon3 flash"
-          >POST</router-link
-        >
+        <router-link :to="`/board/${this.uid}`" class="header-link neon3 flash">POST</router-link>
       </li>
       <li>
-        <router-link
-          to="/signup"
-          class="header-link neon3 flash"
-          v-if="!authenticatedUser"
-          >SINGUP</router-link
-        >
+        <router-link to="/signup" class="header-link neon3 flash" v-if="!authenticatedUser">SINGUP</router-link>
       </li>
       <li>
-        <router-link
-          to="/signin"
-          class="header-link neon3 flash"
-          v-if="!authenticatedUser"
-          >SINGIN</router-link
-        >
+        <router-link to="/signin" class="header-link neon3 flash" v-if="!authenticatedUser">SINGIN</router-link>
       </li>
       <li>
-        <router-link :to="`/mypage/${this.uid}`" class="header-link neon3 flash"
-          >MYPAGE</router-link
-        >
+        <router-link :to="`/mypage/${this.uid}`" class="header-link neon3 flash">MYPAGE</router-link>
       </li>
       <li v-if="authenticatedUser">
-        <button
-          class="header-link neon3 flash"
-          @click="signOut"
-          v-if="authenticatedUser"
-        >
-          SINGOUT
-        </button>
+        <button class="header-link neon3 flash" @click="signOut" v-if="authenticatedUser">SINGOUT</button>
       </li>
     </ul>
-    <!-- <slide right disableOutsideClick width="200">
-      <li>
-      <router-link to="/" class="header-link neon3 flash">HOME</router-link>
-      </li>
-      <li>
-      <router-link to="/about" class="header-link neon3 flash"
-        >ABOUT</router-link
-      >
-      </li>
-      <li>
-      <router-link :to="`/board/${this.uid}`" class="header-link neon3 flash"
-        >POST</router-link
-      >
-      </li>
-      <li>
-      <router-link
-        to="/signup"
-        class="header-link neon3 flash"
-        v-if="!authenticatedUser"
-        >SINGUP</router-link
-      >
-      </li>
-      <li>
-      <router-link
-        to="/signin"
-        class="header-link neon3 flash"
-        v-if="!authenticatedUser"
-        >SINGIN</router-link
-      >
-      </li>
-      <li>
-      <router-link :to="`/mypage/${this.uid}`" class="header-link neon3 flash"
-        >MYPAGE</router-link
-      >
-      </li>
-      <li v-if="authenticatedUser">
-        <button
-          class="header-link neon3 flash"
-          @click="signOut"
-          v-if="authenticatedUser"
-        >
-          SINGOUT
-        </button>
-      </li>
-    </slide> -->
+    <!-- スマホ用ハンバーガーメニュー -->
+    <slide right disableOutsideClick width="200" class="hamburger-menu">
+      <router-link to="/" class="hamburger-link neon3 flash home-link">HOME</router-link>
+      <router-link to="/about" class="hamburger-link neon3 flash">ABOUT</router-link>
+      <router-link :to="`/board/${this.uid}`" class="hamburger-link neon3 flash">POST</router-link>
+      <router-link to="/signup" class="hamburger-link neon3 flash" v-if="!authenticatedUser">SINGUP</router-link>
+      <router-link to="/signin" class="hamburger-link neon3 flash" v-if="!authenticatedUser">SINGIN</router-link>
+      <router-link :to="`/mypage/${this.uid}`" class="hamburger-link neon3 flash">MYPAGE</router-link>
+      <button class="hamburger-link neon3 flash" @click="signOut" v-if="authenticatedUser">SINGOUT</button>
+    </slide>
   </header>
 </template>
 
@@ -106,7 +49,7 @@ export default {
   name: "signOut",
   data() {
     return {
-      authenticatedUser: "",
+      authenticatedUser: ""
     };
   },
   methods: {
@@ -117,10 +60,12 @@ export default {
         .then(() => {
           this.$router.push("/signin");
         })
-        .catch(() => {this.$swal("ログアウト出来ませんでした。", {
-            icon: "error",
-          });});
-    },
+        .catch(() => {
+          this.$swal("ログアウト出来ませんでした。", {
+            icon: "error"
+          });
+        });
+    }
   },
   created() {
     const currentUser = firebase.auth().currentUser;
@@ -133,14 +78,14 @@ export default {
       .get();
   },
   mounted() {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.authenticatedUser = true;
       } else {
         this.authenticatedUser = false;
       }
     });
-  },
+  }
 };
 </script>
 
@@ -153,6 +98,10 @@ $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
 
 // -- ヘッダー -- //
+
+.home-link {
+  padding-right: 1rem;
+}
 
 .header {
   position: sticky;
@@ -199,6 +148,20 @@ $black-color: rgb(0, 0, 0);
       color: rgba(0, 255, 0, 0.5);
     }
   }
+}
+
+.hamburger-link {
+  color: $white-color;
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  cursor: hand;
+  margin-left: 3rem;
+  font-family: "Roboto", sans-serif;
 }
 
 a.header-ttl:hover,
@@ -290,16 +253,15 @@ $breakpoint-mobile: 600px;
   }
 }
 
-// .bm-burger-button{
-//    @include pc {
-//     display: none;
-//   }
-//    @include tab {
-//     display: none;
-//   }
-//   @include sp {
-//     display: flex;
-//     top: 28px;
-//   }
-// }
+.hamburger-menu {
+  @include pc {
+    display: none;
+  }
+  @include tab {
+    display: none;
+  }
+  @include sp {
+    display: flex;
+  }
+}
 </style>

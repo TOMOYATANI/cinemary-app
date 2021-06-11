@@ -98,30 +98,29 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.main-tll h1[data-v-c9a65f5a] {
+.main-tll h1[data-v-b2774e42] {
   @include sp {
     font-size: 1.5rem;
   }
 }
 
-.main-tll p[data-v-c9a65f5a] {
+.main-tll p[data-v-b2774e42] {
   @include sp {
     font-size: 0.7rem;
   }
 }
 
-.main-tll[data-v-c9a65f5a] {
+.main .tll[data-v-c9a65f5a] {
   @include sp {
-    padding: 1.3rem;
+    padding: 1rem;
   }
 }
 
-.main .post-btn[data-v-c9a65f5a] {
+.main-tll .post-btn[data-v-b2774e42] {
   @include sp {
     width: 5rem;
     margin-top: 1.2rem;
     padding: 0.4rem;
   }
 }
-
 </style>

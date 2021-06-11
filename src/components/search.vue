@@ -14,7 +14,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {};
@@ -143,7 +142,6 @@ hr.separate {
   }
 }
 
-
 // -- ネオンカラー -- //
 
 .neon {
@@ -152,5 +150,40 @@ hr.separate {
   text-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 50px rgba(255, 0, 0, 0.5);
 }
 
+// -- メディアクエリ -- //
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+::placeholder {
+  @include sp {
+    font-size: 0.9rem;
+  }
+}
+
+.search-inner .search-main-contens .search-main-item[data-v-4ad41bb8] {
+  @include sp {
+    width: 28rem;
+    height: 2.5rem;
+    font-size: 0.9rem;
+  }
+}
 </style>
 

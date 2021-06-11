@@ -3,7 +3,7 @@
     <div class="profile-inner flex">
       <div class="item-inner">
         <div class="post">
-          <div class="txt">{{ listData.length }}</div>
+          <div class="txt">{{ cardData.length }}</div>
           <p>POSTS</p>
         </div>
 
@@ -24,7 +24,7 @@ import firebase from "firebase";
 export default {
   data() {
     return {
-      listData: [],
+      cardData: [],
       bookmarkData: []
     };
   },
@@ -42,7 +42,7 @@ export default {
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
-          this.listData.push({ ...doc.data(), id: doc.id });
+          this.cardData.push({ ...doc.data(), id: doc.id });
         });
       });
 
@@ -111,6 +111,13 @@ $breakpoint-mobile: 600px;
 @mixin sp {
   @media (max-width: ($breakpoint-mobile)) {
     @content;
+  }
+}
+
+p[data-v-5a501471] {
+  @include sp {
+    font-size: 13px;
+    margin: 0.9rem;
   }
 }
 </style>

@@ -1,11 +1,12 @@
 <template>
   <div>
     <Header />
-       <Search v-model="searchWord" />
+    <Search v-model="searchWord" />
     <Post />
     <div class="post">
       <h2 id="top" class="post-tll neon">投稿一覧</h2>
-      <div class="post-inner">
+      <!-- PC・タブレット用ページネーション -->
+      <div class="post-inner paginate-pctb">
         <div class="post-items">
           <paginate
             name="paginate-log"
@@ -14,7 +15,38 @@
             :per="12"
             v-if="filteredPostData.length !== 0"
           >
-          <!-- filteredPostDataにて該当する投稿がある場合、表示。 -->
+            <!-- filteredPostDataにて該当する投稿がある場合、表示。 -->
+            <List
+              v-for="(list, index) in paginated('paginate-log')"
+              :index="index"
+              :list="list"
+              :key="list.id"
+            />
+          </paginate>
+          <div v-else class="nothing">" {{searchWord}} " に該当する投稿はありませんでした。</div>
+          <!-- filteredPostDataにて該当する投稿がない場合、上記を表示させる。 -->
+          <paginate-links
+            for="paginate-log"
+            name="paginate-log"
+            class="pagination flex"
+            v-scroll-to="postTop"
+            :async="true"
+            :show-step-links="true"
+            :style="filteredPostData.length !== 0 == '' ? 'display:none;' : 'display:flex;'"
+          ></paginate-links>
+          <!-- filteredPostDataにて該当する投稿がない場合、非表示。投稿がある場合、表示。 -->
+        </div>
+      </div>
+      <!-- スマホ用ページネーション -->
+      <!-- <div class="post-inner paginate-sp">
+        <div class="post-items">
+          <paginate
+            name="paginate-log"
+            tag="ol"
+            :list="filteredPostData"
+            :per="5"
+            v-if="filteredPostData.length !== 0"
+          >
             <List
               v-for="(list, index) in paginated('paginate-log')"
               :index="index"
@@ -24,17 +56,17 @@
             />
           </paginate>
           <div v-else class="nothing">" {{searchWord}} " に該当する投稿はありませんでした。</div>
-          <!-- filteredPostDataにて該当する投稿がない場合、上記を表示させる。 -->
           <paginate-links
             for="paginate-log"
+            name="paginate-log"
             class="pagination flex"
             v-scroll-to="postTop"
+            :async="true"
             :show-step-links="true"
             :style="filteredPostData.length !== 0 == '' ? 'display:none;' : 'display:flex;'"
           ></paginate-links>
-          <!-- filteredPostDataにて該当する投稿がない場合、非表示。投稿がある場合、表示。 -->
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -209,5 +241,59 @@ ul.paginate-links > li.ellipses > a {
   color: transparent;
   -webkit-text-stroke: 1.5px rgb(255, 255, 255);
   text-shadow: 0 0 20px rgb(150, 150, 150), 0 0 20px rgb(150, 150, 150);
+}
+
+// -- メディアクエリ -- //
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+// .paginate-pctb {
+//   @include pc {
+//     display: flex;
+//   }
+//   @include tab {
+//     display: flex;
+//   }
+//   @include sp {
+//     display: none;
+//   }
+// }
+
+// .paginate-sp {
+//   @include pc {
+//     display: none;
+//   }
+//   @include tab {
+//     display: none;
+//   }
+//   @include sp {
+//     display: flex;
+//   }
+// }
+
+.post-tll {
+  @include sp {
+    width: 175px;
+    margin-left: 5rem;
+    padding: 0.5rem;
+  }
 }
 </style>

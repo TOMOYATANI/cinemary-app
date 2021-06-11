@@ -178,32 +178,6 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.main-tll h1[data-v-c9a65f5a] {
-  @include sp {
-    font-size: 1.5rem;
-  }
-}
-
-.main-tll p[data-v-c9a65f5a] {
-  @include sp {
-    font-size: 0.7rem;
-  }
-}
-
-.main-tll[data-v-c9a65f5a] {
-  @include sp {
-    padding: 1.3rem;
-  }
-}
-
-.main .post-btn[data-v-c9a65f5a] {
-  @include sp {
-    width: 5rem;
-    margin-top: 1.2rem;
-    padding: 0.4rem;
-  }
-}
-
 .main-img[data-v-c9a65f5a] {
   @include sp {
     padding: 0.1rem;

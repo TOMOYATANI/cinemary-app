@@ -6,7 +6,71 @@
       " class="post-comment flex">
       <img class="comment-icon" src="../assets/コメント.jpg" alt="コメント" />
     </button>
-    <modal class="modal-inner" v-scroll-lock="open" name="post" :width="750" :height="550">
+    <!-- PC・タブレット用モーダルウィンドウ -->
+    <modal
+      class="modal-inner modal-pctb"
+      v-scroll-lock="open"
+      name="post"
+      :width="750"
+      :height="550"
+    >
+      <div
+        data-modal="post"
+        aria-expanded="true"
+        class="vm--overlay"
+        styles="background: rgba(255, 255, 255, 0.1);"
+      >
+        <div class="vm--top-right-slot"></div>
+      </div>
+      <div class="modal-header flex">
+        <h2 class="post-title flex">Cinemaryを投稿する</h2>
+        <hr class="separate" />
+      </div>
+      <div class="modal-body">
+        <div class="post-items flex">
+          <div class="post-contens flex">
+            <input type="text" class="post-item" maxlength="50" placeholder="タイトル" v-model="title" />
+          </div>
+          <div class="post-contens flex">
+            <textarea-autosize
+              name="text"
+              rows="1"
+              v-model="description"
+              placeholder="内容"
+              maxlength="50"
+              :min-height="70"
+              :max-height="70"
+            ></textarea-autosize>
+          </div>
+          <div class="post-contens flex">
+            <select
+              v-model="genre"
+              class="post-select"
+              :style="{ color: genre == '' ? 'gray' : 'white' }"
+            >
+              <option class="post-item" value hidden>ジャンルを選択</option>
+              <option
+                v-for="genre in genres"
+                :value="genre.name"
+                :key="genre.id"
+                class="post-item"
+                style="color: white;"
+              >{{ genre.name }}</option>
+            </select>
+          </div>
+          <button class="post-btn" @click.prevent="postItem">投稿</button>
+          <button
+            class="hide-btn flex"
+            @click="
+              hide();
+              closeModal();
+            "
+          >×</button>
+        </div>
+      </div>
+    </modal>
+    <!-- スマホ用モーダルウィンドウ -->
+    <modal class="modal-inner modal-sp" v-scroll-lock="open" name="post" :width="500" :height="500">
       <div
         data-modal="post"
         aria-expanded="true"
@@ -125,8 +189,8 @@ export default {
     postItem() {
       const currentUser = firebase.auth().currentUser;
       this.uid = currentUser.uid;
-     
-     const id = firebase
+
+      const id = firebase
         .firestore()
         .collection("posts")
         .doc().id;
@@ -376,10 +440,85 @@ $breakpoint-mobile: 600px;
   }
 }
 
+.modal-pctb {
+  @include pc {
+    display: flex;
+  }
+  @include tab {
+    display: flex;
+  }
+  @include sp {
+    display: none;
+  }
+}
+
+.modal-sp {
+  @include pc {
+    display: none;
+  }
+  @include tab {
+    display: none;
+  }
+  @include sp {
+    display: flex;
+  }
+}
+
+::placeholder {
+  @include sp {
+    font-size: 0.9rem;
+  }
+}
+
+textarea::placeholder {
+  @include sp {
+    font-size: 0.9rem;
+  }
+}
+
+hr.separate[data-v-0148dea0] {
+  @include sp {
+    margin: 1rem 0;
+  }
+}
+
 .post-tll {
   @include sp {
     width: 200px;
     margin: 3rem;
+  }
+}
+
+.modal-inner .modal-header .post-title[data-v-0148dea0] {
+  @include sp {
+    font-size: 1.2rem;
+    padding-top: 3rem;
+  }
+}
+
+.modal-inner .modal-body .post-items .post-contens .post-item[data-v-0148dea0] {
+  @include sp {
+    width: 23rem;
+    height: 3rem;
+    font-size: 0.9rem;
+  }
+}
+
+textarea[data-v-0148dea0] {
+  @include sp {
+    width: 23rem;
+    font-size: 0.9rem;
+  }
+}
+
+.modal-inner
+  .modal-body
+  .post-items
+  .post-contens
+  .post-select[data-v-0148dea0] {
+  @include sp {
+    width: 23rem;
+    font-size: 0.9rem;
   }
 }
 </style>

@@ -162,9 +162,38 @@ $breakpoint-mobile: 600px;
   }
 }
 
-p[data-v-e7ab893a] {
+.about .description p[data-v-751dc925] {
   @include sp {
     font-size: 0.8rem;
+  }
+   @include tab {
+    font-size: 0.9rem;
+  }
+}
+
+.about ul .remark .faceicon img[data-v-751dc925] {
+  @include sp {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.say[data-v-751dc925] {
+  @include sp {
+    margin: 0 0 0 20px;
+    padding: 8px;
+  }
+}
+
+.about ul .remark[data-v-751dc925] {
+  @include sp {
+    width: 405px;
+  }
+}
+
+p[data-v-751dc925] {
+  @include sp {
+    font-size: 0.9rem;
   }
 }
 

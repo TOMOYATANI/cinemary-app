@@ -80,21 +80,55 @@ $black-color: rgb(0, 0, 0);
 
 // -- テンプレート -- //
 
-  .profile-list {
-    width: 50%;
+.profile-list {
+  width: 50%;
+  display: flex;
+  margin: 3rem;
+  color: $white-color;
+  .list-items {
     display: flex;
-    margin: 3rem;
-    color: $white-color;
-    .list-items {
-      display: flex;
-      justify-content: start;
-      color: rgb(130, 130, 130);
-      .list-color {
-        color: $white-color;
-        font-weight: bold;
-        margin: 0 1rem;
-      }
+    justify-content: start;
+    color: rgb(130, 130, 130);
+    .list-color {
+      color: $white-color;
+      font-weight: bold;
+      margin: 0 1rem;
     }
+  }
 }
 
+// -- メディアクエリ -- //
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.profile-list .list-items .list-color {
+  @include sp {
+    font-size: 0.9rem;
+  }
+}
+
+.profile-list .list-items {
+  @include sp {
+      width: 330px;
+    font-size: 0.9rem;
+  }
+}
 </style>

@@ -139,11 +139,40 @@ hr.separate {
   width: 100%;
 }
 
-// -- ネオン -- //
+// -- ネオンカラー -- //
 
 .neon {
   color: transparent;
   -webkit-text-stroke: 0.5px rgb(255, 0, 0);
   text-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+}
+
+// -- メディアクエリ -- //
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.mypage .post-list[data-v-1d5f4956] {
+  @include sp {
+    width: 60%;
+    font-size: 1rem;
+  }
 }
 </style>

@@ -7,7 +7,153 @@
             "
       class="profile-edit flex"
     >プロフィール編集</button>
-    <modal class="modal-inner" v-scroll-lock="open" name="edit" :width="1100" :height="740">
+     <!-- PC・タブレット用モーダルウィンドウ -->
+    <modal
+      class="modal-inner modal-pctb"
+      v-scroll-lock="open"
+      name="edit"
+      :width="1100"
+      :height="740"
+    >
+      <div data-modal="edit" aria-expanded="true" class="vm--overlay">
+        <div class="vm--top-right-slot"></div>
+      </div>
+      <div class="modal-header flex">
+        <h2 class="profile-tll flex">プロフィールを編集する</h2>
+        <hr class="separate" />
+      </div>
+      <div class="modal-body">
+        <div class="profile-inner flex">
+          <div class="profile-contens flex">
+            <div class="profile-img-inner flex">
+              <img
+                :src="preview == '' ? uploadedImage.fileUrl : preview"
+                width="200"
+                height="200"
+                class="profile-img"
+                alt="プロフィール画像"
+              />
+              <!--previewが空の場合、fileUrl（画像）を表示。空の場合はpreviewを表示。-->
+              <label class="profile-txt profile-update">
+                プロフィール画像を編集する
+                <input type="file" @change="onFileChange" style="display:none" />
+              </label>
+            </div>
+            <div class="line"></div>
+            <div class="profile-items flex">
+              <div class="profile-contens flex">
+                <input type="text" class="profile-item" placeholder="名前" v-model="name" />
+              </div>
+              <div class="profile-contens flex">
+                <select
+                  class="profile-select"
+                  v-model="sex"
+                  :style="{ color: sex == '' ? 'gray' : 'white' }"
+                >
+                  <option class="profile-item" value hidden>性別</option>
+                  <option
+                    v-for="sex in sexs"
+                    :value="sex.name"
+                    :key="sex.id"
+                    class="profile-item"
+                    style="color: white;"
+                  >{{ sex.name }}</option>
+                </select>
+              </div>
+              <div class="profile-contens flex">
+                <select
+                  class="profile-select"
+                  v-model="age"
+                  :style="{ color: age == '' ? 'gray' : 'white' }"
+                >
+                  <option class="profile-item" value hidden>年齢</option>
+                  <option
+                    v-for="age in ages"
+                    :value="age.name"
+                    :key="age.id"
+                    class="profile-item"
+                    style="color: white;"
+                  >{{ age.name }}</option>
+                </select>
+              </div>
+              <div class="profile-contens flex">
+                <select
+                  class="profile-select"
+                  v-model="access"
+                  :style="{ color: access == '' ? 'gray' : 'white' }"
+                >
+                  <option class="profile-item" value hidden>居住地</option>
+                  <option
+                    v-for="access in accesses"
+                    :value="access.name"
+                    :key="access.id"
+                    class="profile-item"
+                    style="color: white;"
+                  >{{ access.name }}</option>
+                </select>
+              </div>
+              <div class="profile-contens flex">
+                <select
+                  class="profile-select"
+                  v-model="profession"
+                  :style="{ color: profession == '' ? 'gray' : 'white' }"
+                >
+                  <option class="profile-item" value hidden>職業</option>
+                  <option
+                    v-for="profession in professions"
+                    :value="profession.name"
+                    :key="profession.id"
+                    class="profile-item"
+                    style="color: white;"
+                  >{{ profession.name }}</option>
+                </select>
+              </div>
+              <div class="profile-contens flex">
+                <textarea-autosize
+                  name="text"
+                  cols="10"
+                  rows="1"
+                  v-model="selfpr"
+                  placeholder="自己紹介"
+                  maxlength="50"
+                  :min-height="70"
+                  :max-height="70"
+                ></textarea-autosize>
+              </div>
+              <div class="profile-contens flex">
+                <select
+                  v-model="genre"
+                  class="profile-select"
+                  :style="{ color: genre == '' ? 'gray' : 'white' }"
+                >
+                  <option class="profile-item" value hidden>好きなジャンル</option>
+                  <option
+                    v-for="genre in genres"
+                    :value="genre.name"
+                    :key="genre.id"
+                    class="profile-item"
+                    style="color: white;"
+                  >{{ genre.name }}</option>
+                </select>
+              </div>
+              <div class="profile-contens flex">
+                <input type="text" class="profile-item" placeholder="好きな映画" v-model="favMovie" />
+              </div>
+            </div>
+            <button
+              class="hide-btn flex"
+              @click="
+                      hide();
+                      closeModal();
+                    "
+            >×</button>
+          </div>
+          <button @click="updateBtn" class="update-btn flex">更新</button>
+        </div>
+      </div>
+    </modal>
+    <!-- スマホ用モーダルウィンドウ -->
+    <modal class="modal-inner modal-sp" v-scroll-lock="open" name="edit" :width="500" :height="720">
       <div data-modal="edit" aria-expanded="true" class="vm--overlay">
         <div class="vm--top-right-slot"></div>
       </div>
@@ -671,6 +817,134 @@ hr.separate {
       border-color: #333;
       color: #fff;
     }
+  }
+}
+
+// -- メディアクエリ -- //
+
+$breakpoint-pc: 1440px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (max-width: ($breakpoint-pc)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.mypage-edit .profile-edit[data-v-6eaa1356] {
+  @include sp {
+    width: 8.5rem;
+    overflow: hidden;
+    font-size: 0.7rem;
+  }
+}
+
+.modal-pctb {
+  @include pc {
+    display: flex;
+  }
+  @include tab {
+    display: flex;
+  }
+  @include sp {
+    display: none;
+  }
+}
+
+.modal-sp {
+  @include pc {
+    display: none;
+  }
+  @include tab {
+    display: none;
+  }
+  @include sp {
+    display: flex;
+  }
+}
+
+.mypage-edit .modal-inner .modal-header .profile-tll[data-v-6eaa1356] {
+  @include sp {
+    font-size: 1.1rem;
+  }
+}
+
+.mypage-edit
+  .modal-inner
+  .modal-body
+  .profile-inner
+  .profile-contens
+  .profile-img-inner
+  .profile-img[data-v-6eaa1356] {
+  @include sp {
+    width: 180px;
+    height: 180px;
+    margin-left: 0rem;
+  }
+}
+
+.mypage-edit
+  .modal-inner
+  .modal-body
+  .profile-inner
+  .profile-contens
+  .profile-img-inner
+  .profile-txt[data-v-6eaa1356] {
+  @include sp {
+    margin: 1rem 0;
+    margin-left: 0rem;
+    font-size: 0.8rem;
+  }
+}
+
+.mypage-edit .profile-select[data-v-6eaa1356] {
+  @include sp {
+    width: 11rem;
+    font-size: 0.9rem;
+  }
+}
+
+.mypage-edit
+  .modal-inner
+  .modal-body
+  .profile-inner
+  .profile-contens
+  .profile-item[data-v-6eaa1356] {
+  @include sp {
+    width: 11rem;
+    height: 2.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+textarea[data-v-6eaa1356] {
+  @include sp {
+    width: 11rem;
+    font-size: 0.9rem;
+  }
+}
+
+.mypage-edit .modal-inner .update-btn[data-v-6eaa1356] {
+  cursor: pointer;
+  @include sp {
+    margin: 1rem;
+  }
+}
+
+.mypage-edit .modal-inner .modal-body .profile-inner[data-v-6eaa1356] {
+  @include sp {
+    padding-bottom: 3rem;
   }
 }
 </style>

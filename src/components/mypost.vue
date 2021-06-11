@@ -1,6 +1,7 @@
 <template>
   <div class="profile-posts">
-    <paginate name="paginate-listData" tag="ol" :list="listData" :per="3">
+    <!-- PC・タブレット用ページネーション -->
+    <paginate name="paginate-listData" class="paginate-pctb" tag="ol" :list="listData" :per="3">
       <List
         v-for="(list, index) in paginated('paginate-listData')"
         :index="index"
@@ -10,10 +11,29 @@
     </paginate>
     <paginate-links
       for="paginate-listData"
-      class="pagination flex"
+      name="paginate-listData"
+      :async="true"
+      class="pagination paginate-pctb flex"
       :show-step-links="true"
       :style="listData == '' ? 'display:none;' : 'display:flex;'"
     ></paginate-links>
+    <!-- スマホ用ページネーション -->
+    <!-- <paginate name="paginate-listData" class="paginate-sp" tag="ol" :list="listData" :per="1">
+      <List
+        v-for="(list, index) in paginated('paginate-listData')"
+        :index="index"
+        :list="list"
+        :key="list.id"
+      />
+    </paginate>
+    <paginate-links
+      for="paginate-listData"
+      name="paginate-listData"
+      :async="true"
+      class="pagination paginate-sp flex"
+      :show-step-links="true"
+      :style="listData == '' ? 'display:none;' : 'display:flex;'"
+    ></paginate-links> -->
   </div>
 </template>
 
@@ -29,11 +49,11 @@ export default {
     return {
       profileData: {},
       listData: [],
-      paginate: ["paginate-listData"],
+      paginate: ["paginate-listData"]
     };
   },
   components: {
-    List,
+    List
   },
 
   created() {
@@ -138,6 +158,30 @@ $breakpoint-mobile: 600px;
     @content;
   }
 }
+
+// .paginate-pctb {
+//   @include pc {
+//     display: flex;
+//   }
+//   @include tab {
+//     display: flex;
+//   }
+//   @include sp {
+//     display: none !important;
+//   }
+// }
+
+// .paginate-sp {
+//   @include pc {
+//     display: none;
+//   }
+//   @include tab {
+//     display: none;
+//   }
+//   @include sp {
+//     display: flex;
+//   }
+// }
 
 .mypage-inner .profile-inner-l {
   @include sp {
