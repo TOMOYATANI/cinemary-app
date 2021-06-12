@@ -11,6 +11,7 @@
           "
         />
         <h3>{{ list.title }}</h3>
+         {{bookmark}}
       </div>
     </div>
     <div class="face face2 flex">
@@ -55,7 +56,6 @@ export default {
     //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
     list: {
       type: Object,
-      required: true
       //親コンポーネント(board.vue)のlist[Object型]をpropsで渡している。
     },
     index: {
@@ -63,9 +63,7 @@ export default {
       //親コンポーネント(board.vue)のindex[Number型]をpropsで渡している。
     },
     bookmark: {
-      type: Object,
-      required: true,
-      default:() => {},
+      type: Array,
     }
   },
 

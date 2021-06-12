@@ -6,7 +6,7 @@
     <div class="post">
       <h2 id="top" class="post-tll neon">投稿一覧</h2>
       <!-- PC・タブレット用ページネーション -->
-      <div class="post-inner paginate-pctb">
+      <div class="post-inner" v-if="$mq === 'pc'">
         <div class="post-items">
           <paginate
             name="paginate-log"
@@ -23,7 +23,9 @@
               :key="list.id"
             />
           </paginate>
-          <div v-else class="nothing">" {{searchWord}} " に該当する投稿はありませんでした。</div>
+          <div v-else class="nothing">
+            " {{ searchWord }} " に該当する投稿はありませんでした。
+          </div>
           <!-- filteredPostDataにて該当する投稿がない場合、上記を表示させる。 -->
           <paginate-links
             for="paginate-log"
@@ -32,13 +34,17 @@
             v-scroll-to="postTop"
             :async="true"
             :show-step-links="true"
-            :style="filteredPostData.length !== 0 == '' ? 'display:none;' : 'display:flex;'"
+            :style="
+              (filteredPostData.length !== 0) == ''
+                ? 'display:none;'
+                : 'display:flex;'
+            "
           ></paginate-links>
           <!-- filteredPostDataにて該当する投稿がない場合、非表示。投稿がある場合、表示。 -->
         </div>
       </div>
       <!-- スマホ用ページネーション -->
-      <!-- <div class="post-inner paginate-sp">
+      <div class="post-inner" v-if="$mq === 'sp'">
         <div class="post-items">
           <paginate
             name="paginate-log"
@@ -55,7 +61,9 @@
               :key="list.id"
             />
           </paginate>
-          <div v-else class="nothing">" {{searchWord}} " に該当する投稿はありませんでした。</div>
+          <div v-else class="nothing">
+            " {{ searchWord }} " に該当する投稿はありませんでした。
+          </div>
           <paginate-links
             for="paginate-log"
             name="paginate-log"
@@ -63,10 +71,14 @@
             v-scroll-to="postTop"
             :async="true"
             :show-step-links="true"
-            :style="filteredPostData.length !== 0 == '' ? 'display:none;' : 'display:flex;'"
+            :style="
+              (filteredPostData.length !== 0) == ''
+                ? 'display:none;'
+                : 'display:flex;'
+            "
           ></paginate-links>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -83,6 +95,16 @@ Vue.use(VuePaginate);
 const VueScrollTo = require("vue-scrollto");
 Vue.use(VueScrollTo);
 
+// import VueMq from "vue-mq";
+
+// Vue.use(VueMq, {
+//   breakpoints: {
+//     pc: 1440,
+//     tb: 1024,
+//     sp: 600,
+//   },
+// });
+
 export default {
   data() {
     return {
@@ -93,19 +115,19 @@ export default {
       paginate: ["paginate-log"],
       postTop: "#top",
       userDatas: [],
-      searchWord: ""
+      searchWord: "",
     };
   },
   components: {
     Header,
     Post,
     List,
-    Search
+    Search,
   },
   computed: {
     filteredPostData() {
       if (this.searchWord != "") {
-        return this.postData.filter(v => {
+        return this.postData.filter((v) => {
           return ~v.genre.indexOf(this.searchWord);
           //検索内容(this.searchWord)と同じ内容(genre)を持つ要素の位置を返す。存在しない場合、-1を返す。
           //しかし、-1は今回ない為、「~v」とビット反転演算子(符号を反転してマイナス1した数)を使って、-1 → 0となる。
@@ -114,7 +136,7 @@ export default {
         return this.postData;
         //サーチ内容がない場合はそのまま、それ以外はフィルタ結果を返す
       }
-    }
+    },
   },
   created() {
     // "posts"コレクションの全ドキュメントを取得。
@@ -123,9 +145,9 @@ export default {
       .collection("posts")
       .orderBy("time", "desc")
       .get()
-      .then(snapshot => {
+      .then((snapshot) => {
         //"posts"(参照先)のスナップショットを得る
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.postData.push({ ...doc.data(), id: doc.id });
           //更にpostDataの空配列に格納した"doc"データを格納
@@ -137,12 +159,12 @@ export default {
       .firestore()
       .collection("users")
       .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
           this.userDatas.push(JSON.parse(JSON.stringify(doc.data())));
         });
       });
-  }
+  },
 };
 </script>
 

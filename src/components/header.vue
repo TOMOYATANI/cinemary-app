@@ -49,7 +49,8 @@ export default {
   name: "signOut",
   data() {
     return {
-      authenticatedUser: ""
+      authenticatedUser: "",
+      uid:[]
     };
   },
   methods: {
@@ -67,23 +68,22 @@ export default {
         });
     }
   },
-  created() {
-    const currentUser = firebase.auth().currentUser;
-    this.uid = currentUser.uid;
-
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(currentUser.uid)
-      .get();
-  },
   mounted() {
     firebase.auth().onAuthStateChanged(user => {
+      const currentUser = firebase.auth().currentUser;
+      this.uid = currentUser.uid;
+
       if (user) {
         this.authenticatedUser = true;
       } else {
         this.authenticatedUser = false;
       }
+
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(currentUser.uid)
+        .get();
     });
   }
 };

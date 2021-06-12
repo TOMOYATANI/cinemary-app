@@ -15,11 +15,15 @@ export default {
   name: "signOut",
   data() {
     return {
-      authenticatedUser: ""
+      authenticatedUser: "",
+      uid: []
     };
   },
   mounted() {
     firebase.auth().onAuthStateChanged(user => {
+      const currentUser = firebase.auth().currentUser;
+      this.uid = currentUser.uid;
+
       if (user) {
         this.authenticatedUser = true;
       } else {

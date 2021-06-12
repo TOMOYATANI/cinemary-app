@@ -167,7 +167,7 @@ $breakpoint-mobile: 600px;
     font-size: 0.8rem;
   }
    @include tab {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 }
 

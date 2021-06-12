@@ -6,7 +6,7 @@
       " class="post-comment flex">
       <img class="comment-icon" src="../assets/コメント.jpg" alt="コメント" />
     </button>
-    <!-- PC・タブレット用モーダルウィンドウ -->
+     <!-- PC・タブレット用モーダルウィンドウ -->
     <modal
       class="modal-inner modal-pctb"
       v-scroll-lock="open"
@@ -69,7 +69,7 @@
         </div>
       </div>
     </modal>
-    <!-- スマホ用モーダルウィンドウ -->
+     <!-- スマホ用モーダルウィンドウ -->
     <modal class="modal-inner modal-sp" v-scroll-lock="open" name="post" :width="500" :height="500">
       <div
         data-modal="post"

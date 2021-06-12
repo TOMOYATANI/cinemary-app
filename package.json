@@ -30,6 +30,7 @@
     "vue-click-outside": "^1.1.0",
     "vue-instantsearch": "^3.7.0",
     "vue-js-modal": "^2.0.0-rc.6",
+    "vue-mq": "^1.0.1",
     "vue-nl2br": "^0.1.2",
     "vue-paginate": "^3.6.0",
     "vue-router": "^3.2.0",

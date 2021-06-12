@@ -3,9 +3,6 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import firebase from "firebase";
-import InstantSearch from "vue-instantsearch";
-
-Vue.use(InstantSearch);
 
 Vue.config.productionTip = false;
 

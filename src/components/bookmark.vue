@@ -11,13 +11,13 @@
           class="paginate-pctb"
           tag="ol"
           :list="bookmarkList"
-          :per="3"
+          :per="12"
           v-if="bookmarkList.length !== 0"
         >
           <List
             v-for="(list) in paginated('paginate-bookmarkList')"
             :list="list"
-            :bookmark="bookmarklist"
+            :bookmark="bookmarkList"
             :key="list.id"
           />
         </paginate>

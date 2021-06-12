@@ -49,7 +49,7 @@ export default {
     return {
       profileData: {},
       listData: [],
-      paginate: ["paginate-listData"]
+      paginate: ["paginate-listData"],
     };
   },
   components: {
