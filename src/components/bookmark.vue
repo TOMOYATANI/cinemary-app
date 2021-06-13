@@ -5,7 +5,6 @@
       <h3 class="bookmarkList-title flex">{{ profileData.name }} さんのブックマーク一覧</h3>
       <hr class="separate" />
       <div class="bookmarkList-posts">
-        <!-- PC・タブレット用ページネーション -->
         <paginate
           name="paginate-bookmarkList"
           class="paginate-pctb"
@@ -31,27 +30,6 @@
           :show-step-links="true"
           :style="bookmarkList == '' ? 'display:none;' : 'display:flex;'"
         ></paginate-links>
-        <!--スマホ用ページネーション -->
-        <!-- <paginate
-          name="paginate-bookmarkList"
-          class="paginate-sp"
-          tag="ol"
-          :list="bookmarkList"
-          :per="3"
-          v-if="bookmarkList.length !== 0"
-        >
-          <List v-for="(list) in paginated('paginate-bookmarkList')" :list="list" :key="list.id" />
-        </paginate>
-
-        <div v-else class="nothing flex">ブックマークされた投稿はありません</div>
-        <paginate-links
-          for="paginate-bookmarkList"
-          name="paginate-bookmarkList"
-          :async="true"
-          class="pagination paginate-sp flex"
-          :show-step-links="true"
-          :style="bookmarkList == '' ? 'display:none;' : 'display:flex;'"
-        ></paginate-links>-->
       </div>
     </div>
   </div>
@@ -179,28 +157,4 @@ $breakpoint-mobile: 600px;
     @content;
   }
 }
-
-// .paginate-pctb {
-//   @include pc {
-//     display: flex !important;
-//   }
-//   @include tab {
-//     display: flex !important;
-//   }
-//   @include sp {
-//     display: none !important;
-//   }
-// }
-
-// .paginate-sp {
-//   @include pc {
-//     display: none !important;
-//   }
-//   @include tab {
-//     display: none !important;
-//   }
-//   @include sp {
-//     display: flex !important;
-//   }
-// }
 </style>
