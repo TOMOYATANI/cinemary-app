@@ -28,11 +28,11 @@ export default {
   data() {
     return {
       email: "",
-      password: "",
+      password: ""
     };
   },
   components: {
-    Header,
+    Header
   },
   methods: {
     signIn() {
@@ -40,30 +40,28 @@ export default {
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
         //ユーザーがログインフォームへ入力したら、signInWithEmailAndPassword メソッドを呼び出す。
-        .then((res) => {
+        .then(res => {
           this.$swal("ログインに成功しました。 ", {
-            icon: "success",
+            icon: "success"
           });
           this.uid = res.user.uid;
 
-          return (
-            firebase
-              .firestore()
-              .collection("users")
-              .doc(this.uid)
-              .get()
-          );
+          return firebase
+            .firestore()
+            .collection("users")
+            .doc(this.uid)
+            .get();
         })
         .then(() => {
           this.$router.push(`/mypage/${this.uid}`);
         })
         .catch(() => {
           this.$swal("ログイン情報が間違っています。", {
-            icon: "error",
+            icon: "error"
           });
         });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -76,19 +74,15 @@ $black-color: rgb(0, 0, 0);
 
 .signin {
   height: 90vh;
-  flex-flow: column nowrap;
   background-color: rgba(20, 20, 20);
   .signin-inner {
     width: 35%;
-    height: 53%;
+    height: 55%;
     flex-direction: column;
     z-index: 1;
     font-weight: bold;
     color: gray;
     background-color: $black-color;
-    position: absolute;
-    top: 30%;
-    left: 35%;
     padding: 2rem;
     box-shadow: 0 0 10px rgb(45, 45, 45);
   }
@@ -124,6 +118,34 @@ $black-color: rgb(0, 0, 0);
     font-weight: bold;
     font-size: 0.9rem;
     cursor: pointer;
+  }
+}
+
+// -- メディアクエリ -- //
+
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (min-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.signin .signin-inner {
+  @include sp {
+    width: 60%;
+    left: 21%;
   }
 }
 </style>

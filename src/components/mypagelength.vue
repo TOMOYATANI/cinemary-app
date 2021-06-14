@@ -94,12 +94,11 @@ p {
 }
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -114,7 +113,7 @@ $breakpoint-mobile: 600px;
   }
 }
 
-p[data-v-5a501471] {
+p {
   @include sp {
     font-size: 13px;
     margin: 0.9rem;

@@ -142,12 +142,11 @@ p {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -162,42 +161,42 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.about .description p[data-v-751dc925] {
+.about .description p {
   @include sp {
     font-size: 0.8rem;
   }
-   @include tab {
+  @include tab {
     font-size: 0.85rem;
   }
 }
 
-.about ul .remark .faceicon img[data-v-751dc925] {
+.about ul .remark .faceicon img {
   @include sp {
     width: 50px;
     height: 50px;
   }
 }
 
-.say[data-v-751dc925] {
+.say {
   @include sp {
     margin: 0 0 0 20px;
     padding: 8px;
   }
 }
 
-.about ul .remark[data-v-751dc925] {
+.about ul .remark {
   @include sp {
     width: 405px;
   }
 }
 
-p[data-v-751dc925] {
+p {
   @include sp {
     font-size: 0.9rem;
   }
 }
 
-.about ul .remark[data-v-e7ab893a] {
+.about ul .remark {
   @include sp {
     width: 400px;
   }

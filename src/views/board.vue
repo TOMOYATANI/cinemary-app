@@ -220,12 +220,11 @@ ul.paginate-links > li.ellipses > a {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }

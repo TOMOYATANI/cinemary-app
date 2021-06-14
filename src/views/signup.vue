@@ -31,11 +31,11 @@ export default {
       email: "",
       password: "",
       name: "",
-      uid: "",
+      uid: ""
     };
   },
   components: {
-    Header,
+    Header
   },
   methods: {
     signUp() {
@@ -46,30 +46,28 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         //メールアドレスとパスワードを検証し、それらをcreateUserWithEmailAndPassword メソッドに渡す。
 
-        .then((userCredential) => {
+        .then(userCredential => {
           userCredential.user.updateProfile({
             //新規登録時に取得したemailとpasswordを引数として（userCredential）渡す。
             //userCredential引数に渡して新規登録したユーザーをFirebaseでプロフィール情報を登録。
             displayName: self.name,
-            photoURL: require("../assets/デフォルト画像.jpg"),
+            photoURL: require("../assets/デフォルト画像.jpg")
           });
           this.$swal("登録に成功しました。", {
-            icon: "success",
+            icon: "success"
           });
           this.uid = userCredential.user.uid;
 
-          return (
-            firebase
-              .firestore()
-              .collection("users")
-              .doc(this.uid)
-              .set({
-                name: this.name,
-                time: firebase.firestore.FieldValue.serverTimestamp(),
-                uid: userCredential.user.uid,
-                //各マイページにページ遷移出来るようにする為にuidをfirestoreに格納
-              })
-          );
+          return firebase
+            .firestore()
+            .collection("users")
+            .doc(this.uid)
+            .set({
+              name: this.name,
+              time: firebase.firestore.FieldValue.serverTimestamp(),
+              uid: userCredential.user.uid
+              //各マイページにページ遷移出来るようにする為にuidをfirestoreに格納
+            });
         })
         .then(() => {
           this.$router.push(`/mypage/${this.uid}`);
@@ -77,11 +75,11 @@ export default {
         })
         .catch(() => {
           this.$swal("登録情報が正しくありません。", {
-            icon: "error",
+            icon: "error"
           });
         });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -94,19 +92,15 @@ $black-color: rgb(0, 0, 0);
 
 .signup {
   height: 90vh;
-  flex-flow: column nowrap;
   background-color: rgba(20, 20, 20);
   .signup-inner {
     width: 35%;
-    height: 53%;
+    height: 60%;
     flex-direction: column;
     z-index: 1;
     font-weight: bold;
     color: gray;
     background-color: $black-color;
-    position: absolute;
-    top: 30%;
-    left: 35%;
     padding: 2rem;
     box-shadow: 0 0 10px rgb(45, 45, 45);
     h2 {
@@ -143,6 +137,34 @@ $black-color: rgb(0, 0, 0);
       font-size: 0.9rem;
       cursor: pointer;
     }
+  }
+}
+
+// -- メディアクエリ -- //
+
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 600px;
+
+@mixin pc {
+  @media (min-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin tab {
+  @media (max-width: ($breakpoint-tablet)) {
+    @content;
+  }
+}
+@mixin sp {
+  @media (max-width: ($breakpoint-mobile)) {
+    @content;
+  }
+}
+
+.signup .signup-inner {
+  @include sp {
+    width: 60%;
+    left: 21%;
   }
 }
 </style>

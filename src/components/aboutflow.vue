@@ -161,12 +161,11 @@ p {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -181,13 +180,13 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.about .flow[data-v-5a126e4a] {
+.about .flow {
   @include sp {
     height: 22rem;
   }
 }
 
-.about .flow .flow-item img[data-v-5a126e4a] {
+.about .flow .flow-item img {
   @include sp {
     width: 55px;
     height: 55px;
@@ -198,7 +197,7 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.about .flow .flow-item h3[data-v-5a126e4a] {
+.about .flow .flow-item h3 {
   @include sp {
     padding: 0.3rem;
     font-size: 0.9rem;
@@ -209,7 +208,7 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.about .flow .flow-item .step-txt[data-v-5a126e4a] {
+.about .flow .flow-item .step-txt {
   @include sp {
     padding: 0.9rem;
     font-size: 12px;

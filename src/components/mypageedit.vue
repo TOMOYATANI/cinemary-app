@@ -7,7 +7,7 @@
             "
       class="profile-edit flex"
     >プロフィール編集</button>
-     <!-- PC・タブレット用モーダルウィンドウ -->
+    <!-- PC・タブレット用モーダルウィンドウ -->
     <modal
       class="modal-inner modal-pctb"
       v-scroll-lock="open"
@@ -822,12 +822,11 @@ hr.separate {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -842,7 +841,7 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.mypage-edit .profile-edit[data-v-6eaa1356] {
+.mypage-edit .profile-edit {
   @include sp {
     width: 8.5rem;
     overflow: hidden;
@@ -874,7 +873,7 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.mypage-edit .modal-inner .modal-header .profile-tll[data-v-6eaa1356] {
+.mypage-edit .modal-inner .modal-header .profile-tll {
   @include sp {
     font-size: 1.1rem;
   }
@@ -886,7 +885,7 @@ $breakpoint-mobile: 600px;
   .profile-inner
   .profile-contens
   .profile-img-inner
-  .profile-img[data-v-6eaa1356] {
+  .profile-img {
   @include sp {
     width: 180px;
     height: 180px;
@@ -900,7 +899,7 @@ $breakpoint-mobile: 600px;
   .profile-inner
   .profile-contens
   .profile-img-inner
-  .profile-txt[data-v-6eaa1356] {
+  .profile-txt {
   @include sp {
     margin: 1rem 0;
     margin-left: 0rem;
@@ -908,7 +907,7 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.mypage-edit .profile-select[data-v-6eaa1356] {
+.mypage-edit .profile-select {
   @include sp {
     width: 11rem;
     font-size: 0.9rem;
@@ -920,7 +919,7 @@ $breakpoint-mobile: 600px;
   .modal-body
   .profile-inner
   .profile-contens
-  .profile-item[data-v-6eaa1356] {
+  .profile-item {
   @include sp {
     width: 11rem;
     height: 2.5rem;
@@ -928,21 +927,21 @@ $breakpoint-mobile: 600px;
   }
 }
 
-textarea[data-v-6eaa1356] {
+textarea {
   @include sp {
     width: 11rem;
     font-size: 0.9rem;
   }
 }
 
-.mypage-edit .modal-inner .update-btn[data-v-6eaa1356] {
+.mypage-edit .modal-inner .update-btn {
   cursor: pointer;
   @include sp {
     margin: 1rem;
   }
 }
 
-.mypage-edit .modal-inner .modal-body .profile-inner[data-v-6eaa1356] {
+.mypage-edit .modal-inner .modal-body .profile-inner {
   @include sp {
     padding-bottom: 3rem;
   }

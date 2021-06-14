@@ -82,12 +82,11 @@ $black-color: rgb(0, 0, 0);
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -102,27 +101,28 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.main-tll h1[data-v-b2774e42] {
+.main-tll h1 {
   @include sp {
     font-size: 1.5rem;
   }
 }
 
-.main-tll p[data-v-b2774e42] {
+.main-tll p {
   @include sp {
     font-size: 0.7rem;
   }
 }
 
-.main .tll[data-v-c9a65f5a] {
+.main .tll {
   @include sp {
     padding: 1rem;
+    top: 33%;
   }
 }
 
-.main-tll .post-btn[data-v-b2774e42] {
+.main-tll .post-btn {
   @include sp {
-    width: 5rem;
+    width: 6.5rem;
     margin-top: 1.2rem;
     padding: 0.4rem;
   }

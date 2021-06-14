@@ -4,37 +4,18 @@
       <h1 class="chat-tll flash neon flex">Chat Room</h1>
       <slide right disableOutsideClick width="200">
         <router-link to="/" class="header-link neon3 flash">HOME</router-link>
-        <router-link to="/about" class="header-link neon3 flash"
-          >ABOUT</router-link
-        >
-        <router-link :to="`/board/${this.uid}`" class="header-link neon3 flash"
-          >POST</router-link
-        >
-        <router-link
-          to="/signup"
-          class="header-link neon3 flash"
-          v-if="!authenticatedUser"
-          >SINGUP</router-link
-        >
-        <router-link
-          to="/signin"
-          class="header-link neon3 flash"
-          v-if="!authenticatedUser"
-          >SINGIN</router-link
-        >
-        <router-link :to="`/mypage/${this.uid}`" class="header-link neon3 flash"
-          >MYPAGE</router-link
-        >
+        <router-link to="/about" class="header-link neon3 flash">ABOUT</router-link>
+        <router-link :to="`/board/${this.uid}`" class="header-link neon3 flash">POST</router-link>
+        <router-link to="/signup" class="header-link neon3 flash" v-if="!authenticatedUser">SINGUP</router-link>
+        <router-link to="/signin" class="header-link neon3 flash" v-if="!authenticatedUser">SINGIN</router-link>
+        <router-link :to="`/mypage/${this.uid}`" class="header-link neon3 flash">MYPAGE</router-link>
       </slide>
       <div id="page-wrap"></div>
     </div>
     <!--Firebase から取得したリストを描画-->
     <transition-group name="chat" tag="div" class="list content">
       <!--chatの中の{ key, name, image, message ,userid }をそれぞれ取得-->
-      <section
-        v-for="{ key, name, image, message, userid, time } in chat"
-        :key="key"
-      >
+      <section v-for="{ key, name, image, message, userid, time } in chat" :key="key">
         <div v-if="userid === user.uid" class="myitem flex">
           <!-- 自身 -->
           <!--「画像」の指定-->
@@ -55,7 +36,7 @@
           <!-- 自身ではない -->
           <!--「画像」の指定-->
           <div class="otherimage flex">
-            <router-link :to="`/mypage/${returnUserData(userid).uid}`">
+            <router-link v-if="returnUserData(userid)" :to="`/mypage/${returnUserData(userid).uid}`">
               <img
                 :src="
                   returnUserData(userid)
@@ -67,9 +48,9 @@
               />
               <div class="othername flex">
                 {{
-                  returnUserData(userid)
-                    ? returnUserData(userid).name
-                    : "NO NAME"
+                returnUserData(userid)
+                ? returnUserData(userid).name
+                : "NO NAME"
                 }}
               </div>
             </router-link>
@@ -122,15 +103,15 @@ export default {
       user: {}, // ユーザー情報
       chat: [], // 取得したメッセージを入れる配列
       input: "", // 入力したメッセージ
-      uid:"",
+      uid: null,
       userIds: [],
       userDatas: [],
       authenticatedUser: "",
-      preview: require("../assets/デフォルト画像.jpg"),
+      preview: require("../assets/デフォルト画像.jpg")
     };
   },
   created() {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       // ログイン状態ならuserが取得できる
       this.user = user ? user : {};
       //userにはログイン中のユーザー情報(Firebaseのデータ)が保存されている。
@@ -167,7 +148,7 @@ export default {
           .collection("users")
           .doc(message.userid)
           .get()
-          .then((snapshot) => {
+          .then(snapshot => {
             self.userDatas.push(snapshot.data());
           });
         //メッセージを送信したuserid(ログイン中のユーザーid)の情報をuserDatasに保存
@@ -179,7 +160,7 @@ export default {
         image: message.image,
         message: message.message,
         userid: message.userid,
-        time: message.time,
+        time: message.time
       });
       this.scrollBottom();
       //スクロールの一番下に追加。
@@ -197,7 +178,7 @@ export default {
               name: this.user.displayName,
               image: this.user.photoURL,
               userid: this.user.uid,
-              time: firebase.database.ServerValue.TIMESTAMP,
+              time: firebase.database.ServerValue.TIMESTAMP
             },
 
             () => {
@@ -207,7 +188,7 @@ export default {
       }
     },
     returnUserData(id) {
-      const userData = this.userDatas.find((user) => user.uid === id);
+      const userData = this.userDatas.find(user => user.uid === id);
       //methodsなので引数に渡した値(id)はtemplate内の引数(userid)を渡していること。
       //this.userDatas（配列）に入っている値uesr.uidとidが一致したものを一つuserData（配列）に保存。
       return userData;
@@ -222,16 +203,16 @@ export default {
         text: "メッセージを削除しますか？",
         icon: "warning",
         buttons: true,
-        dangerMode: true,
+        dangerMode: true
       })
-        .then((willDelete) => {
+        .then(willDelete => {
           if (willDelete) {
             this.$swal("メッセージを削除しました", {
-              icon: "success",
+              icon: "success"
             });
             this.$router.go({
               path: `/chat/${this.$route.params.id}`,
-              force: true,
+              force: true
             });
           } else {
             this.$swal("キャンセルしました。");
@@ -239,14 +220,14 @@ export default {
         })
         .catch(() => {
           this.$swal("メッセージを削除出来ません。", {
-            icon: "error",
+            icon: "error"
           });
         });
-    },
+    }
   },
   mounted() {
     //以下、ユーザーが認証済みであれば表示・非表示を設定
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       const currentUser = firebase.auth().currentUser;
       this.uid = currentUser.uid;
 
@@ -256,7 +237,7 @@ export default {
         this.authenticatedUser = false;
       }
     });
-  },
+  }
 };
 </script>
 
@@ -415,7 +396,7 @@ div {
     }
   }
   .list {
-    width: 75%;
+    width: 90%;
     padding-bottom: 50px;
     overflow: hidden;
   }
@@ -487,13 +468,17 @@ div {
   height: 30px;
   left: 36px;
   position: absolute;
-  top: 28px;
+  top: 28px !important;
   width: 36px;
   color: $white-color;
 }
 
+.bm-burger-bars {
+  background-color: $white-color !important;
+}
+
 .bm-menu {
-  background-color: $black-color;
+  background-color: $black-color !important;
   height: 100%;
   left: 0;
   overflow-x: hidden;
@@ -516,7 +501,7 @@ div {
 .cross-style {
   cursor: pointer;
   position: absolute;
-  left: 25px;
+  left: 25px !important;
   top: 12px;
 }
 
@@ -566,14 +551,13 @@ div {
   }
 }
 
-/* <====== Media Queries======> */
+// -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -589,7 +573,10 @@ $breakpoint-mobile: 600px;
 }
 
 .chat .content .othermessage {
-     @include sp {
+  @include tab {
+    margin: 0;
+  }
+  @include sp {
     margin: 0;
   }
 }

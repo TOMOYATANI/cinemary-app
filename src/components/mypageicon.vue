@@ -81,12 +81,11 @@ $black-color: rgb(0, 0, 0);
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -101,14 +100,14 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.mypage-icon .profile-inner-img[data-v-3d31f544] {
+.mypage-icon .profile-inner-img {
   @include sp {
     width: 180px;
     height: 180px;
   }
 }
 
-.mypage-icon .profile-inner-name[data-v-3d31f544] {
+.mypage-icon .profile-inner-name {
   @include sp {
     font-size: 18px;
     padding: 0.9rem;

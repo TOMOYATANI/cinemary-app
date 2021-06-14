@@ -6,7 +6,7 @@
       " class="post-comment flex">
       <img class="comment-icon" src="../assets/コメント.jpg" alt="コメント" />
     </button>
-     <!-- PC・タブレット用モーダルウィンドウ -->
+    <!-- PC・タブレット用モーダルウィンドウ -->
     <modal
       class="modal-inner modal-pctb"
       v-scroll-lock="open"
@@ -69,7 +69,7 @@
         </div>
       </div>
     </modal>
-     <!-- スマホ用モーダルウィンドウ -->
+    <!-- スマホ用モーダルウィンドウ -->
     <modal class="modal-inner modal-sp" v-scroll-lock="open" name="post" :width="500" :height="500">
       <div
         data-modal="post"
@@ -418,14 +418,13 @@ textarea::placeholder {
   text-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 50px rgba(255, 0, 0, 0.5);
 }
 
-/* <====== Media Queries======> */
+// -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -476,7 +475,7 @@ textarea::placeholder {
   }
 }
 
-hr.separate[data-v-0148dea0] {
+hr.separate {
   @include sp {
     margin: 1rem 0;
   }
@@ -489,14 +488,14 @@ hr.separate[data-v-0148dea0] {
   }
 }
 
-.modal-inner .modal-header .post-title[data-v-0148dea0] {
+.modal-inner .modal-header .post-title {
   @include sp {
     font-size: 1.2rem;
     padding-top: 3rem;
   }
 }
 
-.modal-inner .modal-body .post-items .post-contens .post-item[data-v-0148dea0] {
+.modal-inner .modal-body .post-items .post-contens .post-item {
   @include sp {
     width: 23rem;
     height: 3rem;
@@ -504,18 +503,14 @@ hr.separate[data-v-0148dea0] {
   }
 }
 
-textarea[data-v-0148dea0] {
+textarea {
   @include sp {
     width: 23rem;
     font-size: 0.9rem;
   }
 }
 
-.modal-inner
-  .modal-body
-  .post-items
-  .post-contens
-  .post-select[data-v-0148dea0] {
+.modal-inner .modal-body .post-items .post-contens .post-select {
   @include sp {
     width: 23rem;
     font-size: 0.9rem;

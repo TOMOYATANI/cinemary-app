@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       authenticatedUser: "",
-      uid:[]
+      uid: []
     };
   },
   methods: {
@@ -70,20 +70,14 @@ export default {
   },
   mounted() {
     firebase.auth().onAuthStateChanged(user => {
-      const currentUser = firebase.auth().currentUser;
-      this.uid = currentUser.uid;
-
       if (user) {
         this.authenticatedUser = true;
       } else {
         this.authenticatedUser = false;
       }
 
-      firebase
-        .firestore()
-        .collection("users")
-        .doc(currentUser.uid)
-        .get();
+      const currentUser = firebase.auth().currentUser;
+      this.uid = currentUser.uid;
     });
   }
 };
@@ -227,12 +221,11 @@ a.header-ttl:hover span {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }

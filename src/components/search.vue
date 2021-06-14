@@ -152,12 +152,11 @@ hr.separate {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -178,7 +177,7 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.search-inner .search-main-contens .search-main-item[data-v-4ad41bb8] {
+.search-inner .search-main-contens .search-main-item {
   @include sp {
     width: 28rem;
     height: 2.5rem;

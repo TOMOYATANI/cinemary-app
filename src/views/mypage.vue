@@ -149,12 +149,11 @@ hr.separate {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -169,7 +168,7 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.mypage .post-list[data-v-1d5f4956] {
+.mypage .post-list{
   @include sp {
     width: 60%;
     font-size: 1rem;

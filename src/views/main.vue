@@ -158,12 +158,11 @@ $black-color: rgb(0, 0, 0);
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -178,7 +177,7 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.main-img[data-v-c9a65f5a] {
+.main-img{
   @include sp {
     padding: 0.1rem;
   }

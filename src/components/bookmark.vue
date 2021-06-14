@@ -138,12 +138,11 @@ hr.separate {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1440px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
+  @media (min-width: ($breakpoint-tablet)) {
     @content;
   }
 }
@@ -155,6 +154,14 @@ $breakpoint-mobile: 600px;
 @mixin sp {
   @media (max-width: ($breakpoint-mobile)) {
     @content;
+  }
+}
+
+.bookmarkList .nothing {
+  @include sp {
+    font-size: 1rem;
+    padding: 8rem;
+    margin: 5rem 0;
   }
 }
 </style>
