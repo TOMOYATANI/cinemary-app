@@ -208,7 +208,8 @@ export default {
             firebase
               .firestore()
               .collection("posts")
-              .add({
+              .doc(id)
+              .set({
                 title: this.title,
                 description: this.description,
                 genre: this.genre,

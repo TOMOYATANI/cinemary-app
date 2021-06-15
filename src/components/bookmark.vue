@@ -16,7 +16,7 @@
           <List
             v-for="(list) in paginated('paginate-bookmarkList')"
             :list="list"
-            :bookmark="bookmarkList"
+            :bookmark="currentUserBookmarkList"
             :key="list.id"
           />
         </paginate>
@@ -48,7 +48,9 @@ export default {
     return {
       profileData: {},
       paginate: ["paginate-bookmarkList"],
-      bookmarkList: []
+      bookmarkList: [],
+      currentUserBookmarkList: [],
+      uid: null
     };
   },
   components: {
@@ -78,7 +80,89 @@ export default {
           this.bookmarkList.push(doc.data());
         });
       });
+
+    const currentUser = firebase.auth().currentUser;
+    const uid = currentUser.uid;
+
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .collection("bookmarks")
+      .orderBy("time", "desc")
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          this.currentUserBookmarkList.push(doc.data());
+          console.log(this.currentUserBookmarkList);
+        });
+      });
+
+    // firebase.auth().onAuthStateChanged(function(currentUser) {
+    //   if (currentUser) {
+    //     const currentUser = firebase.auth().currentUser;
+    //     const uid = currentUser.uid;
+
+    //     firebase
+    //       .firestore()
+    //       .collection("users")
+    //       .doc(uid)
+    //       .collection("bookmarks")
+    //       .orderBy("time", "desc")
+    //       .get()
+    //       .then(snapshot => {
+    //         snapshot.forEach(doc => {
+    //           this.currentUserBookmarkList.push(doc.data());
+    //           // console.log(this.currentUserBookmarkList);
+    //         });
+    //       });
+    //   }
+    // });
+
+    //   await firebase.auth().onAuthStateChanged(function(currentUser) {
+    //     if (currentUser) {
+    //       const currentUser = firebase.auth().currentUser;
+    //       const uid = currentUser.uid;
+
+    //       firebase
+    //         .firestore()
+    //         .collection("users")
+    //         .doc(uid)
+    //         .collection("bookmarks")
+    //         .orderBy("time", "desc")
+    //         .get()
+    //         .then(snapshot => {
+    //           snapshot.forEach(doc => {
+    //             this.currentUserBookmarkList.push(doc.data());
+    //             // console.log(this.currentUserBookmarkList);
+    //           });
+    //         });
+    //     }
+    //   });
+    // }
   }
+  // mounted() {
+  //     firebase.auth().onAuthStateChanged(function(currentUser) {
+  //         if (currentUser) {
+  //           const currentUser = firebase.auth().currentUser;
+  //           const uid = currentUser.uid;
+
+  //           firebase
+  //             .firestore()
+  //             .collection("users")
+  //             .doc(uid)
+  //             .collection("bookmarks")
+  //             .orderBy("time", "desc")
+  //             .get()
+  //             .then(snapshot => {
+  //               snapshot.forEach(doc => {
+  //                 this.currentUserBookmarkList.push(doc.data());
+  //                 // console.log(this.currentUserBookmarkList);
+  //               });
+  //             });
+  //         }
+  //       });
+  //     }
 };
 </script>
 

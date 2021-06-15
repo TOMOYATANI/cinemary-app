@@ -36,7 +36,10 @@
           <!-- 自身ではない -->
           <!--「画像」の指定-->
           <div class="otherimage flex">
-            <router-link v-if="returnUserData(userid)" :to="`/mypage/${returnUserData(userid).uid}`">
+            <router-link
+              v-if="returnUserData(userid)"
+              :to="`/mypage/${returnUserData(userid).uid}`"
+            >
               <img
                 :src="
                   returnUserData(userid)
@@ -165,7 +168,9 @@ export default {
       this.scrollBottom();
       //スクロールの一番下に追加。
     },
-    doSend() {
+    doSend(event) {
+      if (event.keyCode !== 13) return;
+      // 日本語入力中のEnterキー操作は無効にする
       const time = time;
       if (this.user.uid && this.input.length) {
         //以下でFirebaseに書き込まれたメッセージを追加

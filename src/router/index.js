@@ -41,7 +41,19 @@ const routes = [
     //このルートは認証が必要であることの状態をもたせている。
   },
   {
+    path: "/mypage",
+    name: "Mypage",
+    component: Mypage,
+    meta: { requiresAuth: true },
+    //このルートは認証が必要であることの状態をもたせている。
+  },
+  {
     path: "/board/:uid",
+    name: "Board",
+    component: Board,
+  },
+  {
+    path: "/board",
     name: "Board",
     component: Board,
   },

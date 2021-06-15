@@ -11,7 +11,7 @@
           "
         />
         <h3>{{ list.title }}</h3>
-         {{bookmark}}
+        {{bookmark}}
       </div>
     </div>
     <div class="face face2 flex">
@@ -20,18 +20,15 @@
         <p>{{ list.description }}</p>
         <router-link :to="`/chat/${list.id}`" class="join-btn flex">ルームへ参加</router-link>
         <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
-        <img
-          src="../assets/ブックマーク保存.jpg"
-          alt="ブックマーク"
-          class="bookmark-icon"
-          @click="saveBookmark"
-        />
+        <img src="../assets/ブックマーク保存.jpg" alt="ブックマーク" class="bookmark-icon" @click="saveBookmark" />
+        <!-- v-if="hasBookmark(list)" -->
         <img
           src="../assets/ブックマーク未保存.jpg"
           alt="ブックマーク"
           class="bookmark-icon"
           @click="deleteBookmark"
         />
+        <!-- v-else -->
         <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
       </div>
     </div>
@@ -55,7 +52,7 @@ export default {
   props: {
     //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
     list: {
-      type: Object,
+      type: Object
       //親コンポーネント(board.vue)のlist[Object型]をpropsで渡している。
     },
     index: {
@@ -63,7 +60,7 @@ export default {
       //親コンポーネント(board.vue)のindex[Number型]をpropsで渡している。
     },
     bookmark: {
-      type: Array,
+      type: Array
     }
   },
 
@@ -89,10 +86,10 @@ export default {
       return userData;
     },
 
-    // hasBookmark(book) {
-    //   // ブックマークリスト内にbook idがあればtrue それ以外はfalse
-    //   return this.bookmarkList.some(value => value.id === book.id);
-    // },
+    hasBookmark(book) {
+      // ブックマークリスト内にbook idがあればtrue それ以外はfalse
+      return this.bookmark.some(value => value.id === book.id);
+    },
 
     saveBookmark() {
       const ref = firebase

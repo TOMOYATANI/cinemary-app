@@ -21,11 +21,11 @@ export default {
   },
   mounted() {
     firebase.auth().onAuthStateChanged(user => {
-      const currentUser = firebase.auth().currentUser;
-      this.uid = currentUser.uid;
-
       if (user) {
         this.authenticatedUser = true;
+
+        const currentUser = firebase.auth().currentUser;
+        this.uid = currentUser.uid;
       } else {
         this.authenticatedUser = false;
       }

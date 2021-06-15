@@ -11,7 +11,12 @@
         <router-link to="/about" class="header-link neon3 flash">ABOUT</router-link>
       </li>
       <li>
-        <router-link :to="`/board/${this.uid}`" class="header-link neon3 flash">POST</router-link>
+        <router-link
+          :to="`/board/${this.uid}`"
+          class="header-link neon3 flash"
+          v-if="authenticatedUser"
+        >POST</router-link>
+        <router-link to="/board" class="header-link neon3 flash" v-if="!authenticatedUser">POST</router-link>
       </li>
       <li>
         <router-link to="/signup" class="header-link neon3 flash" v-if="!authenticatedUser">SINGUP</router-link>
@@ -30,10 +35,21 @@
     <slide right disableOutsideClick width="200" class="hamburger-menu">
       <router-link to="/" class="hamburger-link neon3 flash home-link">HOME</router-link>
       <router-link to="/about" class="hamburger-link neon3 flash">ABOUT</router-link>
-      <router-link :to="`/board/${this.uid}`" class="hamburger-link neon3 flash">POST</router-link>
+      <router-link
+        :to="`/board/${this.uid}`"
+        class="hamburger-link neon3 flash"
+        v-if="authenticatedUser"
+      >POST</router-link>
+      <router-link to="/board" class="header-link neon3 flash" v-if="!authenticatedUser">POST</router-link>
+
       <router-link to="/signup" class="hamburger-link neon3 flash" v-if="!authenticatedUser">SINGUP</router-link>
       <router-link to="/signin" class="hamburger-link neon3 flash" v-if="!authenticatedUser">SINGIN</router-link>
-      <router-link :to="`/mypage/${this.uid}`" class="hamburger-link neon3 flash">MYPAGE</router-link>
+      <router-link
+        :to="`/mypage/${this.uid}`"
+        class="hamburger-link neon3 flash"
+        v-if="authenticatedUser"
+      >MYPAGE</router-link>
+      <router-link to="/board" class="header-link neon3 flash" v-if="!authenticatedUser">MYPAGE</router-link>
       <button class="hamburger-link neon3 flash" @click="signOut" v-if="authenticatedUser">SINGOUT</button>
     </slide>
   </header>
@@ -50,7 +66,7 @@ export default {
   data() {
     return {
       authenticatedUser: "",
-      uid: []
+      uid: null
     };
   },
   methods: {
@@ -72,12 +88,12 @@ export default {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.authenticatedUser = true;
+
+        const currentUser = firebase.auth().currentUser;
+        this.uid = currentUser.uid;
       } else {
         this.authenticatedUser = false;
       }
-
-      const currentUser = firebase.auth().currentUser;
-      this.uid = currentUser.uid;
     });
   }
 };
