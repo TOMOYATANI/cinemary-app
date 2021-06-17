@@ -48,7 +48,7 @@ export default {
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
-          this.listData.push({ ...doc.data(), id: doc.id });
+          this.listData.push(doc.data());
         });
       });
   }
@@ -121,11 +121,12 @@ hr.separate {
 
 /* <====== Media Queries======> */
 
+$breakpoint-pc: 1025px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (min-width: ($breakpoint-tablet)) {
+  @media (min-width: ($breakpoint-pc)) {
     @content;
   }
 }

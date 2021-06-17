@@ -66,7 +66,7 @@ export default {
       paginate: ["paginate-log"],
       postTop: "#top",
       userDatas: [],
-      searchWord: "",
+      searchWord: ""
       // currentUserBookmarkList: []
     };
   },
@@ -101,7 +101,7 @@ export default {
         //"posts"(参照先)のスナップショットを得る
         snapshot.forEach(doc => {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
-          this.postData.push({ ...doc.data(), id: doc.id });
+          this.postData.push(doc.data());
           //更にpostDataの空配列に格納した"doc"データを格納
           //...とは、配列を外に出すという意
         });
@@ -232,11 +232,12 @@ ul.paginate-links > li.ellipses > a {
 
 // -- メディアクエリ -- //
 
+$breakpoint-pc: 1025px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (min-width: ($breakpoint-tablet)) {
+  @media (min-width: ($breakpoint-pc)) {
     @content;
   }
 }

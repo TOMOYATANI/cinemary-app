@@ -209,6 +209,7 @@ export default {
               .firestore()
               .collection("posts")
               .doc(id)
+              //doc(id)として自動生成されたidを参照し、set()でそのidを保存
               .set({
                 title: this.title,
                 description: this.description,
@@ -421,11 +422,12 @@ textarea::placeholder {
 
 // -- メディアクエリ -- //
 
+$breakpoint-pc: 1025px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (min-width: ($breakpoint-tablet)) {
+  @media (min-width: ($breakpoint-pc)) {
     @content;
   }
 }

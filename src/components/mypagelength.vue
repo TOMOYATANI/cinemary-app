@@ -3,7 +3,7 @@
     <div class="profile-inner flex">
       <div class="item-inner">
         <div class="post">
-          <div class="txt">{{ cardData.length }}</div>
+          <div class="txt">{{ listData.length }}</div>
           <p>POSTS</p>
         </div>
 
@@ -24,7 +24,7 @@ import firebase from "firebase";
 export default {
   data() {
     return {
-      cardData: [],
+      listData: [],
       bookmarkData: []
     };
   },
@@ -42,7 +42,7 @@ export default {
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
-          this.cardData.push({ ...doc.data(), id: doc.id });
+          this.listData.push(doc.data());
         });
       });
 
@@ -94,11 +94,12 @@ p {
 }
 // -- メディアクエリ -- //
 
+$breakpoint-pc: 1025px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (min-width: ($breakpoint-tablet)) {
+  @media (min-width: ($breakpoint-pc)) {
     @content;
   }
 }

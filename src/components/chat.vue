@@ -324,6 +324,7 @@ div {
       font-size: 75%;
       margin-top: 0.5rem;
       font-weight: bold;
+      font-family: "Roboto", sans-serif;
     }
 
     .myimage {
@@ -382,6 +383,7 @@ div {
       font-size: 75%;
       margin-top: 0.5rem;
       font-weight: bold;
+      font-family: "Roboto", sans-serif;
     }
 
     .otherimage {
@@ -558,11 +560,12 @@ div {
 
 // -- メディアクエリ -- //
 
+$breakpoint-pc: 1025px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (min-width: ($breakpoint-tablet)) {
+  @media (min-width: ($breakpoint-pc)) {
     @content;
   }
 }

@@ -55,29 +55,8 @@ export default {
         .get()
         .then(snapshot => {
           this.profileData = snapshot.data();
-          this.name = this.profileData.name || "";
-          this.sex = this.profileData.sex || "";
-          this.age = this.profileData.age || "";
-          this.access = this.profileData.access || "";
-          this.selfpr = this.profileData.selfpr || "";
-          this.profession = this.profileData.profession || "";
-          this.genre = this.profileData.genre || "";
-          this.favMovie = this.profileData.favMovie || "";
         });
     }
-
-    firebase
-      .firestore()
-      .collection("posts")
-      .orderBy("time", "desc")
-      .where("uid", "==", this.$route.params.uid)
-      //uidをフィルタリングして現在のURLと合致するもののみを参照
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          this.listData.push({ ...doc.data(), id: doc.id });
-        });
-      });
   }
 };
 </script>
@@ -120,6 +99,7 @@ hr.separate {
     margin-top: 0.5rem;
     margin-bottom: 1rem;
     justify-content: flex-start;
+    font-family: "Roboto", sans-serif;
   }
 
   .profile-posts {
@@ -149,11 +129,12 @@ hr.separate {
 
 // -- メディアクエリ -- //
 
+$breakpoint-pc: 1025px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (min-width: ($breakpoint-tablet)) {
+  @media (min-width: ($breakpoint-pc)) {
     @content;
   }
 }
@@ -168,7 +149,7 @@ $breakpoint-mobile: 600px;
   }
 }
 
-.mypage .post-list{
+.mypage .post-list {
   @include sp {
     width: 60%;
     font-size: 1rem;

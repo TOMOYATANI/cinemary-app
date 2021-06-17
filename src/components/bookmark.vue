@@ -19,8 +19,8 @@
             :bookmark="currentUserBookmarkList"
             :key="list.id"
           />
+          <!-- data内のcurrentUserBookmarkList：[]をbindしてpropsでデータを渡す -->
         </paginate>
-
         <div v-else class="nothing flex">ブックマークされた投稿はありません</div>
         <paginate-links
           for="paginate-bookmarkList"
@@ -68,6 +68,7 @@ export default {
         this.profileData = snapshot.data();
       });
 
+    //各ユーザー(ページ内のユーザー)がブックマークしたリスト
     firebase
       .firestore()
       .collection("users")
@@ -81,88 +82,24 @@ export default {
         });
       });
 
-    const currentUser = firebase.auth().currentUser;
-    const uid = currentUser.uid;
+    //ログイン中ユーザーがブックマークしたリスト
+    firebase.auth().onAuthStateChanged(user => {
+      const uid = user.uid;
 
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(uid)
-      .collection("bookmarks")
-      .orderBy("time", "desc")
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          this.currentUserBookmarkList.push(doc.data());
-          console.log(this.currentUserBookmarkList);
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(uid)
+        .collection("bookmarks")
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            this.currentUserBookmarkList.push(doc.data());
+            console.log(this.currentUserBookmarkList);
+          });
         });
-      });
-
-    // firebase.auth().onAuthStateChanged(function(currentUser) {
-    //   if (currentUser) {
-    //     const currentUser = firebase.auth().currentUser;
-    //     const uid = currentUser.uid;
-
-    //     firebase
-    //       .firestore()
-    //       .collection("users")
-    //       .doc(uid)
-    //       .collection("bookmarks")
-    //       .orderBy("time", "desc")
-    //       .get()
-    //       .then(snapshot => {
-    //         snapshot.forEach(doc => {
-    //           this.currentUserBookmarkList.push(doc.data());
-    //           // console.log(this.currentUserBookmarkList);
-    //         });
-    //       });
-    //   }
-    // });
-
-    //   await firebase.auth().onAuthStateChanged(function(currentUser) {
-    //     if (currentUser) {
-    //       const currentUser = firebase.auth().currentUser;
-    //       const uid = currentUser.uid;
-
-    //       firebase
-    //         .firestore()
-    //         .collection("users")
-    //         .doc(uid)
-    //         .collection("bookmarks")
-    //         .orderBy("time", "desc")
-    //         .get()
-    //         .then(snapshot => {
-    //           snapshot.forEach(doc => {
-    //             this.currentUserBookmarkList.push(doc.data());
-    //             // console.log(this.currentUserBookmarkList);
-    //           });
-    //         });
-    //     }
-    //   });
-    // }
+    });
   }
-  // mounted() {
-  //     firebase.auth().onAuthStateChanged(function(currentUser) {
-  //         if (currentUser) {
-  //           const currentUser = firebase.auth().currentUser;
-  //           const uid = currentUser.uid;
-
-  //           firebase
-  //             .firestore()
-  //             .collection("users")
-  //             .doc(uid)
-  //             .collection("bookmarks")
-  //             .orderBy("time", "desc")
-  //             .get()
-  //             .then(snapshot => {
-  //               snapshot.forEach(doc => {
-  //                 this.currentUserBookmarkList.push(doc.data());
-  //                 // console.log(this.currentUserBookmarkList);
-  //               });
-  //             });
-  //         }
-  //       });
-  //     }
 };
 </script>
 
@@ -222,11 +159,12 @@ hr.separate {
 
 // -- メディアクエリ -- //
 
+$breakpoint-pc: 1025px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (min-width: ($breakpoint-tablet)) {
+  @media (min-width: ($breakpoint-pc)) {
     @content;
   }
 }

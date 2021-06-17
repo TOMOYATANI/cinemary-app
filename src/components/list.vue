@@ -11,7 +11,7 @@
           "
         />
         <h3>{{ list.title }}</h3>
-        {{bookmark}}
+        {{list.id}}
       </div>
     </div>
     <div class="face face2 flex">
@@ -22,12 +22,12 @@
         <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
         <img src="../assets/ブックマーク保存.jpg" alt="ブックマーク" class="bookmark-icon" @click="saveBookmark" />
         <!-- v-if="hasBookmark(list)" -->
-        <img
+        <!-- <img
           src="../assets/ブックマーク未保存.jpg"
           alt="ブックマーク"
           class="bookmark-icon"
           @click="deleteBookmark"
-        />
+        />-->
         <!-- v-else -->
         <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
       </div>
@@ -92,14 +92,12 @@ export default {
     },
 
     saveBookmark() {
-      const ref = firebase
+      const id = firebase
         .firestore()
         .collection("users")
         .doc(this.$route.params.uid)
         .collection("bookmarks")
-        .doc();
-
-      const id = ref.id;
+        .doc().id;
 
       firebase
         .firestore()
@@ -346,11 +344,12 @@ div {
 
 // -- メディアクエリ -- //
 
+$breakpoint-pc: 1025px;
 $breakpoint-tablet: 1024px;
 $breakpoint-mobile: 600px;
 
 @mixin pc {
-  @media (min-width: ($breakpoint-tablet)) {
+  @media (min-width: ($breakpoint-pc)) {
     @content;
   }
 }
