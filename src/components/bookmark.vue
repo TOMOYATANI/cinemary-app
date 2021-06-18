@@ -13,14 +13,16 @@
           :per="12"
           v-if="bookmarkList.length !== 0"
         >
-          <List
+          <List v-for="(list) in paginated('paginate-bookmarkList')" :list="list" :key="list.id" />
+          <!-- data内のcurrentUserBookmarkList：[]をbindしてpropsでデータを渡す -->
+        </paginate>
+        <!-- <List
             v-for="(list) in paginated('paginate-bookmarkList')"
             :list="list"
             :bookmark="currentUserBookmarkList"
             :key="list.id"
-          />
-          <!-- data内のcurrentUserBookmarkList：[]をbindしてpropsでデータを渡す -->
-        </paginate>
+        />-->
+        <!-- </paginate> -->
         <div v-else class="nothing flex">ブックマークされた投稿はありません</div>
         <paginate-links
           for="paginate-bookmarkList"
@@ -85,7 +87,6 @@ export default {
     //ログイン中ユーザーがブックマークしたリスト
     firebase.auth().onAuthStateChanged(user => {
       const uid = user.uid;
-
       firebase
         .firestore()
         .collection("users")
@@ -94,11 +95,65 @@ export default {
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            this.currentUserBookmarkList.push(doc.data());
-            console.log(this.currentUserBookmarkList);
+            this.currentUserBookmarkList.push(doc.postId);
+          });
+        });
+      firebase
+        .firestore()
+        .collection("posts")
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            if (this.currentUserBookmarkList.includes(doc.id)) {
+              this.bookmarkList.push({ ...doc.data(), isBookmarked: true });
+            }
           });
         });
     });
+    // firebase.auth().onAuthStateChanged(user => {
+    //   const uid = user.uid;
+    //   firebase
+    //     .firestore()
+    //     .collection("users")
+    //     .doc(uid)
+    //     .collection("bookmarks")
+    //     .get()
+    //     .then(snapshot => {
+    //       snapshot.forEach(doc => {
+    //         this.currentUserBookmarkList.push(doc.data());
+    //         console.log(this.currentUserBookmarkList);
+    //       });
+    //     });
+    // });
+
+    // //認証済みユーザーがブックマークしたリスト
+    // firebase.auth().onAuthStateChanged(user => {
+    //   const uid = user.uid;
+
+    //   firebase
+    //     .firestore()
+    //     .collection("users")
+    //     .doc(uid)
+    //     .collection("bookmarks")
+    //     .get()
+    //     .then(snapshot => {
+    //       snapshot.forEach(doc => {
+    //         this.currentUserBookmarkList.push(doc.postId);
+    //         console.log(this.currentUserBookmarkList);
+    //       });
+    //     });
+    //   firebase
+    //     .firestore()
+    //     .collection("posts")
+    //     .get()
+    //     .then(snapshot => {
+    //       snapshot.forEach(doc => {
+    //         if (this.currentUserBookmarkList.includes(doc.id)) {
+    //           this.bookmarkList.push(doc.data());
+    //         }
+    //       });
+    //     });
+    // });
   }
 };
 </script>

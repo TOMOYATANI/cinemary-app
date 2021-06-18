@@ -103,7 +103,6 @@ export default {
           //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
           this.postData.push(doc.data());
           //更にpostDataの空配列に格納した"doc"データを格納
-          //...とは、配列を外に出すという意
         });
       });
 

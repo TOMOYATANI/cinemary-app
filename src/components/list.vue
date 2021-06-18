@@ -11,7 +11,7 @@
           "
         />
         <h3>{{ list.title }}</h3>
-        {{list.id}}
+        <!-- {{list}} -->
       </div>
     </div>
     <div class="face face2 flex">
@@ -58,9 +58,6 @@ export default {
     index: {
       type: Number
       //親コンポーネント(board.vue)のindex[Number型]をpropsで渡している。
-    },
-    bookmark: {
-      type: Array
     }
   },
 
@@ -105,11 +102,14 @@ export default {
         .doc(this.$route.params.uid)
         .collection("bookmarks")
         .doc(id)
-        .set({
-          bookmarkId: id,
-          ...this.list,
-          time: firebase.firestore.FieldValue.serverTimestamp()
-        })
+        .set(
+          {
+            // bookmarkId: id,
+            // ...this.list,
+            postId: this.list.id,
+            time: firebase.firestore.FieldValue.serverTimestamp()
+          }
+        )
         .then(() => {
           this.$swal("ブックマークに追加しました。", {
             icon: "success"
