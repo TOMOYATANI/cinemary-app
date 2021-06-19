@@ -98,15 +98,13 @@ export default {
 
       firebase
         .firestore()
-        .collection("users")
-        .doc(this.$route.params.uid)
-        .collection("bookmarks")
-        .doc(id)
+        .collection("users") //「users」コレクションを参照
+        .doc(this.$route.params.uid) //対象ページのユーザーを参照
+        .collection("bookmarks") //「bookmarks」サブコレクションを参照
+        .doc(id) //自動生成されたドキュメントIDを参照
         .set(
           {
-            // bookmarkId: id,
-            // ...this.list,
-            postId: this.list.id,
+            postId: this.list.id, //「postId」に投稿データである「this.list.id」を代入。
             time: firebase.firestore.FieldValue.serverTimestamp()
           }
         )
@@ -122,13 +120,13 @@ export default {
         });
     },
 
-    deleteBookmark() {
+   deleteBookmark() {
       firebase
         .firestore()
         .collection("users")
         .doc(this.$route.params.uid)
         .collection("bookmarks")
-        .doc(this.list.bookmarkId)
+        .doc(this.list.postId)
         .delete()
         .then(() => {
           this.$swal("ブックマークを取り消ししました。", {

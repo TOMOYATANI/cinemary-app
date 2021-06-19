@@ -7,28 +7,20 @@
       <div class="bookmarkList-posts">
         <paginate
           name="paginate-bookmarkList"
-          class="paginate-pctb"
           tag="ol"
           :list="bookmarkList"
           :per="12"
           v-if="bookmarkList.length !== 0"
         >
           <List v-for="(list) in paginated('paginate-bookmarkList')" :list="list" :key="list.id" />
-          <!-- data内のcurrentUserBookmarkList：[]をbindしてpropsでデータを渡す -->
+          <!-- data内にあるbookmarkList配列から、v-forディレクティブを使って1つずつ要素を取り出し描画。 -->
         </paginate>
-        <!-- <List
-            v-for="(list) in paginated('paginate-bookmarkList')"
-            :list="list"
-            :bookmark="currentUserBookmarkList"
-            :key="list.id"
-        />-->
-        <!-- </paginate> -->
         <div v-else class="nothing flex">ブックマークされた投稿はありません</div>
         <paginate-links
           for="paginate-bookmarkList"
           name="paginate-bookmarkList"
           :async="true"
-          class="pagination paginate-pctb flex"
+          class="pagination flex"
           :show-step-links="true"
           :style="bookmarkList == '' ? 'display:none;' : 'display:flex;'"
         ></paginate-links>
@@ -51,7 +43,7 @@ export default {
       profileData: {},
       paginate: ["paginate-bookmarkList"],
       bookmarkList: [],
-      currentUserBookmarkList: [],
+      currentUserBookmarkIds: [],
       uid: null
     };
   },
@@ -89,71 +81,36 @@ export default {
       const uid = user.uid;
       firebase
         .firestore()
-        .collection("users")
-        .doc(uid)
-        .collection("bookmarks")
+        .collection("users") //「users」コレクションを参照
+        .doc(uid) //ログイン中のユーザーを参照
+        .collection("bookmarks") //「bookmarks」サブコレクションを参照
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            this.currentUserBookmarkList.push(doc.postId);
+            //forEachで全てのドキュメントに対して
+            this.currentUserBookmarkIds.push(doc.data().postId);
+            //「postId」を追加し、this.currentUserBookmarkIdsへ格納
           });
         });
       firebase
         .firestore()
-        .collection("posts")
+        .collection("posts") //「posts」コレクションを参照
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            if (this.currentUserBookmarkList.includes(doc.id)) {
-              this.bookmarkList.push({ ...doc.data(), isBookmarked: true });
+            //forEachで全てのドキュメントに対して
+            if (this.currentUserBookmarkIds.includes(doc.data().id)) {
+              //this.currentUserBookmarkIdsに「id」が含まれていたら、
+              this.bookmarkList.push({
+                ...doc.data(),
+                isBookmarked: true
+              });
+              console.log(this.bookmarkList);
+              //...doc.data()としてバラした「posts」の投稿データとisBookmarkedを代入。
             }
           });
         });
     });
-    // firebase.auth().onAuthStateChanged(user => {
-    //   const uid = user.uid;
-    //   firebase
-    //     .firestore()
-    //     .collection("users")
-    //     .doc(uid)
-    //     .collection("bookmarks")
-    //     .get()
-    //     .then(snapshot => {
-    //       snapshot.forEach(doc => {
-    //         this.currentUserBookmarkList.push(doc.data());
-    //         console.log(this.currentUserBookmarkList);
-    //       });
-    //     });
-    // });
-
-    // //認証済みユーザーがブックマークしたリスト
-    // firebase.auth().onAuthStateChanged(user => {
-    //   const uid = user.uid;
-
-    //   firebase
-    //     .firestore()
-    //     .collection("users")
-    //     .doc(uid)
-    //     .collection("bookmarks")
-    //     .get()
-    //     .then(snapshot => {
-    //       snapshot.forEach(doc => {
-    //         this.currentUserBookmarkList.push(doc.postId);
-    //         console.log(this.currentUserBookmarkList);
-    //       });
-    //     });
-    //   firebase
-    //     .firestore()
-    //     .collection("posts")
-    //     .get()
-    //     .then(snapshot => {
-    //       snapshot.forEach(doc => {
-    //         if (this.currentUserBookmarkList.includes(doc.id)) {
-    //           this.bookmarkList.push(doc.data());
-    //         }
-    //       });
-    //     });
-    // });
   }
 };
 </script>

@@ -76,13 +76,13 @@ export default {
     List,
     Search
   },
-  computed: {
+   computed: {
     filteredPostData() {
       if (this.searchWord != "") {
         return this.postData.filter(v => {
           return ~v.genre.indexOf(this.searchWord);
-          //検索内容(this.searchWord)と同じ内容(genre)を持つ要素の位置を返す。存在しない場合、-1を返す。
-          //しかし、-1は今回ない為、「~v」とビット反転演算子(符号を反転してマイナス1した数)を使って、-1 → 0となる。
+          //検索ワード「this.searchWord」が「genre」に存在する場合、結果を返す。
+          //否定演算子を使って~v(-1) は 0 となるため、見つからなかった場合は、実行されない。
         });
       } else {
         return this.postData;
