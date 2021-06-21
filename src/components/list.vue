@@ -29,7 +29,9 @@
           @click="deleteBookmark"
         />-->
         <!-- v-else -->
-        <p class="post-time">{{ list.time.toDate().toLocaleString() }}</p>
+        <p class="post-time">{{ $dayjs(list.time.toDate()).format('YYYY/M/D HH:mm') }}</p>
+        
+        
       </div>
     </div>
   </div>
@@ -40,6 +42,10 @@ import firebase from "firebase";
 import Vue from "vue";
 import VueSwal from "vue-swal";
 Vue.use(VueSwal);
+import dayjs from "dayjs";
+
+dayjs.locale("ja");
+Vue.prototype.$dayjs = dayjs;
 
 export default {
   data() {
@@ -83,10 +89,10 @@ export default {
       return userData;
     },
 
-    hasBookmark(book) {
-      // ブックマークリスト内にbook idがあればtrue それ以外はfalse
-      return this.bookmark.some(value => value.id === book.id);
-    },
+    // hasBookmark(book) {
+    //   // ブックマークリスト内にbook idがあればtrue それ以外はfalse
+    //   return this.bookmark.some(value => value.id === book.id);
+    // },
 
     saveBookmark() {
       const id = firebase

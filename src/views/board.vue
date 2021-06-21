@@ -66,8 +66,8 @@ export default {
       paginate: ["paginate-log"],
       postTop: "#top",
       userDatas: [],
-      searchWord: ""
-      // currentUserBookmarkList: []
+      searchWord: "",
+      currentUserBookmarkIds: []
     };
   },
   components: {
@@ -76,7 +76,7 @@ export default {
     List,
     Search
   },
-   computed: {
+  computed: {
     filteredPostData() {
       if (this.searchWord != "") {
         return this.postData.filter(v => {
@@ -106,18 +106,40 @@ export default {
         });
       });
 
-    // firebase
-    //   .firestore()
-    //   .collection("users")
-    //   .doc(this.uid)
-    //   .collection("bookmarks")
-    //   .orderBy("time", "desc")
-    //   .get()
-    //   .then(snapshot => {
-    //     snapshot.forEach(doc => {
-    //       this.currentUserBookmarkList.push(doc.data());
-    //     });
-    //   });
+    //各ユーザーがブックマークしたリスト
+
+    firebase
+      .firestore()
+      .collection("users") //「users」コレクションを参照
+      .doc(this.$route.params.uid) //現在表示中ユーザーを参照
+      .collection("bookmarks") //「bookmarks」サブコレクションを参照
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          //forEachで全てのドキュメントに対して
+          this.currentUserBookmarkIds.push(doc.data().postId);
+          //「postId」を追加し、this.currentUserBookmarkIdsへ格納
+          console.log(this.currentUserBookmarkIds);
+        });
+      });
+    firebase
+      .firestore()
+      .collection("posts") //「posts」コレクションを参照
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          //forEachで全てのドキュメントに対して
+          if (this.currentUserBookmarkIds.includes(doc.data().id)) {
+            //this.currentUserBookmarkIdsに「id」が含まれていたら、
+            this.postData.push({
+              isBookmarked: true
+            });
+            //isBookmarkedを追加。
+          }
+          console.log(this.currentUserBookmarkIds);
+          console.log(this.postData);
+        });
+      });
 
     firebase
       .firestore()

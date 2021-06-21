@@ -62,55 +62,41 @@ export default {
         this.profileData = snapshot.data();
       });
 
-    //各ユーザー(ページ内のユーザー)がブックマークしたリスト
+    //ログイン中ユーザーがブックマークしたリスト
     firebase
       .firestore()
-      .collection("users")
-      .doc(this.$route.params.uid)
-      .collection("bookmarks")
+      .collection("users") //「users」コレクションを参照
+      .doc(this.$route.params.uid) //現在表示中ユーザーを参照
+      .collection("bookmarks") //「bookmarks」サブコレクションを参照
       .orderBy("time", "desc")
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
-          this.bookmarkList.push(doc.data());
+          //forEachで全てのドキュメントに対して
+          this.currentUserBookmarkIds.push(doc.data().postId);
+          //「postId」を追加し、this.currentUserBookmarkIdsへ格納
+          console.log(this.currentUserBookmarkIds);
         });
       });
-
-    //ログイン中ユーザーがブックマークしたリスト
-    firebase.auth().onAuthStateChanged(user => {
-      const uid = user.uid;
-      firebase
-        .firestore()
-        .collection("users") //「users」コレクションを参照
-        .doc(uid) //ログイン中のユーザーを参照
-        .collection("bookmarks") //「bookmarks」サブコレクションを参照
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            //forEachで全てのドキュメントに対して
-            this.currentUserBookmarkIds.push(doc.data().postId);
-            //「postId」を追加し、this.currentUserBookmarkIdsへ格納
-          });
+    firebase
+      .firestore()
+      .collection("posts") //「posts」コレクションを参照
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          //forEachで全てのドキュメントに対して
+          if (this.currentUserBookmarkIds.includes(doc.data().id)) {
+            //this.currentUserBookmarkIdsに「id」が含まれていたら、
+            this.bookmarkList.push({
+              ...doc.data(),
+              isBookmarked: true
+            });
+            console.log(this.currentUserBookmarkIds);
+            console.log(this.bookmarkList);
+            //...doc.data()としてバラした「posts」の投稿データとisBookmarkedを代入。
+          }
         });
-      firebase
-        .firestore()
-        .collection("posts") //「posts」コレクションを参照
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            //forEachで全てのドキュメントに対して
-            if (this.currentUserBookmarkIds.includes(doc.data().id)) {
-              //this.currentUserBookmarkIdsに「id」が含まれていたら、
-              this.bookmarkList.push({
-                ...doc.data(),
-                isBookmarked: true
-              });
-              console.log(this.bookmarkList);
-              //...doc.data()としてバラした「posts」の投稿データとisBookmarkedを代入。
-            }
-          });
-        });
-    });
+      });
   }
 };
 </script>
