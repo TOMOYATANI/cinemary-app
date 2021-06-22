@@ -91,21 +91,6 @@ export default {
     }
   },
   created() {
-    // "posts"コレクションの全ドキュメントを取得。
-    firebase
-      .firestore()
-      .collection("posts")
-      .orderBy("time", "desc")
-      .get()
-      .then(snapshot => {
-        //"posts"(参照先)のスナップショットを得る
-        snapshot.forEach(doc => {
-          //上記で得たデータをforEachでドキュメントの数だけ"doc"データに格納
-          this.postData.push(doc.data());
-          //更にpostDataの空配列に格納した"doc"データを格納
-        });
-      });
-
     //各ユーザーがブックマークしたリスト
 
     firebase
@@ -125,6 +110,7 @@ export default {
     firebase
       .firestore()
       .collection("posts") //「posts」コレクションを参照
+      .orderBy("time", "desc")
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
@@ -132,9 +118,12 @@ export default {
           if (this.currentUserBookmarkIds.includes(doc.data().id)) {
             //this.currentUserBookmarkIdsに「id」が含まれていたら、
             this.postData.push({
+              ...doc.data(),
               isBookmarked: true
             });
             //isBookmarkedを追加。
+          } else {
+            this.postData.push(doc.data());
           }
           console.log(this.currentUserBookmarkIds);
           console.log(this.postData);
@@ -227,19 +216,19 @@ ol {
 }
 
 ul.paginate-links > li.left-arrow > a {
-  margin: 1rem;
+  padding: 1rem;
 }
 
 ul.paginate-links > li.right-arrow > a {
-  margin: 1rem;
+  padding: 1rem;
 }
 
 ul.paginate-links > li.number > a {
-  margin: 1rem;
+  padding: 1rem;
 }
 
 ul.paginate-links > li.ellipses > a {
-  margin: 1rem;
+  padding: 1rem;
 }
 
 // --ネオン --//

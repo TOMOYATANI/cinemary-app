@@ -11,7 +11,7 @@
           "
         />
         <h3>{{ list.title }}</h3>
-        <!-- {{list}} -->
+        {{list.isBookmarked}}
       </div>
     </div>
     <div class="face face2 flex">
@@ -27,11 +27,9 @@
           alt="ブックマーク"
           class="bookmark-icon"
           @click="deleteBookmark"
-        />-->
+        /> -->
         <!-- v-else -->
-        <p class="post-time">{{ $dayjs(list.time.toDate()).format('YYYY/M/D HH:mm') }}</p>
-        
-        
+        <p class="post-time">{{ $dayjs(list.time.toDate()).format('YYYY/MM/DD HH:mm') }}</p>
       </div>
     </div>
   </div>
@@ -90,8 +88,7 @@ export default {
     },
 
     // hasBookmark(book) {
-    //   // ブックマークリスト内にbook idがあればtrue それ以外はfalse
-    //   return this.bookmark.some(value => value.id === book.id);
+    //   return this.list.includes(book.isBookmarked);
     // },
 
     saveBookmark() {
@@ -108,12 +105,10 @@ export default {
         .doc(this.$route.params.uid) //対象ページのユーザーを参照
         .collection("bookmarks") //「bookmarks」サブコレクションを参照
         .doc(id) //自動生成されたドキュメントIDを参照
-        .set(
-          {
-            postId: this.list.id, //「postId」に投稿データである「this.list.id」を代入。
-            time: firebase.firestore.FieldValue.serverTimestamp()
-          }
-        )
+        .set({
+          postId: this.list.id, //「postId」に投稿データである「this.list.id」を代入。
+          time: firebase.firestore.FieldValue.serverTimestamp()
+        })
         .then(() => {
           this.$swal("ブックマークに追加しました。", {
             icon: "success"
@@ -126,7 +121,7 @@ export default {
         });
     },
 
-   deleteBookmark() {
+    deleteBookmark() {
       firebase
         .firestore()
         .collection("users")
