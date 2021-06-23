@@ -11,7 +11,6 @@
           "
         />
         <h3>{{ list.title }}</h3>
-        {{list.isBookmarked}}
       </div>
     </div>
     <div class="face face2 flex">
@@ -20,15 +19,14 @@
         <p>{{ list.description }}</p>
         <router-link :to="`/chat/${list.id}`" class="join-btn flex">ルームへ参加</router-link>
         <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
-        <img src="../assets/ブックマーク保存.jpg" alt="ブックマーク" class="bookmark-icon" @click="saveBookmark" />
-        <!-- v-if="hasBookmark(list)" -->
-        <!-- <img
-          src="../assets/ブックマーク未保存.jpg"
+        <img
+          :src="bookmark"
           alt="ブックマーク"
           class="bookmark-icon"
           @click="deleteBookmark"
-        /> -->
-        <!-- v-else -->
+          v-if="this.isBookmarked = true"
+        />
+        <img :src="bookmarked" alt="ブックマーク" class="bookmark-icon" @click="saveBookmark" v-else />
         <p class="post-time">{{ $dayjs(list.time.toDate()).format('YYYY/MM/DD HH:mm') }}</p>
       </div>
     </div>
@@ -48,13 +46,14 @@ Vue.prototype.$dayjs = dayjs;
 export default {
   data() {
     return {
-      bookmarkId: "",
+      bookmark: require("../assets/ブックマーク保存.jpg"),
+      bookmarked: require("../assets/ブックマーク未保存.jpg"),
+      isBookmarked: false,
       userDatas: [],
       preview: require("../assets/デフォルト画像.jpg")
     };
   },
   props: {
-    //親コンポーネントから子コンポーネントに文字列、数値、配列やオブジェクトなどの値を渡す
     list: {
       type: Object
       //親コンポーネント(board.vue)のlist[Object型]をpropsで渡している。
@@ -87,10 +86,6 @@ export default {
       return userData;
     },
 
-    // hasBookmark(book) {
-    //   return this.list.includes(book.isBookmarked);
-    // },
-
     saveBookmark() {
       const id = firebase
         .firestore()
@@ -113,6 +108,7 @@ export default {
           this.$swal("ブックマークに追加しました。", {
             icon: "success"
           });
+          this.isBookmarked = true;
         })
         .catch(() => {
           this.$swal("ブックマークを追加出来ません。", {
@@ -127,20 +123,25 @@ export default {
         .collection("users")
         .doc(this.$route.params.uid)
         .collection("bookmarks")
-        .doc(this.list.postId)
-        .delete()
-        .then(() => {
-          this.$swal("ブックマークを取り消ししました。", {
-            icon: "success"
-          });
-          this.$router.go({
-            path: `/bookmark/${this.$route.params.uid}`,
-            force: true
-          });
-        })
-        .catch(() => {
-          this.$swal("ブックマークを取り消し出来ません。", {
-            icon: "error"
+        .where("postId", "==", this.list.id)
+        //postIdをフィルタリングして投稿idであるthis.list.idと合致するもののみを参照
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            //forEachで全てのドキュメントに対して
+            doc.ref //ドキュメントの数だけrefを参照して
+              .delete() //削除を実行
+              .then(() => {
+                this.$swal("ブックマークを取り消ししました。", {
+                  icon: "success"
+                });
+                this.isBookmarked = false;
+              })
+              .catch(() => {
+                this.$swal("ブックマークを取り消し出来ません。", {
+                  icon: "error"
+                });
+              });
           });
         });
     },
@@ -150,6 +151,7 @@ export default {
       this.uid = currentUser.uid;
 
       if (this.list.uid == this.uid) {
+        //投稿したユーザーとログイン中のユーザーが一致した場合、
         this.$swal({
           title: "内容確認",
           text: "投稿を削除しますか？",
@@ -158,6 +160,7 @@ export default {
           dangerMode: true
         })
           .then(willDelete => {
+            //コレクション「posts」から対象の投稿を削除
             if (willDelete) {
               firebase
                 .firestore()
@@ -165,13 +168,48 @@ export default {
                 .doc(this.list.id)
                 .delete()
                 .then(() => {
-                  this.$swal("投稿を削除しました", {
-                    icon: "success"
-                  });
                   this.$router.go({
                     path: `/board/${this.$route.params.uid}`,
                     force: true
                   });
+                })
+
+                .then(() => {
+                  //コレクション「users」から全てのユーザーを参照
+                  firebase
+                    .firestore()
+                    .collection("users")
+                    .get()
+                    .then(snapshot => {
+                      snapshot.forEach(user => {
+                        //forEachで全てのユーザーに対して
+                        firebase
+                          .firestore()
+                          .collection("users")
+                          .doc(user.data().uid)
+                          .collection("bookmarks")
+                          .where("postId", "==", this.list.id)
+                          //postIdをフィルタリングして投稿idであるthis.list.idと合致するもののみを参照
+                          .get()
+                          .then(snapshot => {
+                            let count = 0;
+
+                            snapshot.forEach(doc => {
+                              doc.ref.delete().then(() => {
+                                //ドキュメントの数だけrefを参照して削除を実行
+                                count++;
+                                if (snapshot.size == count) {
+                                  //対象が削除されてからリロード
+                                  this.$router.go({
+                                    path: `/board/${this.$route.params.uid}`,
+                                    force: true
+                                  });
+                                }
+                              });
+                            });
+                          });
+                      });
+                    });
                 })
                 .catch(() => {
                   this.$swal("投稿を削除出来ません。", {

@@ -104,7 +104,6 @@ export default {
           //forEachで全てのドキュメントに対して
           this.currentUserBookmarkIds.push(doc.data().postId);
           //「postId」を追加し、this.currentUserBookmarkIdsへ格納
-          console.log(this.currentUserBookmarkIds);
         });
       });
     firebase
@@ -125,8 +124,6 @@ export default {
           } else {
             this.postData.push(doc.data());
           }
-          console.log(this.currentUserBookmarkIds);
-          console.log(this.postData);
         });
       });
 

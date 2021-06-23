@@ -504,9 +504,6 @@ export default {
                       //set()でmergeをtrueにすると、上書き。updetaと同様。
                     )
                     .then(() => {
-                      this.$swal("更新しました。", {
-                        icon: "success"
-                      });
                       this.$router.go({
                         path: `/mypage/${this.$route.params.uid}`,
                         force: true
@@ -545,9 +542,6 @@ export default {
                   { merge: true }
                 )
                 .then(() => {
-                  this.$swal("更新しました。", {
-                    icon: "success"
-                  });
                   this.$router.go({
                     path: `/mypage/${this.$route.params.uid}`,
                     force: true

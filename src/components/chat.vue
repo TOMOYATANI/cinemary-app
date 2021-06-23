@@ -212,9 +212,6 @@ export default {
       })
         .then(willDelete => {
           if (willDelete) {
-            this.$swal("メッセージを削除しました", {
-              icon: "success"
-            });
             this.$router.go({
               path: `/chat/${this.$route.params.id}`,
               force: true

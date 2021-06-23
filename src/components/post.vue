@@ -219,14 +219,9 @@ export default {
                 uid: this.$route.params.uid
               })
               .then(() => {
-                this.$swal("投稿しました。", {
-                  icon: "success"
-                });
                 this.$router.go({ path: `/board/${this.uid}`, force: true });
               })
-              .catch(() => {
-                console.log("err");
-              });
+              .catch(() => {});
           } else {
             this.$swal("キャンセルしました。");
           }
@@ -367,7 +362,7 @@ textarea::placeholder {
           height: 3rem;
           border-bottom: 1px solid #ddd;
           color: $white-color;
-          font-size: 1.1rem;
+          font-size: 1rem;
           background-color: $black-color;
         }
       }

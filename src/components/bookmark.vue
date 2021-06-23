@@ -75,7 +75,6 @@ export default {
           //forEachで全てのドキュメントに対して
           this.currentUserBookmarkIds.push(doc.data().postId);
           //「postId」を追加し、this.currentUserBookmarkIdsへ格納
-          console.log(this.currentUserBookmarkIds);
         });
       });
     firebase
@@ -91,8 +90,6 @@ export default {
               ...doc.data(),
               isBookmarked: true
             });
-            console.log(this.currentUserBookmarkIds);
-            console.log(this.bookmarkList);
             //...doc.data()としてバラした「posts」の投稿データとisBookmarkedを代入。
           }
         });
