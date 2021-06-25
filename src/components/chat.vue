@@ -504,7 +504,14 @@ div {
   cursor: pointer;
   position: absolute;
   left: 25px !important;
-  top: 12px;
+  top: 18px;
+}
+
+.bm-cross {
+  position: absolute;
+  width: 3px;
+  height: 17px!important;
+  transform: rotate(45deg);
 }
 
 // -- neon -- //

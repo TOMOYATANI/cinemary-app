@@ -179,6 +179,8 @@ a.header-ttl:hover span {
   color: rgba(200, 200, 200, 0.6);
 }
 
+
+
 // -- ネオンカラー -- //
 
 .neon {
@@ -258,6 +260,9 @@ $breakpoint-mobile: 600px;
 }
 
 .header-menu {
+  @include tab {
+    display: none;
+  }
   @include sp {
     display: none;
   }
@@ -268,7 +273,7 @@ $breakpoint-mobile: 600px;
     display: none;
   }
   @include tab {
-    display: none;
+    display: flex;
   }
   @include sp {
     display: flex;
