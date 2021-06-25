@@ -15,12 +15,7 @@
             v-if="filteredPostData.length !== 0"
           >
             <!-- filteredPostDataにて該当する投稿がある場合、表示。 -->
-            <List
-              v-for="(list, index) in paginated('paginate-log')"
-              :index="index"
-              :list="list"
-              :key="list.id"
-            />
+            <List v-for="list in paginated('paginate-log')" :list="list" :key="list.id" />
           </paginate>
           <div v-else class="nothing">" {{ searchWord }} " に該当する投稿はありませんでした。</div>
           <!-- filteredPostDataにて該当する投稿がない場合、上記を表示させる。 -->
@@ -54,7 +49,9 @@ import Vue from "vue";
 import VuePaginate from "vue-paginate";
 Vue.use(VuePaginate);
 const VueScrollTo = require("vue-scrollto");
-Vue.use(VueScrollTo);
+Vue.use(VueScrollTo, {
+  offset: -120
+});
 
 export default {
   data() {
@@ -122,7 +119,10 @@ export default {
             });
             //isBookmarkedを追加。
           } else {
-            this.postData.push(doc.data());
+            this.postData.push({
+              ...doc.data(),
+              isBookmarked: false
+            });
           }
         });
       });

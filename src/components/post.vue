@@ -94,7 +94,7 @@
               rows="1"
               v-model="description"
               placeholder="内容"
-              maxlength="50"
+              maxlength="57"
               :min-height="70"
               :max-height="70"
             ></textarea-autosize>

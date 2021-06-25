@@ -76,7 +76,7 @@
           v-model="input"
           placeholder="メッセージを入力"
           :disabled="!user.uid"
-          @keydown.enter.exact.prevent="doSend"
+          @click.prevent="doSend"
         ></textarea>
         <!-- ユーザーでなければ無効化 -->
         <button type="submit" :disabled="!user.uid" class="send-button">
@@ -168,9 +168,7 @@ export default {
       this.scrollBottom();
       //スクロールの一番下に追加。
     },
-    doSend(event) {
-      if (event.keyCode !== 13) return;
-      // 日本語入力中のEnterキー操作は無効にする
+    doSend() {
       const time = time;
       if (this.user.uid && this.input.length) {
         //以下でFirebaseに書き込まれたメッセージを追加

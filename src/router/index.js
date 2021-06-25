@@ -71,10 +71,21 @@ const routes = [
   },
 ];
 
+const scrollBehavior = (to, from, savedPosition) => {
+  if (savedPosition) {
+    return savedPosition;
+  } else {
+    return { x: 0, y: 0 };
+  }
+  //位置を指定して指定箇所へ遷移させる
+};
+
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+  scrollBehavior,
+  //インスタンスの作成時に、scrollBehaviorに位置を返す関数を指定
 });
 
 router.beforeEach((to, from, next) => {

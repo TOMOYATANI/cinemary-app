@@ -1,6 +1,13 @@
 <template>
   <div class="profile-posts">
-    <paginate name="paginate-listData" class="paginate-pctb" tag="ol" :list="listData" :per="3">
+    <paginate
+      name="paginate-listData"
+      class="paginate-pctb"
+      tag="ol"
+      :list="listData"
+      :per="3"
+      v-if="listData.length !== 0"
+    >
       <List
         v-for="(list, index) in paginated('paginate-listData')"
         :index="index"
@@ -8,6 +15,7 @@
         :key="list.id"
       />
     </paginate>
+    <div v-else class="nothing flex">投稿はありません</div>
     <paginate-links
       for="paginate-listData"
       name="paginate-listData"
@@ -31,7 +39,7 @@ export default {
     return {
       profileData: {},
       listData: [],
-      paginate: ["paginate-listData"],
+      paginate: ["paginate-listData"]
     };
   },
   components: {
@@ -109,6 +117,14 @@ hr.separate {
 
 .mypage-other {
   width: 100%;
+}
+
+.nothing {
+  color: $white-color;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 5rem;
 }
 
 // -- ネオンカラー -- //

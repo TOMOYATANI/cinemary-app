@@ -20,13 +20,19 @@
         <router-link :to="`/chat/${list.id}`" class="join-btn flex">ルームへ参加</router-link>
         <!-- 「list.id」propsで親コンポーネントから取得したidを取得。-->
         <img
-          :src="bookmark"
+          src="../assets/ブックマーク保存.jpg"
           alt="ブックマーク"
           class="bookmark-icon"
           @click="deleteBookmark"
-          v-if="this.isBookmarked = true"
+          v-if="list.isBookmarked"
         />
-        <img :src="bookmarked" alt="ブックマーク" class="bookmark-icon" @click="saveBookmark" v-else />
+        <img
+          src="../assets/ブックマーク未保存.jpg"
+          alt="ブックマーク"
+          class="bookmark-icon"
+          @click="saveBookmark"
+          v-else
+        />
         <p class="post-time">{{ $dayjs(list.time.toDate()).format('YYYY/MM/DD HH:mm') }}</p>
       </div>
     </div>
@@ -46,9 +52,6 @@ Vue.prototype.$dayjs = dayjs;
 export default {
   data() {
     return {
-      bookmark: require("../assets/ブックマーク保存.jpg"),
-      bookmarked: require("../assets/ブックマーク未保存.jpg"),
-      isBookmarked: false,
       userDatas: [],
       preview: require("../assets/デフォルト画像.jpg")
     };
@@ -57,10 +60,6 @@ export default {
     list: {
       type: Object
       //親コンポーネント(board.vue)のlist[Object型]をpropsで渡している。
-    },
-    index: {
-      type: Number
-      //親コンポーネント(board.vue)のindex[Number型]をpropsで渡している。
     }
   },
 
@@ -108,7 +107,7 @@ export default {
           this.$swal("ブックマークに追加しました。", {
             icon: "success"
           });
-          this.isBookmarked = true;
+          this.list.isBookmarked = true;
         })
         .catch(() => {
           this.$swal("ブックマークを追加出来ません。", {
@@ -135,7 +134,7 @@ export default {
                 this.$swal("ブックマークを取り消ししました。", {
                   icon: "success"
                 });
-                this.isBookmarked = false;
+                this.list.isBookmarked = false;
               })
               .catch(() => {
                 this.$swal("ブックマークを取り消し出来ません。", {
@@ -167,12 +166,6 @@ export default {
                 .collection("posts")
                 .doc(this.list.id)
                 .delete()
-                .then(() => {
-                  this.$router.go({
-                    path: `/board/${this.$route.params.uid}`,
-                    force: true
-                  });
-                })
 
                 .then(() => {
                   //コレクション「users」から全てのユーザーを参照
@@ -192,20 +185,12 @@ export default {
                           //postIdをフィルタリングして投稿idであるthis.list.idと合致するもののみを参照
                           .get()
                           .then(snapshot => {
-                            let count = 0;
-
-                            snapshot.forEach(doc => {
-                              doc.ref.delete().then(() => {
-                                //ドキュメントの数だけrefを参照して削除を実行
-                                count++;
-                                if (snapshot.size == count) {
-                                  //対象が削除されてからリロード
-                                  this.$router.go({
-                                    path: `/board/${this.$route.params.uid}`,
-                                    force: true
-                                  });
-                                }
-                              });
+                            snapshot.forEach(doc => doc.ref.delete());
+                          })
+                          .then(() => {
+                            this.$router.go({
+                              path: `/board/${this.$route.params.uid}`,
+                              force: true
                             });
                           });
                       });

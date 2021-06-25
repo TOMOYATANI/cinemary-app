@@ -12,7 +12,7 @@
           :per="12"
           v-if="bookmarkList.length !== 0"
         >
-          <List v-for="(list) in paginated('paginate-bookmarkList')" :list="list" :key="list.id" />
+          <List v-for="list in paginated('paginate-bookmarkList')" :list="list" :key="list.id" />
           <!-- data内にあるbookmarkList配列から、v-forディレクティブを使って1つずつ要素を取り出し描画。 -->
         </paginate>
         <div v-else class="nothing flex">ブックマークされた投稿はありません</div>
@@ -80,6 +80,7 @@ export default {
     firebase
       .firestore()
       .collection("posts") //「posts」コレクションを参照
+      .orderBy("time", "desc")
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
