@@ -6,9 +6,9 @@
       " class="post-comment flex">
       <img class="comment-icon" src="../assets/コメント.jpg" alt="コメント" />
     </button>
-    <!-- PC・タブレット用モーダルウィンドウ -->
+    <!-- xl・タブレット用モーダルウィンドウ -->
     <modal
-      class="modal-inner modal-pctb"
+      class="modal-inner modal-xltb"
       v-scroll-lock="open"
       name="post"
       :width="750"
@@ -299,6 +299,7 @@ textarea::placeholder {
   background-color: $black-color;
   .post-comment {
     position: fixed;
+    z-index: 100;
     top: 130px;
     right: 45px;
     width: 60px;
@@ -417,84 +418,101 @@ textarea::placeholder {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1025px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
+$breakpoint-xl: 1025px;
+$breakpoint-lg: 1024px;
+$breakpoint-md: 600px;
+$breakpoint-sm: 400px;
 
-@mixin pc {
-  @media (min-width: ($breakpoint-pc)) {
+@mixin xl {
+  @media (min-width: ($breakpoint-xl)) {
     @content;
   }
 }
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
+@mixin lg {
+  @media (max-width: ($breakpoint-lg)) {
     @content;
   }
 }
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
+@mixin md {
+  @media (max-width: ($breakpoint-md)) {
+    @content;
+  }
+}
+@mixin sm {
+  @media (max-width: ($breakpoint-sm)) {
     @content;
   }
 }
 
-.modal-pctb {
-  @include pc {
+.post-content .post-comment {
+  @include md {
+    right: 12px;
+  }
+  @include sm {
+    right: 10px;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.post-content .post-comment .comment-icon {
+  @include sm {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+.modal-xltb {
+  @include xl {
     display: flex;
   }
-  @include tab {
+  @include lg {
     display: flex;
   }
-  @include sp {
+  @include md {
     display: none;
   }
 }
 
 .modal-sp {
-  @include pc {
+  @include xl {
     display: none;
   }
-  @include tab {
+  @include lg {
     display: none;
   }
-  @include sp {
+  @include md {
     display: flex;
   }
 }
 
 ::placeholder {
-  @include sp {
+  @include md {
     font-size: 0.9rem;
   }
 }
 
 textarea::placeholder {
-  @include sp {
+  @include md {
     font-size: 0.9rem;
   }
 }
 
 hr.separate {
-  @include sp {
+  @include md {
     margin: 1rem 0;
   }
 }
 
-.post-tll {
-  @include sp {
-    width: 200px;
-    margin: 3rem;
-  }
-}
-
 .modal-inner .modal-header .post-title {
-  @include sp {
+  @include md {
     font-size: 1.2rem;
     padding-top: 3rem;
   }
 }
 
 .modal-inner .modal-body .post-items .post-contens .post-item {
-  @include sp {
+  @include md {
     width: 23rem;
     height: 3rem;
     font-size: 0.9rem;
@@ -502,14 +520,14 @@ hr.separate {
 }
 
 textarea {
-  @include sp {
+  @include md {
     width: 23rem;
     font-size: 0.9rem;
   }
 }
 
 .modal-inner .modal-body .post-items .post-contens .post-select {
-  @include sp {
+  @include md {
     width: 23rem;
     font-size: 0.9rem;
   }

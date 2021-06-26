@@ -40,7 +40,7 @@
         class="hamburger-link neon3 flash"
         v-if="authenticatedUser"
       >POST</router-link>
-      <router-link to="/board" class="header-link neon3 flash" v-if="!authenticatedUser">POST</router-link>
+      <router-link to="/board" class="hamburger-link neon3 flash" v-if="!authenticatedUser">POST</router-link>
 
       <router-link to="/signup" class="hamburger-link neon3 flash" v-if="!authenticatedUser">SINGUP</router-link>
       <router-link to="/signin" class="hamburger-link neon3 flash" v-if="!authenticatedUser">SINGIN</router-link>
@@ -49,7 +49,7 @@
         class="hamburger-link neon3 flash"
         v-if="authenticatedUser"
       >MYPAGE</router-link>
-      <router-link to="/board" class="header-link neon3 flash" v-if="!authenticatedUser">MYPAGE</router-link>
+      <router-link to="/board" class="hamburger-link neon3 flash" v-if="!authenticatedUser">MYPAGE</router-link>
       <button class="hamburger-link neon3 flash" @click="signOut" v-if="authenticatedUser">SINGOUT</button>
     </slide>
   </header>
@@ -179,8 +179,6 @@ a.header-ttl:hover span {
   color: rgba(200, 200, 200, 0.6);
 }
 
-
-
 // -- ネオンカラー -- //
 
 .neon {
@@ -239,43 +237,67 @@ a.header-ttl:hover span {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1025px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
+$breakpoint-xl: 1025px;
+$breakpoint-lg: 1024px;
+$breakpoint-md: 600px;
+$breakpoint-sm: 400px;
 
-@mixin pc {
-  @media (min-width: ($breakpoint-pc)) {
+@mixin xl {
+  @media (min-width: ($breakpoint-xl)) {
     @content;
   }
 }
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
+@mixin lg {
+  @media (max-width: ($breakpoint-lg)) {
     @content;
   }
 }
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
+@mixin md {
+  @media (max-width: ($breakpoint-md)) {
     @content;
+  }
+}
+@mixin sm {
+  @media (max-width: ($breakpoint-sm)) {
+    @content;
+  }
+}
+
+.header {
+  @include sm {
+    padding: 1rem 2rem;
+  }
+}
+
+.header-ttl {
+  @include sm {
+    font-size: 2rem;
+  }
+}
+
+.header-ttl-color {
+  @include sm {
+    font-size: 2.5rem;
   }
 }
 
 .header-menu {
-  @include tab {
+  @include lg {
     display: none;
   }
-  @include sp {
+  @include md {
     display: none;
   }
 }
 
 .hamburger-menu {
-  @include pc {
+  @include xl {
     display: none;
   }
-  @include tab {
+  @include lg {
     display: flex;
   }
-  @include sp {
+  @include md {
     display: flex;
   }
 }

@@ -3,12 +3,20 @@
     <div class="chat-header flex">
       <h1 class="chat-tll flash neon flex">Chat Room</h1>
       <slide right disableOutsideClick width="200">
-        <router-link to="/" class="header-link neon3 flash">HOME</router-link>
-        <router-link to="/about" class="header-link neon3 flash">ABOUT</router-link>
-        <router-link :to="`/board/${this.uid}`" class="header-link neon3 flash">POST</router-link>
-        <router-link to="/signup" class="header-link neon3 flash" v-if="!authenticatedUser">SINGUP</router-link>
-        <router-link to="/signin" class="header-link neon3 flash" v-if="!authenticatedUser">SINGIN</router-link>
-        <router-link :to="`/mypage/${this.uid}`" class="header-link neon3 flash">MYPAGE</router-link>
+        <router-link to="/" class="hamburger-link neon3 flash">HOME</router-link>
+        <router-link to="/about" class="hamburger-link neon3 flash">ABOUT</router-link>
+        <router-link :to="`/board/${this.uid}`" class="hamburger-link neon3 flash">POST</router-link>
+        <router-link
+          to="/signup"
+          class="hamburger-link neon3 flash"
+          v-if="!authenticatedUser"
+        >SINGUP</router-link>
+        <router-link
+          to="/signin"
+          class="hamburger-link neon3 flash"
+          v-if="!authenticatedUser"
+        >SINGIN</router-link>
+        <router-link :to="`/mypage/${this.uid}`" class="hamburger-link neon3 flash">MYPAGE</router-link>
       </slide>
       <div id="page-wrap"></div>
     </div>
@@ -173,7 +181,7 @@ export default {
       if (this.user.uid && this.input.length) {
         //以下でFirebaseに書き込まれたメッセージを追加
         firebase
-          .database()
+          .dalgase()
           .ref(this.$route.params.id)
           .push(
             {
@@ -181,7 +189,7 @@ export default {
               name: this.user.displayName,
               image: this.user.photoURL,
               userid: this.user.uid,
-              time: firebase.database.ServerValue.TIMESTAMP
+              time: firebase.dalgase.ServerValue.TIMESTAMP
             },
 
             () => {
@@ -198,7 +206,7 @@ export default {
     },
     deleteMessage(key) {
       firebase
-        .database()
+        .dalgase()
         .ref(this.$route.params.id + "/" + key)
         .remove();
       this.$swal({
@@ -451,7 +459,7 @@ div {
 
 //ハンバーガーメニュー
 
-.header-link {
+.hamburger-link {
   color: $white-color;
   text-decoration: none;
   background-color: transparent;
@@ -510,7 +518,7 @@ div {
 .bm-cross {
   position: absolute;
   width: 3px;
-  height: 17px!important;
+  height: 17px !important;
   transform: rotate(45deg);
 }
 
@@ -562,37 +570,86 @@ div {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1025px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
+$breakpoint-xl: 1025px;
+$breakpoint-lg: 1024px;
+$breakpoint-md: 600px;
+$breakpoint-sm: 400px;
 
-@mixin pc {
-  @media (min-width: ($breakpoint-pc)) {
+@mixin xl {
+  @media (min-width: ($breakpoint-xl)) {
     @content;
   }
 }
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
+@mixin lg {
+  @media (max-width: ($breakpoint-lg)) {
     @content;
   }
 }
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
+@mixin md {
+  @media (max-width: ($breakpoint-md)) {
+    @content;
+  }
+}
+@mixin sm {
+  @media (max-width: ($breakpoint-sm)) {
     @content;
   }
 }
 
+.chat .content .otheritem {
+  @include sm {
+    margin: 1.1rem;
+  }
+}
+
+.chat .content .otherimage {
+  @include sm {
+    padding-right: 0rem;
+  }
+}
+
+.chat .content .myitem {
+  @include sm {
+    margin: 1.1rem;
+  }
+}
+
+.chat .content .myimage {
+  @include sm {
+    padding-left: 0rem;
+  }
+}
+
+.bm-burger-button {
+  @include sm {
+    right: 23px !important;
+  }
+}
+
+.chat .chat-header .chat-tll {
+  @include sm {
+    font-size: 2rem;
+  }
+}
 .chat .content .othermessage {
-  @include tab {
+  @include lg {
     margin: 0;
   }
-  @include sp {
+  @include md {
     margin: 0;
+  }
+  @include sm {
+    font-size: 0.9rem;
+  }
+}
+.chat .content .mymessage {
+  @include sm {
+    font-size: 0.9rem;
   }
 }
 
 .chat .list {
-  @include sp {
+  @include md {
     width: 100%;
   }
 }

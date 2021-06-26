@@ -129,30 +129,40 @@ hr.separate {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1025px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
+$breakpoint-xl: 1025px;
+$breakpoint-lg: 1024px;
+$breakpoint-md: 600px;
+$breakpoint-sm: 400px;
 
-@mixin pc {
-  @media (min-width: ($breakpoint-pc)) {
+@mixin xl {
+  @media (min-width: ($breakpoint-xl)) {
     @content;
   }
 }
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
+@mixin lg {
+  @media (max-width: ($breakpoint-lg)) {
     @content;
   }
 }
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
+@mixin md {
+  @media (max-width: ($breakpoint-md)) {
+    @content;
+  }
+}
+@mixin sm {
+  @media (max-width: ($breakpoint-sm)) {
     @content;
   }
 }
 
 .mypage .post-list {
-  @include sp {
+  @include md {
     width: 60%;
     font-size: 1rem;
+  }
+  @include sm {
+    width: 70%;
+    font-size: 0.95rem;
   }
 }
 </style>

@@ -142,64 +142,91 @@ p {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1025px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
+$breakpoint-xl: 1025px;
+$breakpoint-lg: 1024px;
+$breakpoint-md: 600px;
+$breakpoint-sm: 400px;
 
-@mixin pc {
-  @media (min-width: ($breakpoint-pc)) {
+@mixin xl {
+  @media (min-width: ($breakpoint-xl)) {
     @content;
   }
 }
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
+@mixin lg {
+  @media (max-width: ($breakpoint-lg)) {
     @content;
   }
 }
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
+@mixin md {
+  @media (max-width: ($breakpoint-md)) {
     @content;
+  }
+}
+@mixin sm {
+  @media (max-width: ($breakpoint-sm)) {
+    @content;
+  }
+}
+
+.about-tll {
+  @include sm {
+    font-size: 1.4rem;
   }
 }
 
 .about .description p {
-  @include sp {
-    font-size: 0.8rem;
-  }
-  @include tab {
+  @include lg {
     font-size: 0.85rem;
+  }
+  @include md {
+    font-size: 0.8rem;
   }
 }
 
 .about ul .remark .faceicon img {
-  @include sp {
+  @include md {
     width: 50px;
     height: 50px;
+  }
+  @include sm {
+    width: 45px;
+    height: 45px;
   }
 }
 
 .say {
-  @include sp {
+  @include md {
     margin: 0 0 0 20px;
     padding: 8px;
+  }
+  @include sm {
+    margin: 0 0 0 10px;
   }
 }
 
 .about ul .remark {
-  @include sp {
+  @include md {
     width: 405px;
+  }
+  @include sm {
+    width: 356px;
   }
 }
 
 p {
-  @include sp {
+  @include md {
     font-size: 0.9rem;
+  }
+  @include sm {
+    font-size: 0.8rem;
   }
 }
 
-.about ul .remark {
-  @include sp {
-    width: 400px;
+.about .description {
+  @include sm {
+    width: 80%;
+    margin: 2rem;
+    padding: 0;
   }
 }
 </style>

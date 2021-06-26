@@ -152,37 +152,55 @@ hr.separate {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1025px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
+$breakpoint-xl: 1025px;
+$breakpoint-lg: 1024px;
+$breakpoint-md: 600px;
+$breakpoint-sm: 400px;
 
-@mixin pc {
-  @media (min-width: ($breakpoint-pc)) {
+@mixin xl {
+  @media (min-width: ($breakpoint-xl)) {
     @content;
   }
 }
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
+@mixin lg {
+  @media (max-width: ($breakpoint-lg)) {
     @content;
   }
 }
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
+@mixin md {
+  @media (max-width: ($breakpoint-md)) {
     @content;
+  }
+}
+@mixin sm {
+  @media (max-width: ($breakpoint-sm)) {
+    @content;
+  }
+}
+
+hr.separate {
+  @include sm {
+    margin: 1rem 0;
   }
 }
 
 ::placeholder {
-  @include sp {
+  @include md {
     font-size: 0.9rem;
+  }
+  @include sm {
+    font-size: 0.8rem;
   }
 }
 
 .search-inner .search-main-contens .search-main-item {
-  @include sp {
+  @include md {
     width: 28rem;
     height: 2.5rem;
     font-size: 0.9rem;
+  }
+  @include sm {
+    width: 20rem;
   }
 }
 </style>

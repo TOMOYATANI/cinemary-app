@@ -6,7 +6,7 @@
     <div class="post">
       <h2 id="top" class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
-        <div class="post-items paginate-pctb">
+        <div class="post-items paginate-xltb">
           <paginate
             name="paginate-log"
             tag="ol"
@@ -239,31 +239,56 @@ ul.paginate-links > li.ellipses > a {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1025px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
+$breakpoint-xl: 1025px;
+$breakpoint-lg: 1024px;
+$breakpoint-md: 600px;
+$breakpoint-sm: 400px;
 
-@mixin pc {
-  @media (min-width: ($breakpoint-pc)) {
+@mixin xl {
+  @media (min-width: ($breakpoint-xl)) {
     @content;
   }
 }
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
+@mixin lg {
+  @media (max-width: ($breakpoint-lg)) {
     @content;
   }
 }
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
+@mixin md {
+  @media (max-width: ($breakpoint-md)) {
+    @content;
+  }
+}
+@mixin sm {
+  @media (max-width: ($breakpoint-sm)) {
     @content;
   }
 }
 
 .post-tll {
-  @include sp {
-    width: 175px;
-    margin-left: 5rem;
+  @include md {
+    width: 200px;
+    margin-left: 4rem;
+    padding: 0.8rem;
+  }
+  @include sm {
+    width: 150px;
+    margin-left: 3rem;
     padding: 0.5rem;
+    font-size: 1.3rem;
+  }
+}
+
+.post .nothing {
+  @include md {
+    font-size: 1rem;
+    padding: 5rem;
+    margin: 3rem 2rem;
+  }
+  @include sm {
+    font-size: 0.9rem;
+    padding: 5rem;
+    margin: 3rem 2rem;
   }
 }
 </style>

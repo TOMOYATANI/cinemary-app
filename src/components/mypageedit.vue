@@ -7,9 +7,9 @@
             "
       class="profile-edit flex"
     >プロフィール編集</button>
-    <!-- PC・タブレット用モーダルウィンドウ -->
+    <!-- xl・タブレット用モーダルウィンドウ -->
     <modal
-      class="modal-inner modal-pctb"
+      class="modal-inner modal-xltb"
       v-scroll-lock="open"
       name="edit"
       :width="1100"
@@ -816,60 +816,66 @@ hr.separate {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1025px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
+$breakpoint-xl: 1025px;
+$breakpoint-lg: 1024px;
+$breakpoint-md: 600px;
+$breakpoint-sm: 400px;
 
-@mixin pc {
-  @media (min-width: ($breakpoint-pc)) {
+@mixin xl {
+  @media (min-width: ($breakpoint-xl)) {
     @content;
   }
 }
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
+@mixin lg {
+  @media (max-width: ($breakpoint-lg)) {
     @content;
   }
 }
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
+@mixin md {
+  @media (max-width: ($breakpoint-md)) {
+    @content;
+  }
+}
+@mixin sm {
+  @media (max-width: ($breakpoint-sm)) {
     @content;
   }
 }
 
 .mypage-edit .profile-edit {
-  @include sp {
+  @include md {
     width: 8.5rem;
     overflow: hidden;
     font-size: 0.7rem;
   }
 }
 
-.modal-pctb {
-  @include pc {
+.modal-xltb {
+  @include xl {
     display: flex;
   }
-  @include tab {
+  @include lg {
     display: flex;
   }
-  @include sp {
+  @include md {
     display: none;
   }
 }
 
 .modal-sp {
-  @include pc {
+  @include xl {
     display: none;
   }
-  @include tab {
+  @include lg {
     display: none;
   }
-  @include sp {
+  @include md {
     display: flex;
   }
 }
 
 .mypage-edit .modal-inner .modal-header .profile-tll {
-  @include sp {
+  @include md {
     font-size: 1.1rem;
   }
 }
@@ -881,7 +887,7 @@ $breakpoint-mobile: 600px;
   .profile-contens
   .profile-img-inner
   .profile-img {
-  @include sp {
+  @include md {
     width: 180px;
     height: 180px;
     margin-left: 0rem;
@@ -895,7 +901,7 @@ $breakpoint-mobile: 600px;
   .profile-contens
   .profile-img-inner
   .profile-txt {
-  @include sp {
+  @include md {
     margin: 1rem 0;
     margin-left: 0rem;
     font-size: 0.8rem;
@@ -903,7 +909,7 @@ $breakpoint-mobile: 600px;
 }
 
 .mypage-edit .profile-select {
-  @include sp {
+  @include md {
     width: 11rem;
     font-size: 0.9rem;
   }
@@ -915,7 +921,7 @@ $breakpoint-mobile: 600px;
   .profile-inner
   .profile-contens
   .profile-item {
-  @include sp {
+  @include md {
     width: 11rem;
     height: 2.5rem;
     font-size: 0.9rem;
@@ -923,7 +929,7 @@ $breakpoint-mobile: 600px;
 }
 
 textarea {
-  @include sp {
+  @include md {
     width: 11rem;
     font-size: 0.9rem;
   }
@@ -931,13 +937,13 @@ textarea {
 
 .mypage-edit .modal-inner .update-btn {
   cursor: pointer;
-  @include sp {
+  @include md {
     margin: 1rem;
   }
 }
 
 .mypage-edit .modal-inner .modal-body .profile-inner {
-  @include sp {
+  @include md {
     padding-bottom: 3rem;
   }
 }

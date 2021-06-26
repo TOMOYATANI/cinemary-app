@@ -2,7 +2,7 @@
   <div class="profile-posts">
     <paginate
       name="paginate-listData"
-      class="paginate-pctb"
+      class="paginate-xltb"
       tag="ol"
       :list="listData"
       :per="3"
@@ -20,7 +20,7 @@
       for="paginate-listData"
       name="paginate-listData"
       :async="true"
-      class="pagination paginate-pctb flex"
+      class="pagination paginate-xltb flex"
       :show-step-links="true"
       :style="listData == '' ? 'display:none;' : 'display:flex;'"
     ></paginate-links>
@@ -135,37 +135,50 @@ hr.separate {
   text-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
 }
 
-/* <====== Media Queries======> */
+// -- メディアクエリ -- //
 
-$breakpoint-pc: 1025px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
+$breakpoint-xl: 1025px;
+$breakpoint-lg: 1024px;
+$breakpoint-md: 600px;
+$breakpoint-sm: 400px;
 
-@mixin pc {
-  @media (min-width: ($breakpoint-pc)) {
+@mixin xl {
+  @media (min-width: ($breakpoint-xl)) {
     @content;
   }
 }
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
+@mixin lg {
+  @media (max-width: ($breakpoint-lg)) {
     @content;
   }
 }
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
+@mixin md {
+  @media (max-width: ($breakpoint-md)) {
+    @content;
+  }
+}
+@mixin sm {
+  @media (max-width: ($breakpoint-sm)) {
     @content;
   }
 }
 
 .mypage-inner .profile-inner-l {
-  @include sp {
+  @include md {
     padding: 1rem;
   }
 }
 
 .mypage-inner .profile-inner-r {
-  @include sp {
+  @include md {
     padding: 1rem;
+  }
+}
+
+.nothing {
+  @include sm {
+    font-size: 0.95rem;
+    padding: 2rem;
   }
 }
 </style>

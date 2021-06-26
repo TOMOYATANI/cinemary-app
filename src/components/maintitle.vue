@@ -82,47 +82,72 @@ $black-color: rgb(0, 0, 0);
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1025px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
+$breakpoint-xl: 1025px;
+$breakpoint-lg: 1024px;
+$breakpoint-md: 600px;
+$breakpoint-sm: 400px;
 
-@mixin pc {
-  @media (min-width: ($breakpoint-pc)) {
+@mixin xl {
+  @media (min-width: ($breakpoint-xl)) {
     @content;
   }
 }
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
+@mixin lg {
+  @media (max-width: ($breakpoint-lg)) {
     @content;
   }
 }
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
+@mixin md {
+  @media (max-width: ($breakpoint-md)) {
+    @content;
+  }
+}
+@mixin sm {
+  @media (max-width: ($breakpoint-sm)) {
     @content;
   }
 }
 
-.main-tll h1 {
-  @include sp {
-    font-size: 1.5rem;
-  }
-}
-
-.main-tll p {
-  @include sp {
-    font-size: 0.7rem;
+.main-tll {
+  @include sm {
+    width: 94%;
   }
 }
 
 .main .tll {
-  @include sp {
+  @include sm {
+    z-index: 1;
+    left: 3% !important;
+  }
+}
+
+.main-tll h1 {
+  @include md {
+    font-size: 1.5rem;
+  }
+  @include sm {
+    font-size: 1.2rem;
+  }
+}
+
+.main-tll p {
+  @include md {
+    font-size: 0.7rem;
+  }
+  @include sm {
+    font-size: 0.6rem;
+  }
+}
+
+.main .tll {
+  @include md {
     padding: 1rem;
     top: 33%;
   }
 }
 
 .main-tll .post-btn {
-  @include sp {
+  @include md {
     width: 6.5rem;
     margin-top: 1.2rem;
     padding: 0.4rem;

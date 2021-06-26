@@ -161,62 +161,104 @@ p {
 
 // -- メディアクエリ -- //
 
-$breakpoint-pc: 1025px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
+$breakpoint-xl: 1025px;
+$breakpoint-lg: 1024px;
+$breakpoint-md: 600px;
+$breakpoint-sm: 400px;
 
-@mixin pc {
-  @media (min-width: ($breakpoint-pc)) {
+@mixin xl {
+  @media (min-width: ($breakpoint-xl)) {
     @content;
   }
 }
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
+@mixin lg {
+  @media (max-width: ($breakpoint-lg)) {
     @content;
   }
 }
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
+@mixin md {
+  @media (max-width: ($breakpoint-md)) {
     @content;
+  }
+}
+@mixin sm {
+  @media (max-width: ($breakpoint-sm)) {
+    @content;
+  }
+}
+
+.about .flow-tll {
+  @include sm {
+    font-size: 1.4rem;
   }
 }
 
 .about .flow {
-  @include sp {
+  @include md {
     height: 22rem;
+  }
+  @include sm {
+    height: unset;
+  }
+}
+
+.about .flow {
+  @include sm {
+    height: unset;
   }
 }
 
 .about .flow .flow-item img {
-  @include sp {
+  @include lg {
+    width: 60px;
+    height: 60px;
+  }
+  @include md {
     width: 55px;
     height: 55px;
   }
-  @include tab {
-    width: 60px;
-    height: 60px;
+  @include sm {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+.about .flow .flow-item {
+  @include sm {
+    flex-direction: column;
+  }
+}
+
+.about .flow .flow-item .step {
+  @include sm {
+    width: 100%;
   }
 }
 
 .about .flow .flow-item h3 {
-  @include sp {
-    padding: 0.3rem;
-    font-size: 0.9rem;
-  }
-  @include tab {
+  @include lg {
     padding: 0.4rem;
     font-size: 1rem;
+  }
+  @include md {
+    padding: 0.3rem;
+    font-size: 0.9rem;
   }
 }
 
 .about .flow .flow-item .step-txt {
-  @include sp {
+  @include lg {
+    padding: 1rem;
+    font-size: 13px;
+  }
+  @include md {
     padding: 0.9rem;
     font-size: 12px;
   }
-  @include sp {
-    padding: 1rem;
-    font-size: 13px;
+  @include md {
+    padding: 0;
+    margin-bottom: 1.5rem;
+    font-size: 12px;
   }
 }
 </style>

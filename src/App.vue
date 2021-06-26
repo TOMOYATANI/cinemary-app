@@ -37,6 +37,9 @@ input[type="button"] {
     outline-offset: -2px;
   }
 }
+body {
+  font-size: 16px;
+}
 
 .flex {
   display: flex;
