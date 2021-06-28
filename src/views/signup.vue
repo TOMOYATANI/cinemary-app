@@ -94,8 +94,8 @@ $black-color: rgb(0, 0, 0);
   height: 90vh;
   background-color: rgba(20, 20, 20);
   .signup-inner {
-    width: 35%;
-    height: 60%;
+    width: 480px;
+    height: 450px;
     flex-direction: column;
     z-index: 1;
     font-weight: bold;
@@ -170,18 +170,24 @@ $breakpoint-sm: 400px;
 
 .signup .signup-inner {
   @include md {
-    width: 60%;
-    left: 21%;
+    width: 360px;
+    height: 420px;
   }
   @include sm {
-    width: 85%;
-    left: 21%;
+    width: 320px;
+    height: 370px;
   }
 }
 
-.signup .signup-inner {
+.signup .signup-inner p {
   @include sm {
-    height: 53%;
+    font-size: 14px;
+  }
+}
+
+.signup .signup-inner h2 {
+  @include sm {
+    font-size: 19px;
   }
 }
 </style>

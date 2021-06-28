@@ -194,10 +194,4 @@ $breakpoint-sm: 400px;
   }
 }
 
-.nothing {
-  @include sm {
-    font-size: 0.95rem;
-    padding: 2rem;
-  }
-}
 </style>

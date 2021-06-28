@@ -2,11 +2,13 @@
   <div>
     <Header />
     <Search v-model="searchWord" />
-    <Post />
+    <Postxllg class="post-xllg" />
+    <Postmd class="post-md" />
+    <Postsm class="post-sm" />
     <div class="post">
       <h2 id="top" class="post-tll neon">投稿一覧</h2>
       <div class="post-inner">
-        <div class="post-items paginate-xltb">
+        <div class="post-items">
           <paginate
             name="paginate-log"
             tag="ol"
@@ -42,7 +44,9 @@
 <script>
 import firebase from "firebase";
 import Header from "@/components/header.vue";
-import Post from "@/components/post.vue";
+import Postxllg from "@/components/postxllg.vue";
+import Postmd from "@/components/postmd.vue";
+import Postsm from "@/components/postsm.vue";
 import List from "@/components/list.vue";
 import Search from "@/components/search.vue";
 import Vue from "vue";
@@ -69,7 +73,9 @@ export default {
   },
   components: {
     Header,
-    Post,
+    Postxllg,
+    Postmd,
+    Postsm,
     List,
     Search
   },
@@ -288,7 +294,52 @@ $breakpoint-sm: 400px;
   @include sm {
     font-size: 0.9rem;
     padding: 5rem;
-    margin: 3rem 2rem;
+    margin: 4rem 2rem;
+  }
+}
+
+.post-xllg {
+  @include xl {
+    display: flex;
+  }
+  @include lg {
+    display: flex;
+  }
+  @include md {
+    display: none;
+  }
+  @include sm {
+    display: none;
+  }
+}
+
+.post-md {
+  @include xl {
+    display: none;
+  }
+  @include lg {
+    display: none;
+  }
+  @include md {
+    display: flex;
+  }
+  @include sm {
+    display: none;
+  }
+}
+
+.post-sm {
+  @include xl {
+    display: none;
+  }
+  @include lg {
+    display: none;
+  }
+  @include md {
+    display: none;
+  }
+  @include sm {
+    display: flex;
   }
 }
 </style>

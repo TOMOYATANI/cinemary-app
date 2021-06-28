@@ -181,7 +181,7 @@ export default {
       if (this.user.uid && this.input.length) {
         //以下でFirebaseに書き込まれたメッセージを追加
         firebase
-          .dalgase()
+          .database()
           .ref(this.$route.params.id)
           .push(
             {
@@ -189,7 +189,7 @@ export default {
               name: this.user.displayName,
               image: this.user.photoURL,
               userid: this.user.uid,
-              time: firebase.dalgase.ServerValue.TIMESTAMP
+              time: firebase.database.ServerValue.TIMESTAMP
             },
 
             () => {
@@ -206,7 +206,7 @@ export default {
     },
     deleteMessage(key) {
       firebase
-        .dalgase()
+        .database()
         .ref(this.$route.params.id + "/" + key)
         .remove();
       this.$swal({

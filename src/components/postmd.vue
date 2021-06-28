@@ -1,19 +1,12 @@
 <template>
-  <div class="post-content">
+  <div class="post-content-md">
     <button @click="
         show();
         openModal();
       " class="post-comment flex">
       <img class="comment-icon" src="../assets/コメント.jpg" alt="コメント" />
     </button>
-    <!-- xl・タブレット用モーダルウィンドウ -->
-    <modal
-      class="modal-inner modal-xltb"
-      v-scroll-lock="open"
-      name="post"
-      :width="750"
-      :height="550"
-    >
+    <modal class="modal-inner" v-scroll-lock="open" name="post" :width="550" :height="550">
       <div
         data-modal="post"
         aria-expanded="true"
@@ -69,63 +62,6 @@
         </div>
       </div>
     </modal>
-    <!-- スマホ用モーダルウィンドウ -->
-    <modal class="modal-inner modal-sp" v-scroll-lock="open" name="post" :width="500" :height="500">
-      <div
-        data-modal="post"
-        aria-expanded="true"
-        class="vm--overlay"
-        styles="background: rgba(255, 255, 255, 0.1);"
-      >
-        <div class="vm--top-right-slot"></div>
-      </div>
-      <div class="modal-header flex">
-        <h2 class="post-title flex">Cinemaryを投稿する</h2>
-        <hr class="separate" />
-      </div>
-      <div class="modal-body">
-        <div class="post-items flex">
-          <div class="post-contens flex">
-            <input type="text" class="post-item" maxlength="50" placeholder="タイトル" v-model="title" />
-          </div>
-          <div class="post-contens flex">
-            <textarea-autosize
-              name="text"
-              rows="1"
-              v-model="description"
-              placeholder="内容"
-              maxlength="57"
-              :min-height="70"
-              :max-height="70"
-            ></textarea-autosize>
-          </div>
-          <div class="post-contens flex">
-            <select
-              v-model="genre"
-              class="post-select"
-              :style="{ color: genre == '' ? 'gray' : 'white' }"
-            >
-              <option class="post-item" value hidden>ジャンルを選択</option>
-              <option
-                v-for="genre in genres"
-                :value="genre.name"
-                :key="genre.id"
-                class="post-item"
-                style="color: white;"
-              >{{ genre.name }}</option>
-            </select>
-          </div>
-          <button class="post-btn" @click.prevent="postItem">投稿</button>
-          <button
-            class="hide-btn flex"
-            @click="
-              hide();
-              closeModal();
-            "
-          >×</button>
-        </div>
-      </div>
-    </modal>
   </div>
 </template>
 
@@ -140,7 +76,6 @@ import VScrollLock from "v-scroll-lock";
 Vue.use(VScrollLock);
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
-
 export default {
   data() {
     return {
@@ -184,53 +119,59 @@ export default {
       open: false
     };
   },
-
   methods: {
     postItem() {
-      const currentUser = firebase.auth().currentUser;
-      this.uid = currentUser.uid;
-
-      const id = firebase
-        .firestore()
-        .collection("posts")
-        .doc().id;
-      //.doc().firebaseでコレクションの"posts"を参照して、「id」を取得
-
-      this.$swal({
-        title: "内容確認",
-        text: "この内容で投稿しますか？",
-        icon: "info",
-        buttons: true,
-        dangerMode: true
-      })
-        .then(willDelete => {
-          if (willDelete) {
-            firebase
-              .firestore()
-              .collection("posts")
-              .doc(id)
-              //doc(id)として自動生成されたidを参照し、set()でそのidを保存
-              .set({
-                title: this.title,
-                description: this.description,
-                genre: this.genre,
-                time: firebase.firestore.FieldValue.serverTimestamp(),
-                id: id,
-                uid: this.$route.params.uid
-              })
-              .then(() => {
-                this.$router.go({ path: `/board/${this.uid}`, force: true });
-              })
-              .catch(() => {});
-          } else {
-            this.$swal("キャンセルしました。");
-          }
-        })
-        .catch(() => {
-          this.$swal("投稿出来ませんでした。", {
-            icon: "error"
-          });
-        });
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          const currentUser = firebase.auth().currentUser;
+          this.uid = currentUser.uid;
+          const id = firebase
+            .firestore()
+            .collection("posts")
+            .doc().id;
+          //.doc().firebaseでコレクションの"posts"を参照して、「id」を取得
+          this.$swal({
+            title: "内容確認",
+            text: "この内容で投稿しますか？",
+            icon: "info",
+            buttons: true,
+            dangerMode: true
+          })
+            .then(willDelete => {
+              if (willDelete) {
+                firebase
+                  .firestore()
+                  .collection("posts")
+                  .doc(id)
+                  //doc(id)として自動生成されたidを参照し、set()でそのidを保存
+                  .set({
+                    title: this.title,
+                    description: this.description,
+                    genre: this.genre,
+                    time: firebase.firestore.FieldValue.serverTimestamp(),
+                    id: id,
+                    uid: this.$route.params.uid
+                  })
+                  .then(() => {
+                    this.$router.go({
+                      path: `/board/${this.uid}`,
+                      force: true
+                    });
+                  })
+                  .catch(() => {});
+              } else {
+                this.$swal("キャンセルしました。");
+              }
+            })
+            .catch(() => {
+              this.$swal("投稿出来ませんでした。", {
+                icon: "error"
+              });
+            });
+        } else {
+          this.$router.push("/signin");
+        }
+      });
     },
     show() {
       this.$modal.show("post");
@@ -251,19 +192,15 @@ export default {
 <style scoped lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
 // -- 変数 -- //
-
 $gray-color: rgb(100, 100, 100);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
-
 // -- 共通 -- //
-
 ::placeholder {
   color: gray;
   font-size: 1rem;
   padding-left: 0.25rem;
 }
-
 hr.separate {
   width: 60%;
   display: block;
@@ -273,26 +210,23 @@ hr.separate {
   margin: 2rem 0;
   padding: 0;
 }
-
 textarea {
-  width: 25rem;
+  width: 23rem;
   outline: none;
   border: none;
   border-bottom: 1px solid #ddd;
   color: $white-color;
   font-size: 1rem;
+  padding-left: 0.25rem;
   background-color: $black-color;
 }
-
 textarea::placeholder {
   color: gray;
   font-size: 1rem;
   padding-left: 0.25rem;
 }
-
 // -- 投稿フォーム -- //
-
-.post-content {
+.post-content-md {
   width: 100%;
   position: relative;
   flex-direction: column;
@@ -301,7 +235,7 @@ textarea::placeholder {
     position: fixed;
     z-index: 100;
     top: 130px;
-    right: 45px;
+    right: 12px;
     width: 60px;
     height: 60px;
     border-radius: 50% 50%;
@@ -314,15 +248,14 @@ textarea::placeholder {
     outline: none;
     transition-duration: 0.5s;
     .comment-icon {
-      width: 30px;
-      height: 30px;
+      width: 25px;
+      height: 25px;
     }
   }
   .post-comment:hover {
     transform: translateY(-5px);
   }
 }
-
 .modal-inner {
   position: fixed;
   .vm--overlay {
@@ -333,6 +266,7 @@ textarea::placeholder {
     flex-direction: column;
     background-color: $black-color;
     .post-title {
+      font-size: 1.5rem;
       padding-top: 3rem;
       color: $white-color;
       font-family: "Roboto", sans-serif;
@@ -347,7 +281,7 @@ textarea::placeholder {
       .post-contens {
         margin: 0.8rem;
         .post-select {
-          width: 25rem;
+          width: 23rem;
           outline: none;
           border: none;
           font-size: 1rem;
@@ -357,7 +291,7 @@ textarea::placeholder {
           background-color: $black-color;
         }
         .post-item {
-          width: 25rem;
+          width: 23rem;
           outline: none;
           border: none;
           height: 3rem;
@@ -407,129 +341,10 @@ textarea::placeholder {
     color: #fff;
   }
 }
-
 // -- ネオンカラー -- //
-
 .neon {
   color: transparent;
   -webkit-text-stroke: 0.2px rgb(255, 0, 0);
   text-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 50px rgba(255, 0, 0, 0.5);
-}
-
-// -- メディアクエリ -- //
-
-$breakpoint-xl: 1025px;
-$breakpoint-lg: 1024px;
-$breakpoint-md: 600px;
-$breakpoint-sm: 400px;
-
-@mixin xl {
-  @media (min-width: ($breakpoint-xl)) {
-    @content;
-  }
-}
-@mixin lg {
-  @media (max-width: ($breakpoint-lg)) {
-    @content;
-  }
-}
-@mixin md {
-  @media (max-width: ($breakpoint-md)) {
-    @content;
-  }
-}
-@mixin sm {
-  @media (max-width: ($breakpoint-sm)) {
-    @content;
-  }
-}
-
-.post-content .post-comment {
-  @include md {
-    right: 12px;
-  }
-  @include sm {
-    right: 10px;
-    width: 50px;
-    height: 50px;
-  }
-}
-
-.post-content .post-comment .comment-icon {
-  @include sm {
-    width: 25px;
-    height: 25px;
-  }
-}
-
-.modal-xltb {
-  @include xl {
-    display: flex;
-  }
-  @include lg {
-    display: flex;
-  }
-  @include md {
-    display: none;
-  }
-}
-
-.modal-sp {
-  @include xl {
-    display: none;
-  }
-  @include lg {
-    display: none;
-  }
-  @include md {
-    display: flex;
-  }
-}
-
-::placeholder {
-  @include md {
-    font-size: 0.9rem;
-  }
-}
-
-textarea::placeholder {
-  @include md {
-    font-size: 0.9rem;
-  }
-}
-
-hr.separate {
-  @include md {
-    margin: 1rem 0;
-  }
-}
-
-.modal-inner .modal-header .post-title {
-  @include md {
-    font-size: 1.2rem;
-    padding-top: 3rem;
-  }
-}
-
-.modal-inner .modal-body .post-items .post-contens .post-item {
-  @include md {
-    width: 23rem;
-    height: 3rem;
-    font-size: 0.9rem;
-  }
-}
-
-textarea {
-  @include md {
-    width: 23rem;
-    font-size: 0.9rem;
-  }
-}
-
-.modal-inner .modal-body .post-items .post-contens .post-select {
-  @include md {
-    width: 23rem;
-    font-size: 0.9rem;
-  }
 }
 </style>

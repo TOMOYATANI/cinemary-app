@@ -5,7 +5,13 @@
     <div class="search-main-contens flex">
       <input
         placeholder="例）アクション 恋愛 ミステリー SF ホラー ミュージカル etc.."
-        class="search-main-item"
+        class="search-main-item search-other"
+        type="search"
+        v-model="inputValue"
+      />
+      <input
+        placeholder="例）アクション 恋愛 ミステリー SF ホラー etc.."
+        class="search-main-item search-sm"
         type="search"
         v-model="inputValue"
       />
@@ -201,6 +207,37 @@ hr.separate {
   }
   @include sm {
     width: 20rem;
+    font-size: 0.8rem;
+  }
+}
+
+.search-other {
+  @include xl {
+    display: flex;
+  }
+  @include lg {
+    display: flex;
+  }
+  @include md {
+    display: flex;
+  }
+  @include sm {
+    display: none;
+  }
+}
+
+.search-sm {
+  @include xl {
+    display: none;
+  }
+  @include lg {
+    display: none;
+  }
+  @include md {
+    display: none;
+  }
+  @include sm {
+    display: flex;
   }
 }
 </style>

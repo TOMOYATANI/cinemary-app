@@ -3,7 +3,7 @@
     <div class="profile-inner flex">
       <Mypagelength />
       <hr class="separate" />
-      <Mypageedit
+      <Mypageeditsm
         :style="
               this.uid == this.$route.params.uid
                 ? 'display:flex;'
@@ -16,12 +16,12 @@
 
 <script>
 import firebase from "firebase";
-import Mypageedit from "@/components/mypageedit.vue";
+import Mypageeditsm from "@/components/mypageeditsm.vue";
 import Mypagelength from "@/components/mypagelength.vue";
 
 export default {
   components: {
-    Mypageedit,
+    Mypageeditsm,
     Mypagelength
   },
 

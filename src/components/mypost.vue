@@ -2,7 +2,6 @@
   <div class="profile-posts">
     <paginate
       name="paginate-listData"
-      class="paginate-xltb"
       tag="ol"
       :list="listData"
       :per="3"
@@ -20,7 +19,7 @@
       for="paginate-listData"
       name="paginate-listData"
       :async="true"
-      class="pagination paginate-xltb flex"
+      class="pagination flex"
       :show-step-links="true"
       :style="listData == '' ? 'display:none;' : 'display:flex;'"
     ></paginate-links>
@@ -178,7 +177,7 @@ $breakpoint-sm: 400px;
 .nothing {
   @include sm {
     font-size: 0.95rem;
-    padding: 2rem;
+    padding: 3rem;
   }
 }
 </style>

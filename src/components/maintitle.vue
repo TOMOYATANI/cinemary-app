@@ -109,15 +109,13 @@ $breakpoint-sm: 400px;
 }
 
 .main-tll {
-  @include sm {
-    width: 94%;
+  @include md {
+    width: 95%;
+    padding: 1.5rem 0.9rem;
   }
-}
-
-.main .tll {
   @include sm {
-    z-index: 1;
-    left: 3% !important;
+    width: 95%;
+    padding: 2rem 0.9rem;
   }
 }
 
@@ -127,6 +125,7 @@ $breakpoint-sm: 400px;
   }
   @include sm {
     font-size: 1.2rem;
+    margin-bottom: 0.2rem;
   }
 }
 
@@ -136,13 +135,7 @@ $breakpoint-sm: 400px;
   }
   @include sm {
     font-size: 0.6rem;
-  }
-}
-
-.main .tll {
-  @include md {
-    padding: 1rem;
-    top: 33%;
+    padding: 0.1rem;
   }
 }
 

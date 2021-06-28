@@ -76,8 +76,8 @@ $black-color: rgb(0, 0, 0);
   height: 90vh;
   background-color: rgba(20, 20, 20);
   .signin-inner {
-    width: 35%;
-    height: 55%;
+    width: 480px;
+    height: 400px;
     flex-direction: column;
     z-index: 1;
     font-weight: bold;
@@ -157,19 +157,24 @@ $breakpoint-sm: 400px;
 
 .signin .signin-inner {
   @include md {
-    width: 60%;
-    left: 21%;
+    width: 360px;
+    height: 390px;
   }
   @include sm {
-    width: 90%;
-    left: 21%;
+    width: 300px;
+    height: 350px;
   }
 }
 
-.signin .signin-inner {
+.signin p {
   @include sm {
-    height: 50%;
-    padding: 0;
+    font-size: 12px;
+  }
+}
+
+.signin h2 {
+  @include sm {
+    font-size: 19px;
   }
 }
 </style>

@@ -86,34 +86,39 @@ export default {
     },
 
     saveBookmark() {
-      const id = firebase
-        .firestore()
-        .collection("users")
-        .doc(this.$route.params.uid)
-        .collection("bookmarks")
-        .doc().id;
-
-      firebase
-        .firestore()
-        .collection("users") //「users」コレクションを参照
-        .doc(this.$route.params.uid) //対象ページのユーザーを参照
-        .collection("bookmarks") //「bookmarks」サブコレクションを参照
-        .doc(id) //自動生成されたドキュメントIDを参照
-        .set({
-          postId: this.list.id, //「postId」に投稿データである「this.list.id」を代入。
-          time: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-          this.$swal("ブックマークに追加しました。", {
-            icon: "success"
-          });
-          this.list.isBookmarked = true;
-        })
-        .catch(() => {
-          this.$swal("ブックマークを追加出来ません。", {
-            icon: "error"
-          });
-        });
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          const id = firebase
+            .firestore()
+            .collection("users")
+            .doc(this.$route.params.uid)
+            .collection("bookmarks")
+            .doc().id;
+          firebase
+            .firestore()
+            .collection("users") //「users」コレクションを参照
+            .doc(this.$route.params.uid) //対象ページのユーザーを参照
+            .collection("bookmarks") //「bookmarks」サブコレクションを参照
+            .doc(id) //自動生成されたドキュメントIDを参照
+            .set({
+              postId: this.list.id, //「postId」に投稿データである「this.list.id」を代入。
+              time: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+              this.$swal("ブックマークに追加しました。", {
+                icon: "success"
+              });
+              this.list.isBookmarked = true;
+            })
+            .catch(() => {
+              this.$swal("ブックマークを追加出来ません。", {
+                icon: "error"
+              });
+            });
+        } else {
+          this.$router.push("/signin");
+        }
+      });
     },
 
     deleteBookmark() {

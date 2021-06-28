@@ -1,5 +1,5 @@
 <template>
-  <div class="mypage-edit">
+  <div class="mypagexllg-edit">
     <button
       @click="
               show();
@@ -7,7 +7,6 @@
             "
       class="profile-edit flex"
     >プロフィール編集</button>
-    <!-- xl・タブレット用モーダルウィンドウ -->
     <modal
       class="modal-inner modal-xltb"
       v-scroll-lock="open"
@@ -15,145 +14,6 @@
       :width="1100"
       :height="740"
     >
-      <div data-modal="edit" aria-expanded="true" class="vm--overlay">
-        <div class="vm--top-right-slot"></div>
-      </div>
-      <div class="modal-header flex">
-        <h2 class="profile-tll flex">プロフィールを編集する</h2>
-        <hr class="separate" />
-      </div>
-      <div class="modal-body">
-        <div class="profile-inner flex">
-          <div class="profile-contens flex">
-            <div class="profile-img-inner flex">
-              <img
-                :src="preview == '' ? uploadedImage.fileUrl : preview"
-                width="200"
-                height="200"
-                class="profile-img"
-                alt="プロフィール画像"
-              />
-              <!--previewが空の場合、fileUrl（画像）を表示。空の場合はpreviewを表示。-->
-              <label class="profile-txt profile-update">
-                プロフィール画像を編集する
-                <input type="file" @change="onFileChange" style="display:none" />
-              </label>
-            </div>
-            <div class="line"></div>
-            <div class="profile-items flex">
-              <div class="profile-contens flex">
-                <input type="text" class="profile-item" placeholder="名前" v-model="name" />
-              </div>
-              <div class="profile-contens flex">
-                <select
-                  class="profile-select"
-                  v-model="sex"
-                  :style="{ color: sex == '' ? 'gray' : 'white' }"
-                >
-                  <option class="profile-item" value hidden>性別</option>
-                  <option
-                    v-for="sex in sexs"
-                    :value="sex.name"
-                    :key="sex.id"
-                    class="profile-item"
-                    style="color: white;"
-                  >{{ sex.name }}</option>
-                </select>
-              </div>
-              <div class="profile-contens flex">
-                <select
-                  class="profile-select"
-                  v-model="age"
-                  :style="{ color: age == '' ? 'gray' : 'white' }"
-                >
-                  <option class="profile-item" value hidden>年齢</option>
-                  <option
-                    v-for="age in ages"
-                    :value="age.name"
-                    :key="age.id"
-                    class="profile-item"
-                    style="color: white;"
-                  >{{ age.name }}</option>
-                </select>
-              </div>
-              <div class="profile-contens flex">
-                <select
-                  class="profile-select"
-                  v-model="access"
-                  :style="{ color: access == '' ? 'gray' : 'white' }"
-                >
-                  <option class="profile-item" value hidden>居住地</option>
-                  <option
-                    v-for="access in accesses"
-                    :value="access.name"
-                    :key="access.id"
-                    class="profile-item"
-                    style="color: white;"
-                  >{{ access.name }}</option>
-                </select>
-              </div>
-              <div class="profile-contens flex">
-                <select
-                  class="profile-select"
-                  v-model="profession"
-                  :style="{ color: profession == '' ? 'gray' : 'white' }"
-                >
-                  <option class="profile-item" value hidden>職業</option>
-                  <option
-                    v-for="profession in professions"
-                    :value="profession.name"
-                    :key="profession.id"
-                    class="profile-item"
-                    style="color: white;"
-                  >{{ profession.name }}</option>
-                </select>
-              </div>
-              <div class="profile-contens flex">
-                <textarea-autosize
-                  name="text"
-                  cols="10"
-                  rows="1"
-                  v-model="selfpr"
-                  placeholder="自己紹介"
-                  maxlength="50"
-                  :min-height="70"
-                  :max-height="70"
-                ></textarea-autosize>
-              </div>
-              <div class="profile-contens flex">
-                <select
-                  v-model="genre"
-                  class="profile-select"
-                  :style="{ color: genre == '' ? 'gray' : 'white' }"
-                >
-                  <option class="profile-item" value hidden>好きなジャンル</option>
-                  <option
-                    v-for="genre in genres"
-                    :value="genre.name"
-                    :key="genre.id"
-                    class="profile-item"
-                    style="color: white;"
-                  >{{ genre.name }}</option>
-                </select>
-              </div>
-              <div class="profile-contens flex">
-                <input type="text" class="profile-item" placeholder="好きな映画" v-model="favMovie" />
-              </div>
-            </div>
-            <button
-              class="hide-btn flex"
-              @click="
-                      hide();
-                      closeModal();
-                    "
-            >×</button>
-          </div>
-          <button @click="updateBtn" class="update-btn flex">更新</button>
-        </div>
-      </div>
-    </modal>
-    <!-- スマホ用モーダルウィンドウ -->
-    <modal class="modal-inner modal-sp" v-scroll-lock="open" name="edit" :width="500" :height="720">
       <div data-modal="edit" aria-expanded="true" class="vm--overlay">
         <div class="vm--top-right-slot"></div>
       </div>
@@ -630,6 +490,7 @@ textarea {
   width: 20rem;
   outline: none;
   border: none;
+  padding-left: 0.2rem;
   border-bottom: 1px solid #ddd;
   color: $white-color;
   font-size: 1rem;
@@ -665,7 +526,7 @@ hr.separate {
 
 // -- テンプレート -- //
 
-.mypage-edit {
+.mypagexllg-edit {
   .profile-edit {
     width: 10rem;
     margin: 1rem;
@@ -737,6 +598,7 @@ hr.separate {
             border-bottom: 1px solid #ddd;
             color: $white-color;
             font-size: 1rem;
+            padding-left: 0.2rem;
             background-color: $black-color;
           }
           .profile-img-inner {
@@ -811,140 +673,6 @@ hr.separate {
       border-color: #333;
       color: #fff;
     }
-  }
-}
-
-// -- メディアクエリ -- //
-
-$breakpoint-xl: 1025px;
-$breakpoint-lg: 1024px;
-$breakpoint-md: 600px;
-$breakpoint-sm: 400px;
-
-@mixin xl {
-  @media (min-width: ($breakpoint-xl)) {
-    @content;
-  }
-}
-@mixin lg {
-  @media (max-width: ($breakpoint-lg)) {
-    @content;
-  }
-}
-@mixin md {
-  @media (max-width: ($breakpoint-md)) {
-    @content;
-  }
-}
-@mixin sm {
-  @media (max-width: ($breakpoint-sm)) {
-    @content;
-  }
-}
-
-.mypage-edit .profile-edit {
-  @include md {
-    width: 8.5rem;
-    overflow: hidden;
-    font-size: 0.7rem;
-  }
-}
-
-.modal-xltb {
-  @include xl {
-    display: flex;
-  }
-  @include lg {
-    display: flex;
-  }
-  @include md {
-    display: none;
-  }
-}
-
-.modal-sp {
-  @include xl {
-    display: none;
-  }
-  @include lg {
-    display: none;
-  }
-  @include md {
-    display: flex;
-  }
-}
-
-.mypage-edit .modal-inner .modal-header .profile-tll {
-  @include md {
-    font-size: 1.1rem;
-  }
-}
-
-.mypage-edit
-  .modal-inner
-  .modal-body
-  .profile-inner
-  .profile-contens
-  .profile-img-inner
-  .profile-img {
-  @include md {
-    width: 180px;
-    height: 180px;
-    margin-left: 0rem;
-  }
-}
-
-.mypage-edit
-  .modal-inner
-  .modal-body
-  .profile-inner
-  .profile-contens
-  .profile-img-inner
-  .profile-txt {
-  @include md {
-    margin: 1rem 0;
-    margin-left: 0rem;
-    font-size: 0.8rem;
-  }
-}
-
-.mypage-edit .profile-select {
-  @include md {
-    width: 11rem;
-    font-size: 0.9rem;
-  }
-}
-
-.mypage-edit
-  .modal-inner
-  .modal-body
-  .profile-inner
-  .profile-contens
-  .profile-item {
-  @include md {
-    width: 11rem;
-    height: 2.5rem;
-    font-size: 0.9rem;
-  }
-}
-
-textarea {
-  @include md {
-    width: 11rem;
-    font-size: 0.9rem;
-  }
-}
-
-.mypage-edit .modal-inner .update-btn {
-  cursor: pointer;
-  @include md {
-    margin: 1rem;
-  }
-}
-
-.mypage-edit .modal-inner .modal-body .profile-inner {
-  @include md {
-    padding-bottom: 3rem;
   }
 }
 </style>

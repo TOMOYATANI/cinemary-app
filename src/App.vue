@@ -59,25 +59,7 @@ html {
   background-color: rgba(20, 20, 20);
 }
 
-/* <====== Media Queries======> */
-
-$breakpoint-pc: 1440px;
-$breakpoint-tablet: 1024px;
-$breakpoint-mobile: 600px;
-
-@mixin pc {
-  @media (max-width: ($breakpoint-pc)) {
-    @content;
-  }
-}
-@mixin tab {
-  @media (max-width: ($breakpoint-tablet)) {
-    @content;
-  }
-}
-@mixin sp {
-  @media (max-width: ($breakpoint-mobile)) {
-    @content;
-  }
+.vm--modal {
+  background-color: black !important;
 }
 </style>

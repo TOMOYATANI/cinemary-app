@@ -25,7 +25,16 @@
         <router-link to="/signin" class="header-link neon3 flash" v-if="!authenticatedUser">SINGIN</router-link>
       </li>
       <li>
-        <router-link :to="`/mypage/${this.uid}`" class="header-link neon3 flash">MYPAGE</router-link>
+        <router-link
+          :to="`/mypage/${this.uid}`"
+          class="header-link neon3 flash"
+          v-if="authenticatedUser"
+        >MYPAGE</router-link>
+        <router-link
+          to="/mypage"
+          class="hamburger-link neon3 flash"
+          v-if="!authenticatedUser"
+        >MYPAGE</router-link>
       </li>
       <li v-if="authenticatedUser">
         <button class="header-link neon3 flash" @click="signOut" v-if="authenticatedUser">SINGOUT</button>
@@ -49,7 +58,7 @@
         class="hamburger-link neon3 flash"
         v-if="authenticatedUser"
       >MYPAGE</router-link>
-      <router-link to="/board" class="hamburger-link neon3 flash" v-if="!authenticatedUser">MYPAGE</router-link>
+      <router-link to="/mypage" class="hamburger-link neon3 flash" v-if="!authenticatedUser">MYPAGE</router-link>
       <button class="hamburger-link neon3 flash" @click="signOut" v-if="authenticatedUser">SINGOUT</button>
     </slide>
   </header>
@@ -298,6 +307,9 @@ $breakpoint-sm: 400px;
     display: flex;
   }
   @include md {
+    display: flex;
+  }
+    @include sm {
     display: flex;
   }
 }

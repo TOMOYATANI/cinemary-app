@@ -4,7 +4,9 @@
     <div class="mypage-inner flex">
       <div class="mypage-item flex">
         <Mypageicon class="mypage-icon" />
-        <Mypageother class="mypage-other" />
+        <Mypageotherxllg class="mypage-other mypage-xllg" />
+        <Mypageothermd class="mypage-other mypage-md" />
+        <Mypageothersm class="mypage-other mypage-sm" />
       </div>
       <Mypageprofile />
       <hr class="separate" />
@@ -18,7 +20,9 @@
 import firebase from "firebase";
 import Header from "@/components/header.vue";
 import Mypageicon from "@/components/mypageicon.vue";
-import Mypageother from "@/components/mypageother.vue";
+import Mypageotherxllg from "@/components/mypageotherxllg.vue";
+import Mypageothermd from "@/components/mypageothermd.vue";
+import Mypageothersm from "@/components/mypageothersm.vue";
 import Mypageprofile from "@/components/mypageprofile.vue";
 import Mypost from "@/components/mypost.vue";
 import Vue from "vue";
@@ -38,7 +42,9 @@ export default {
   components: {
     Header,
     Mypageicon,
-    Mypageother,
+    Mypageotherxllg,
+    Mypageothermd,
+    Mypageothersm,
     Mypageprofile,
     Mypost
   },
@@ -155,6 +161,15 @@ $breakpoint-sm: 400px;
   }
 }
 
+.mypage .mypage-inner .mypage-item {
+  @include md {
+    width: 80%;
+  }
+  @include sm {
+    width: 90%;
+  }
+}
+
 .mypage .post-list {
   @include md {
     width: 60%;
@@ -163,6 +178,48 @@ $breakpoint-sm: 400px;
   @include sm {
     width: 70%;
     font-size: 0.95rem;
+  }
+}
+.mypage-xllg {
+  @include xl {
+    display: flex;
+  }
+  @include lg {
+    display: flex;
+  }
+  @include md {
+    display: none;
+  }
+  @include sm {
+    display: none;
+  }
+}
+.mypage-md {
+  @include xl {
+    display: none;
+  }
+  @include lg {
+    display: none;
+  }
+  @include md {
+    display: flex;
+  }
+  @include sm {
+    display: none;
+  }
+}
+.mypage-sm {
+  @include xl {
+    display: none;
+  }
+  @include lg {
+    display: none;
+  }
+  @include md {
+    display: none;
+  }
+  @include sm {
+    display: flex;
   }
 }
 </style>

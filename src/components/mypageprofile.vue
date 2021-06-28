@@ -83,6 +83,7 @@ $black-color: rgb(0, 0, 0);
 .profile-list {
   width: 50%;
   display: flex;
+  justify-content: start;
   margin: 3rem;
   color: $white-color;
   .list-items {
@@ -133,9 +134,9 @@ $breakpoint-sm: 400px;
 
 .profile-list {
   @include sm {
-    width: 100%;
+    width: 70%;
     display: flex;
-    margin: 3rem;
+    margin: 2rem;
     color: white;
   }
 }
@@ -146,7 +147,11 @@ $breakpoint-sm: 400px;
     font-size: 0.9rem;
   }
   @include md {
-    width: 259px;
+    width: 330px;
+    font-size: 0.9rem;
+  }
+    @include sm {
+    width: 330px;
     font-size: 0.9rem;
   }
 }
