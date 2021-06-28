@@ -147,6 +147,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
 // -- 変数 -- //
 
 $white-color: rgb(255, 255, 255);
