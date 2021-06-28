@@ -7,7 +7,7 @@
             "
       class="profile-edit flex"
     >プロフィール編集</button>
-    <modal class="modal-inner" v-scroll-lock="open" name="edit" :width="335" :height="790">
+    <modal class="modal-inner" name="edit" :width="335" :height="790">
       <div data-modal="edit" aria-expanded="true" class="vm--overlay">
         <div class="vm--top-right-slot"></div>
       </div>
@@ -155,8 +155,6 @@ import VueSwal from "vue-swal";
 Vue.use(VueSwal);
 import VModal from "vue-js-modal";
 Vue.use(VModal);
-import VScrollLock from "v-scroll-lock";
-Vue.use(VScrollLock);
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
 import VuePaginate from "vue-paginate";
