@@ -1,12 +1,21 @@
 <template>
   <div class="post-content-md">
-    <button @click="
+    <button
+      @click="
         show();
         openModal();
-      " class="post-comment flex">
+      "
+      class="post-comment flex"
+    >
       <img class="comment-icon" src="../assets/コメント.jpg" alt="コメント" />
     </button>
-    <modal class="modal-inner" v-scroll-lock="open" name="post" :width="550" :height="550">
+    <modal
+      class="modal-inner"
+      v-scroll-lock="open"
+      name="post"
+      :width="550"
+      :height="550"
+    >
       <div
         data-modal="post"
         aria-expanded="true"
@@ -22,7 +31,13 @@
       <div class="modal-body">
         <div class="post-items flex">
           <div class="post-contens flex">
-            <input type="text" class="post-item" maxlength="50" placeholder="タイトル" v-model="title" />
+            <input
+              type="text"
+              class="post-item"
+              maxlength="50"
+              placeholder="タイトル"
+              v-model="title"
+            />
           </div>
           <div class="post-contens flex">
             <textarea-autosize
@@ -48,7 +63,8 @@
                 :key="genre.id"
                 class="post-item"
                 style="color: white;"
-              >{{ genre.name }}</option>
+                >{{ genre.name }}</option
+              >
             </select>
           </div>
           <button class="post-btn" @click.prevent="postItem">投稿</button>
@@ -58,7 +74,9 @@
               hide();
               closeModal();
             "
-          >×</button>
+          >
+            ×
+          </button>
         </div>
       </div>
     </modal>
@@ -114,14 +132,14 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" }
+        { id: 31, name: "ギャング・マフィア" },
       ],
-      open: false
+      open: false,
     };
   },
   methods: {
     postItem() {
-      firebase.auth().onAuthStateChanged(user => {
+      firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           const currentUser = firebase.auth().currentUser;
           this.uid = currentUser.uid;
@@ -135,9 +153,9 @@ export default {
             text: "この内容で投稿しますか？",
             icon: "info",
             buttons: true,
-            dangerMode: true
+            dangerMode: true,
           })
-            .then(willDelete => {
+            .then((willDelete) => {
               if (willDelete) {
                 firebase
                   .firestore()
@@ -150,12 +168,12 @@ export default {
                     genre: this.genre,
                     time: firebase.firestore.FieldValue.serverTimestamp(),
                     id: id,
-                    uid: this.$route.params.uid
+                    uid: this.$route.params.uid,
                   })
                   .then(() => {
                     this.$router.go({
                       path: `/board/${this.uid}`,
-                      force: true
+                      force: true,
                     });
                   })
                   .catch(() => {});
@@ -165,7 +183,7 @@ export default {
             })
             .catch(() => {
               this.$swal("投稿出来ませんでした。", {
-                icon: "error"
+                icon: "error",
               });
             });
         } else {
@@ -184,8 +202,8 @@ export default {
     },
     closeModal() {
       this.open = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -198,7 +216,6 @@ $black-color: rgb(0, 0, 0);
 ::placeholder {
   color: gray;
   font-size: 1rem;
-  padding-left: 0.25rem;
 }
 hr.separate {
   width: 60%;
@@ -216,13 +233,12 @@ textarea {
   border-bottom: 1px solid #ddd;
   color: $white-color;
   font-size: 1rem;
-  padding-left: 0.25rem;
+  padding: 10px;
   background-color: $black-color;
 }
 textarea::placeholder {
   color: gray;
   font-size: 1rem;
-  padding-left: 0.25rem;
 }
 // -- 投稿フォーム -- //
 .post-content-md {
@@ -286,6 +302,7 @@ textarea::placeholder {
           font-size: 1rem;
           color: $white-color;
           height: 3rem;
+          padding: 5px;
           border-bottom: 1px solid #ddd;
           background-color: $black-color;
         }
@@ -298,6 +315,7 @@ textarea::placeholder {
           color: $white-color;
           font-size: 1rem;
           background-color: $black-color;
+          padding: 10px;
         }
       }
     }
@@ -331,7 +349,6 @@ textarea::placeholder {
       cursor: pointer;
       outline: none;
       transition: 0.2s;
-      background-color: white;
     }
   }
   .hide-btn:hover {

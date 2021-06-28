@@ -430,7 +430,7 @@ div {
         border-radius: 25px;
         resize: none;
         margin-right: 0.5rem;
-        padding: 0.65rem;
+        padding: 10px;
         outline: none;
         color: $black-color;
         background-color: $white-color;
