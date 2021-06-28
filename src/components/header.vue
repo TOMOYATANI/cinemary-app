@@ -109,9 +109,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
 // -- 変数 -- //
-
 $gray-color: rgb(100, 100, 100);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
@@ -139,6 +137,7 @@ $black-color: rgb(0, 0, 0);
     border: none;
     outline: none;
     font-family: "Roboto", sans-serif;
+    font-style: italic;
     &-color {
       color: rgb(0, 0, 0);
       font-size: 3rem;
@@ -160,6 +159,7 @@ $black-color: rgb(0, 0, 0);
     cursor: hand;
     margin-left: 3rem;
     font-family: "Roboto", sans-serif;
+    font-style: italic;
     &:not(:first-child) {
       margin-left: 2rem;
     }
@@ -181,6 +181,7 @@ $black-color: rgb(0, 0, 0);
   cursor: hand;
   margin-left: 3rem;
   font-family: "Roboto", sans-serif;
+  font-style: italic;
 }
 
 a.header-ttl:hover,
@@ -309,7 +310,7 @@ $breakpoint-sm: 400px;
   @include md {
     display: flex;
   }
-    @include sm {
+  @include sm {
     display: flex;
   }
 }

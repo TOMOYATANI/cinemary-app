@@ -147,7 +147,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
 // -- 変数 -- //
 
 $white-color: rgb(255, 255, 255);
@@ -190,6 +189,7 @@ $black-color: rgb(0, 0, 0);
   .nothing {
     color: $white-color;
     font-family: "Roboto", sans-serif;
+    font-style: italic;
     font-size: 1.2rem;
     font-weight: bold;
     padding: 8rem;

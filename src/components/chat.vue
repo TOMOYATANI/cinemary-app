@@ -250,10 +250,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");
-
 // -- 変数 -- //
-
 $gray-color: rgb(100, 100, 100);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
@@ -278,6 +275,7 @@ div {
     .chat-tll {
       width: 100%;
       font-family: "Roboto", sans-serif;
+      font-style: italic;
       display: flex;
       padding: 0.3rem;
       font-size: 2.2rem;
@@ -328,6 +326,7 @@ div {
       margin-top: 0.5rem;
       font-weight: bold;
       font-family: "Roboto", sans-serif;
+      font-style: italic;
     }
 
     .myimage {
@@ -387,6 +386,7 @@ div {
       margin-top: 0.5rem;
       font-weight: bold;
       font-family: "Roboto", sans-serif;
+      font-style: italic;
     }
 
     .otherimage {
@@ -471,6 +471,7 @@ div {
   cursor: hand;
   margin-left: 3rem;
   font-family: "Roboto", sans-serif;
+  font-style: italic;
 }
 
 .bm-burger-button {

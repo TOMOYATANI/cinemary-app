@@ -100,7 +100,6 @@ export default {
 
 <style scoped lang="scss">
 // -- 変数 -- //
-
 $gray-color: rgb(100, 100, 100);
 $white-color: rgb(255, 255, 255);
 $black-color: rgb(0, 0, 0);
