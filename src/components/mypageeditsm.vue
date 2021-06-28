@@ -9,7 +9,13 @@
     >
       プロフィール編集
     </button>
-    <modal class="modal-inner" name="edit" :width="335" :height="790">
+    <modal
+      class="modal-inner"
+      v-scroll-lock="open"
+      name="edit"
+      :width="335"
+      :height="790"
+    >
       <div data-modal="edit" aria-expanded="true" class="vm--overlay">
         <div class="vm--top-right-slot"></div>
       </div>
@@ -180,6 +186,8 @@ import VueSwal from "vue-swal";
 Vue.use(VueSwal);
 import VModal from "vue-js-modal";
 Vue.use(VModal);
+import VScrollLock from "v-scroll-lock";
+Vue.use(VScrollLock);
 import VueTextareaAutosize from "vue-textarea-autosize";
 Vue.use(VueTextareaAutosize);
 import VuePaginate from "vue-paginate";
@@ -497,7 +505,7 @@ $black-color: rgb(0, 0, 0);
 textarea {
   width: 15rem;
   font-size: 0.9rem;
-  padding: 10px;
+  padding: 5px;
   outline: none;
   border: none;
   border-bottom: 1px solid #ddd;
@@ -544,9 +552,10 @@ hr.separate {
     outline: none;
     border: none;
     color: $black-color;
-    height: 2.5rem;
+    height: 2rem;
     border-bottom: 1px solid #ddd;
-    padding: 10px;
+    padding: 5px;
+    background-color: $white-color !important;
   }
   .modal-inner {
     position: fixed;
@@ -584,9 +593,9 @@ hr.separate {
           }
           .profile-item {
             width: 15rem;
-            height: 2.5rem;
+            height: 2rem;
             font-size: 0.9rem;
-            padding: 10px;
+            padding: 5px;
             outline: none;
             border: none;
             border-bottom: 1px solid #ddd;
@@ -606,8 +615,8 @@ hr.separate {
               background-color: $black-color;
             }
             .profile-img {
-              width: 140px;
-              height: 140px;
+              width: 100px;
+              height: 100px;
               border-radius: 50% 50%;
             }
             .profile-txt {

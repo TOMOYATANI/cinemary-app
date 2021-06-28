@@ -307,6 +307,7 @@ textarea::placeholder {
           height: 2.5rem;
           border-bottom: 1px solid #ddd;
           padding: 10px;
+          background-color: $white-color !important;
         }
         .post-item {
           width: 16rem;

@@ -689,6 +689,7 @@ hr.separate {
       cursor: pointer;
       outline: none;
       transition: 0.2s;
+      background-color: $white-color;
     }
 
     .hide-btn:hover {
