@@ -2,7 +2,7 @@
   <div class="chat">
     <div class="chat-header flex">
       <h1 class="chat-tll flash neon flex">Chat Room</h1>
-      <slide right disableOutsideClick width="200">
+      <slide right width="200">
         <router-link to="/" class="hamburger-link neon3 flash">HOME</router-link>
         <router-link to="/about" class="hamburger-link neon3 flash">ABOUT</router-link>
         <router-link :to="`/board/${this.uid}`" class="hamburger-link neon3 flash">POST</router-link>

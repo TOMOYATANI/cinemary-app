@@ -41,7 +41,7 @@
       </li>
     </ul>
     <!-- スマホ用ハンバーガーメニュー -->
-    <slide right disableOutsideClick width="200" class="hamburger-menu">
+    <slide right width="200" class="hamburger-menu">
       <router-link to="/" class="hamburger-link neon3 flash home-link">HOME</router-link>
       <router-link to="/about" class="hamburger-link neon3 flash">ABOUT</router-link>
       <router-link
