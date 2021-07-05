@@ -43,28 +43,43 @@ export default {
     };
   },
 
-  created() {
-    const currentUser = firebase.auth().currentUser;
-    this.uid = currentUser.uid;
+  methods: {
+    updateData() {
+      const currentUser = firebase.auth().currentUser;
+      this.uid = currentUser.uid;
 
-    if (currentUser) {
-      firebase
-        .firestore()
-        .collection("users")
-        .doc(this.$route.params.uid)
-        .get()
-        .then(snapshot => {
-          this.profileData = snapshot.data();
-          this.name = this.profileData.name || "";
-          this.sex = this.profileData.sex || "";
-          this.age = this.profileData.age || "";
-          this.access = this.profileData.access || "";
-          this.selfpr = this.profileData.selfpr || "";
-          this.profession = this.profileData.profession || "";
-          this.genre = this.profileData.genre || "";
-          this.favMovie = this.profileData.favMovie || "";
-        });
+      if (currentUser) {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(this.$route.params.uid)
+          .get()
+          .then(snapshot => {
+            this.profileData = snapshot.data();
+            this.name = this.profileData.name || "";
+            this.sex = this.profileData.sex || "";
+            this.age = this.profileData.age || "";
+            this.access = this.profileData.access || "";
+            this.selfpr = this.profileData.selfpr || "";
+            this.profession = this.profileData.profession || "";
+            this.genre = this.profileData.genre || "";
+            this.favMovie = this.profileData.favMovie || "";
+          });
+      }
     }
+  },
+  watch: {
+    "$route.params.uid": {
+      handler: function() {
+        this.updateData();
+      },
+      deep: true,
+      immediate: true
+    }
+  },
+
+  created() {
+    this.updateData();
   }
 };
 </script>
@@ -150,7 +165,7 @@ $breakpoint-sm: 400px;
     width: 330px;
     font-size: 0.9rem;
   }
-    @include sm {
+  @include sm {
     width: 330px;
     font-size: 0.9rem;
   }

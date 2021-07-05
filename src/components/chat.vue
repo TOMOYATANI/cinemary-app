@@ -47,6 +47,7 @@
             <router-link
               v-if="returnUserData(userid)"
               :to="`/mypage/${returnUserData(userid).uid}`"
+              class="otherlink flex"
             >
               <img
                 :src="
@@ -334,9 +335,9 @@ div {
 
     .myimage {
       flex-direction: column;
-      padding-left: 1.4rem;
+      width: 80px;
       img {
-        border-radius: 20px;
+        border-radius: 50%;
         vertical-align: top;
         display: flex;
         align-items: flex-end;
@@ -394,10 +395,13 @@ div {
 
     .otherimage {
       flex-direction: column;
-      padding-right: 1.4rem;
-      img {
-        border-radius: 20px;
-        vertical-align: top;
+      width: 80px;
+      .otherlink {
+        flex-direction: column;
+        img {
+          border-radius: 50%;
+          vertical-align: top;
+        }
       }
     }
     .otherdetail {

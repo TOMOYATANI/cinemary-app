@@ -29,34 +29,49 @@ export default {
     };
   },
 
+  methods: {
+    updateData() {
+      const currentUser = firebase.auth().currentUser;
+      this.uid = currentUser.uid;
+
+      firebase
+        .firestore()
+        .collection("posts")
+        .orderBy("time", "desc")
+        .where("uid", "==", this.$route.params.uid)
+        //uidをフィルタリングして現在のURLと合致するもののみを参照
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            this.listData.push(doc.data());
+          });
+        });
+
+      firebase
+        .firestore()
+        .collection("users")
+        .doc(this.$route.params.uid)
+        .collection("bookmarks")
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            this.bookmarkData.push(doc.data());
+          });
+        });
+    }
+  },
+  watch: {
+    "$route.params.uid": {
+      handler: function() {
+        this.updateData();
+      },
+      deep: true,
+      immediate: true
+    }
+  },
+
   created() {
-    const currentUser = firebase.auth().currentUser;
-    this.uid = currentUser.uid;
-
-    firebase
-      .firestore()
-      .collection("posts")
-      .orderBy("time", "desc")
-      .where("uid", "==", this.$route.params.uid)
-      //uidをフィルタリングして現在のURLと合致するもののみを参照
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          this.listData.push(doc.data());
-        });
-      });
-
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(this.$route.params.uid)
-      .collection("bookmarks")
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          this.bookmarkData.push(doc.data());
-        });
-      });
+    this.updateData();
   }
 };
 </script>

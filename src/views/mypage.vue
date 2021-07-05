@@ -49,20 +49,35 @@ export default {
     Mypost
   },
 
-  created() {
-    const currentUser = firebase.auth().currentUser;
-    this.uid = currentUser.uid;
-
-    if (currentUser) {
-      firebase
-        .firestore()
-        .collection("users")
-        .doc(this.$route.params.uid)
-        .get()
-        .then(snapshot => {
-          this.profileData = snapshot.data();
-        });
+  methods: {
+    updateData() {
+      const currentUser = firebase.auth().currentUser;
+      this.uid = currentUser.uid;
+      if (currentUser) {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(this.$route.params.uid)
+          .get()
+          .then(snapshot => {
+            this.profileData = snapshot.data();
+          });
+      }
+      console.log(currentUser.photoURL);
     }
+  },
+  watch: {
+    "$route.params.uid": {
+      handler: function() {
+        this.updateData();
+      },
+      deep: true,
+      immediate: true
+    }
+  },
+
+  created() {
+    this.updateData();
   }
 };
 </script>

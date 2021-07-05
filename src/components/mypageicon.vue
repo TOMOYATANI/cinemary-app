@@ -27,26 +27,42 @@ export default {
       }
     };
   },
-  created() {
-    const currentUser = firebase.auth().currentUser;
-    this.uid = currentUser.uid;
 
-    if (currentUser) {
-      firebase
-        .firestore()
-        .collection("users")
-        .doc(this.$route.params.uid)
-        .get()
-        .then(snapshot => {
-          this.profileData = snapshot.data();
-          this.$set(
-            this,
-            "uploadedImage",
-            this.profileData.uploadedImage || this.uploadedImage
-          );
-          //変更検知がvue側で行わせる為にset()を使用。
-        });
+  methods: {
+    updateData() {
+      const currentUser = firebase.auth().currentUser;
+      this.uid = currentUser.uid;
+
+      if (currentUser) {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(this.$route.params.uid)
+          .get()
+          .then(snapshot => {
+            this.profileData = snapshot.data();
+            this.$set(
+              this,
+              "uploadedImage",
+              this.profileData.uploadedImage || this.uploadedImage
+            );
+            //変更検知がvue側で行わせる為にset()を使用。
+          });
+      }
     }
+  },
+  watch: {
+    "$route.params.uid": {
+      handler: function() {
+        this.updateData();
+      },
+      deep: true,
+      immediate: true
+    }
+  },
+
+  created() {
+    this.updateData();
   }
 };
 </script>

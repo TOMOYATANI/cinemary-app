@@ -69,7 +69,6 @@ import firebase from "firebase";
 import Vue from "vue";
 import { Slide } from "vue-burger-menu";
 Vue.component("slide", Slide);
-
 export default {
   name: "signOut",
   data() {
@@ -78,6 +77,8 @@ export default {
       uid: null
     };
   },
+
+  
   methods: {
     signOut() {
       firebase
@@ -93,11 +94,11 @@ export default {
         });
     }
   },
+  
   mounted() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.authenticatedUser = true;
-
         const currentUser = firebase.auth().currentUser;
         this.uid = currentUser.uid;
       } else {
@@ -107,6 +108,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,500&display=swap");

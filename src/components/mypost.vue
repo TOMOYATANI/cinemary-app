@@ -45,19 +45,34 @@ export default {
     List
   },
 
-  created() {
-    firebase
-      .firestore()
-      .collection("posts")
-      .orderBy("time", "desc")
-      .where("uid", "==", this.$route.params.uid)
-      //uidをフィルタリングして現在のURLと合致するもののみを参照
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          this.listData.push(doc.data());
+  methods: {
+    updateData() {
+      firebase
+        .firestore()
+        .collection("posts")
+        .orderBy("time", "desc")
+        .where("uid", "==", this.$route.params.uid)
+        //uidをフィルタリングして現在のURLと合致するもののみを参照
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            this.listData.push(doc.data());
+          });
         });
-      });
+    }
+  },
+  watch: {
+    "$route.params.uid": {
+      handler: function() {
+        this.updateData();
+      },
+      deep: true,
+      immediate: true
+    }
+  },
+
+  created() {
+    this.updateData();
   }
 };
 </script>
