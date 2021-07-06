@@ -115,8 +115,6 @@ export default {
                 icon: "error"
               });
             });
-        } else {
-          this.$router.push("/signin");
         }
       });
     },

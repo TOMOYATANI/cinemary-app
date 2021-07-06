@@ -95,7 +95,6 @@ export default {
   },
   created() {
     //各ユーザーがブックマークしたリスト
-
     firebase
       .firestore()
       .collection("users") //「users」コレクションを参照
@@ -108,29 +107,29 @@ export default {
           this.currentUserBookmarkIds.push(doc.data().postId);
           //「postId」を追加し、this.currentUserBookmarkIdsへ格納
         });
-      });
-    firebase
-      .firestore()
-      .collection("posts") //「posts」コレクションを参照
-      .orderBy("time", "desc")
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          //forEachで全てのドキュメントに対して
-          if (this.currentUserBookmarkIds.includes(doc.data().id)) {
-            //this.currentUserBookmarkIdsに「id」が含まれていたら、
-            this.postData.push({
-              ...doc.data(),
-              isBookmarked: true
+        firebase
+          .firestore()
+          .collection("posts") //「posts」コレクションを参照
+          .orderBy("time", "desc")
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              //forEachで全てのドキュメントに対して
+              if (this.currentUserBookmarkIds.includes(doc.data().id)) {
+                //this.currentUserBookmarkIdsに「id」が含まれていたら、
+                this.postData.push({
+                  ...doc.data(),
+                  isBookmarked: true
+                });
+                //isBookmarkedを追加。
+              } else {
+                this.postData.push({
+                  ...doc.data(),
+                  isBookmarked: false
+                });
+              }
             });
-            //isBookmarkedを追加。
-          } else {
-            this.postData.push({
-              ...doc.data(),
-              isBookmarked: false
-            });
-          }
-        });
+          });
       });
 
     firebase
@@ -193,7 +192,7 @@ $black-color: rgb(0, 0, 0);
     font-style: italic;
     font-size: 1.2rem;
     font-weight: bold;
-    padding: 8rem;
+    padding: 9rem;
   }
 }
 
@@ -289,13 +288,15 @@ $breakpoint-sm: 400px;
 .post .nothing {
   @include md {
     font-size: 1rem;
-    padding: 5rem;
-    margin: 3rem 2rem;
+    padding: 0;
+    margin: 8rem 2rem;
+    margin-bottom: 11rem;
   }
   @include sm {
     font-size: 0.9rem;
-    padding: 5rem;
-    margin: 4rem 2rem;
+    padding: 0;
+    margin: 9rem 1rem;
+    margin-bottom: 13rem;
   }
 }
 

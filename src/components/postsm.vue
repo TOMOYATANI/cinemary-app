@@ -1,21 +1,9 @@
 <template>
   <div class="post-content-sm">
-    <button
-      @click="
-        show();
-        openModal();
-      "
-      class="post-comment flex"
-    >
+    <button @click="openModal" class="post-comment flex">
       <img class="comment-icon" src="../assets/コメント.jpg" alt="コメント" />
     </button>
-    <modal
-      class="modal-inner"
-      v-scroll-lock="open"
-      name="post"
-      :width="320"
-      :height="450"
-    >
+    <modal class="modal-inner" v-scroll-lock="open" name="post" :width="320" :height="450">
       <div
         data-modal="post"
         aria-expanded="true"
@@ -31,13 +19,7 @@
       <div class="modal-body">
         <div class="post-items flex">
           <div class="post-contens flex">
-            <input
-              type="text"
-              class="post-item"
-              maxlength="50"
-              placeholder="タイトル"
-              v-model="title"
-            />
+            <input type="text" class="post-item" maxlength="50" placeholder="タイトル" v-model="title" />
           </div>
           <div class="post-contens flex">
             <textarea-autosize
@@ -63,20 +45,11 @@
                 :key="genre.id"
                 class="post-item"
                 style="color: white;"
-                >{{ genre.name }}</option
-              >
+              >{{ genre.name }}</option>
             </select>
           </div>
           <button class="post-btn" @click.prevent="postItem">投稿</button>
-          <button
-            class="hide-btn flex"
-            @click="
-              hide();
-              closeModal();
-            "
-          >
-            ×
-          </button>
+          <button class="hide-btn flex" @click="closeModal">×</button>
         </div>
       </div>
     </modal>
@@ -132,14 +105,14 @@ export default {
         { id: 28, name: "オムニバス" },
         { id: 29, name: "バイオレンス" },
         { id: 30, name: "歴史" },
-        { id: 31, name: "ギャング・マフィア" },
+        { id: 31, name: "ギャング・マフィア" }
       ],
-      open: false,
+      open: false
     };
   },
   methods: {
     postItem() {
-      firebase.auth().onAuthStateChanged((user) => {
+      firebase.auth().onAuthStateChanged(user => {
         if (user) {
           const currentUser = firebase.auth().currentUser;
           this.uid = currentUser.uid;
@@ -153,9 +126,9 @@ export default {
             text: "この内容で投稿しますか？",
             icon: "info",
             buttons: true,
-            dangerMode: true,
+            dangerMode: true
           })
-            .then((willDelete) => {
+            .then(willDelete => {
               if (willDelete) {
                 firebase
                   .firestore()
@@ -168,12 +141,12 @@ export default {
                     genre: this.genre,
                     time: firebase.firestore.FieldValue.serverTimestamp(),
                     id: id,
-                    uid: this.$route.params.uid,
+                    uid: this.$route.params.uid
                   })
                   .then(() => {
                     this.$router.go({
                       path: `/board/${this.uid}`,
-                      force: true,
+                      force: true
                     });
                   })
                   .catch(() => {});
@@ -183,7 +156,7 @@ export default {
             })
             .catch(() => {
               this.$swal("投稿出来ませんでした。", {
-                icon: "error",
+                icon: "error"
               });
             });
         } else {
@@ -191,19 +164,21 @@ export default {
         }
       });
     },
-    show() {
-      this.$modal.show("post");
-    },
-    hide() {
-      this.$modal.hide("post");
-    },
     openModal() {
-      this.open = true;
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          this.$modal.show("post");
+          this.open = true;
+        } else {
+          this.$router.push("/signin");
+        }
+      });
     },
     closeModal() {
+      this.$modal.hide("post");
       this.open = false;
-    },
-  },
+    }
+  }
 };
 </script>
 

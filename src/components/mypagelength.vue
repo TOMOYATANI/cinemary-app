@@ -63,15 +63,13 @@ export default {
   watch: {
     "$route.params.uid": {
       handler: function() {
+        this.listData = [];
+        this.bookmarkData = [];
         this.updateData();
       },
       deep: true,
       immediate: true
     }
-  },
-
-  created() {
-    this.updateData();
   }
 };
 </script>

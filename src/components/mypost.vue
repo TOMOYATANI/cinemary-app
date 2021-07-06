@@ -7,12 +7,7 @@
       :per="3"
       v-if="listData.length !== 0"
     >
-      <List
-        v-for="(list, index) in paginated('paginate-listData')"
-        :index="index"
-        :list="list"
-        :key="list.id"
-      />
+      <List v-for="list in paginated('paginate-listData')" :list="list" :key="list.id" />
     </paginate>
     <div v-else class="nothing flex">投稿はありません</div>
     <paginate-links
@@ -36,43 +31,75 @@ Vue.use(VuePaginate);
 export default {
   data() {
     return {
-      profileData: {},
       listData: [],
-      paginate: ["paginate-listData"]
+      paginate: ["paginate-listData"],
+      currentUserBookmarkIds: []
     };
   },
   components: {
     List
   },
-
   methods: {
     updateData() {
+      //ログイン中ユーザーがブックマークしたリスト
       firebase
         .firestore()
-        .collection("posts")
-        .orderBy("time", "desc")
-        .where("uid", "==", this.$route.params.uid)
-        //uidをフィルタリングして現在のURLと合致するもののみを参照
+        .collection("users") //「users」コレクションを参照
+        .doc(this.$route.params.uid) //現在表示中ユーザーを参照
+        .collection("bookmarks") //「bookmarks」サブコレクションを参照
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
-            this.listData.push(doc.data());
+            //forEachで全てのドキュメントに対して
+            this.currentUserBookmarkIds.push(doc.data().postId);
+            //「postId」を追加し、this.currentUserBookmarkIdsへ格納
+            console.log(this.currentUserBookmarkIds);
           });
+          firebase
+            .firestore()
+            .collection("posts")
+            .orderBy("time", "desc")
+            .where("uid", "==", this.$route.params.uid)
+            //uidをフィルタリングして現在のURLと合致するもののみを参照
+            .get()
+            .then(snapshot => {
+              snapshot.forEach(doc => {
+                //forEachで全てのドキュメントに対して
+                if (this.currentUserBookmarkIds.includes(doc.data().id)) {
+                  //this.currentUserBookmarkIdsに「id」が含まれていたら、
+                  this.listData.push({
+                    ...doc.data(),
+                    isBookmarked: true
+                  });
+                } else {
+                  this.listData.push({
+                    ...doc.data(),
+                    isBookmarked: false
+                  });
+                }
+                console.log(doc.data().id);
+                console.log(this.currentUserBookmarkIds);
+                console.log(this.listData);
+                //...doc.data()としてバラした「posts」の投稿データとisBookmarkedを代入。
+              });
+            });
         });
     }
   },
   watch: {
+    //watchプロパティは、指定した要素の変更を監視するもの
     "$route.params.uid": {
+      //対象のオブジェクト
       handler: function() {
+        this.listData = [];
         this.updateData();
+        //処理
       },
       deep: true,
+      //入れ子になったデータ（オブジェクトのプロパティ）を監視する場合、handlerとdeep:trueのどちらも必須。
       immediate: true
+      //ページが読み込まれた時に処理を行いたい場合は、immediate: trueを設置。
     }
-  },
-
-  created() {
-    this.updateData();
   }
 };
 </script>

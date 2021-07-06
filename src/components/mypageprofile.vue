@@ -77,10 +77,6 @@ export default {
       immediate: true
     }
   },
-
-  created() {
-    this.updateData();
-  }
 };
 </script>
 
@@ -166,7 +162,7 @@ $breakpoint-sm: 400px;
     font-size: 0.9rem;
   }
   @include sm {
-    width: 330px;
+    width: 320px;
     font-size: 0.9rem;
   }
 }

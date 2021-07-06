@@ -60,10 +60,6 @@ export default {
       immediate: true
     }
   },
-
-  created() {
-    this.updateData();
-  }
 };
 </script>
 

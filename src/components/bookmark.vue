@@ -150,7 +150,8 @@ hr.separate {
     font-family: "Roboto", sans-serif;
     font-size: 1.2rem;
     font-weight: bold;
-    padding: 13rem;
+    margin: 10rem 2rem;
+    margin-bottom: 8rem;
   }
 }
 
@@ -185,14 +186,15 @@ $breakpoint-sm: 400px;
 .bookmarkList .nothing {
   @include md {
     font-size: 1rem;
-    padding: 8rem;
-    margin: 5rem 0;
+    margin: 13rem 2rem;
+    margin-bottom: 15rem;
+    padding: 0;
   }
   @include sm {
     font-size: 1rem;
-    padding: 2rem;
-    margin: 12rem 0;
+    margin: 14rem 2rem;
+    margin-bottom: 15rem;
+    padding: 0;
   }
 }
-
 </style>
